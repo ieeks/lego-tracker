@@ -173,7 +173,7 @@ Offene Punkte:
 - [ ] Wunschliste → Sammlung verschieben
 - [ ] Ladestate & Fehlermeldungen
 - [ ] Empty States (keine Sets)
-
+- [] add Suchfunktion (damit man Sets ohne Nummer hinzufuegen kann (aber wie soll das gehen?))
 ---
 
 ## Phase 6 – Deployment
