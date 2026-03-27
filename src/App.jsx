@@ -172,7 +172,8 @@ export default function App() {
       <div style={{ paddingBottom: 90 }}>
         {/* Header */}
         <div style={{
-          padding: "52px 20px 24px",
+          paddingTop: "max(52px, calc(env(safe-area-inset-top, 0px) + 16px))",
+          paddingLeft: 20, paddingRight: 20, paddingBottom: 24,
           background: "linear-gradient(180deg, #2370E8 0%, #1650C4 100%)",
           borderRadius: "0 0 28px 28px",
           marginBottom: 14,
