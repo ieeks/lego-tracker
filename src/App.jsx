@@ -166,6 +166,8 @@ export default function App() {
       maxWidth: 680,
       margin: "0 auto",
       position: "relative",
+      touchAction: "pan-y",
+      overflowX: "hidden",
     }}>
       <DetailModal set={selectedSet} onClose={() => setSelectedSet(null)} />
 
