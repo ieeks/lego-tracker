@@ -119,20 +119,20 @@ function StatCardWide({ label, value, icon, accent, sub }) {
     <div style={{
       background: "#FFFFFF", borderRadius: 20, padding: "14px 16px",
       boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-      display: "flex", alignItems: "center", gap: 12,
+      display: "flex", alignItems: "center", gap: 10,
     }}>
       <div style={{
-        width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+        width: 38, height: 38, borderRadius: 11, flexShrink: 0,
         background: accent + "20",
-        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20,
+        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19,
       }}>
         {icon}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 11, color: "#8E8E93", fontWeight: 500 }}>{label}</div>
-        {sub && <div style={{ fontSize: 10, color: "#AEAEB2", marginTop: 1 }}>{sub}</div>}
+        <div style={{ fontSize: 11, color: "#8E8E93", fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</div>
+        {sub && <div style={{ fontSize: 10, color: "#AEAEB2", marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{sub}</div>}
       </div>
-      <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: 26, fontWeight: 800, color: "#1C1C1E", letterSpacing: "-0.5px", flexShrink: 0 }}>
+      <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: 22, fontWeight: 800, color: "#1C1C1E", letterSpacing: "-0.5px", flexShrink: 0 }}>
         {value}
       </div>
     </div>

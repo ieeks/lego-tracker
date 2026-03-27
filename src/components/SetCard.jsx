@@ -122,7 +122,7 @@ export function SetCard({ set, onClick }) {
             <img
               src={set.image}
               alt={set.name}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
               onError={(e) => { e.target.style.display = "none"; }}
             />
           ) : (
