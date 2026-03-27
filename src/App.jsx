@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCollection } from "./hooks/useCollection";
 import { updateSetStatus, updateSetLocation, deleteSet } from "./services/setService";
 import { BottomNav } from "./components/BottomNav";
@@ -19,6 +19,10 @@ const LOCATIONS = [
 
 function DetailModal({ set, onClose }) {
   const [location, setLocationState] = useState(set?.location ?? null);
+
+  useEffect(() => {
+    setLocationState(set?.location ?? null);
+  }, [set?.id]);
 
   if (!set) return null;
 
@@ -239,7 +243,7 @@ export default function App() {
       position: "relative",
       touchAction: "pan-y",
     }}>
-      <DetailModal key={selectedSet?.id} set={selectedSet} onClose={() => setSelectedSet(null)} />
+      <DetailModal key={selectedSet?.id ?? "closed"} set={selectedSet} onClose={() => setSelectedSet(null)} />
 
       <div style={{ paddingBottom: 90 }}>
         {/* Header */}
