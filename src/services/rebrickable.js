@@ -2,6 +2,21 @@ const API_KEY = import.meta.env.VITE_REBRICKABLE_KEY;
 const BASE = "https://rebrickable.com/api/v3/lego";
 
 /**
+ * Theme-Name von Rebrickable laden.
+ * @param {number} themeId
+ * @returns {Promise<string>} Theme-Name (z.B. "City")
+ */
+export async function fetchThemeName(themeId) {
+  if (!themeId || !API_KEY) return null;
+  const res = await fetch(`${BASE}/themes/${themeId}/`, {
+    headers: { Authorization: `key ${API_KEY}` },
+  });
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data.name ?? null;
+}
+
+/**
  * Set-Daten von Rebrickable laden.
  * @param {string} setNumber  z.B. "42115" oder "42115-1"
  * @returns {Promise<{ set_num, name, num_parts, set_img_url, theme_id }>}

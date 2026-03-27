@@ -14,13 +14,14 @@ const COL = "sets";
  * Neues Set speichern (Daten kommen von Rebrickable).
  * @param {{ setNumber, name, image, parts, theme, status }} data
  */
-export async function addSet({ setNumber, name, image, parts, theme, status }) {
+export async function addSet({ setNumber, name, image, parts, theme, themeName, status }) {
   const ref = await addDoc(collection(db, COL), {
     setNumber,
     name,
     image,
     parts,
     theme,
+    ...(themeName ? { themeName } : {}),
     status, // "built" | "boxed" | "wishlist"
     createdAt: serverTimestamp(),
   });
