@@ -239,7 +239,7 @@ export default function App() {
       position: "relative",
       touchAction: "pan-y",
     }}>
-      <DetailModal set={selectedSet} onClose={() => setSelectedSet(null)} />
+      <DetailModal key={selectedSet?.id} set={selectedSet} onClose={() => setSelectedSet(null)} />
 
       <div style={{ paddingBottom: 90 }}>
         {/* Header */}
