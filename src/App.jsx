@@ -120,19 +120,20 @@ function StatCardWide({ label, value, icon, accent, sub }) {
       background: "#FFFFFF", borderRadius: 20, padding: "14px 16px",
       boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
       display: "flex", alignItems: "center", gap: 10,
+      height: 64,
     }}>
       <div style={{
-        width: 38, height: 38, borderRadius: 11, flexShrink: 0,
+        width: 36, height: 36, borderRadius: 10, flexShrink: 0,
         background: accent + "20",
-        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 19,
+        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
       }}>
         {icon}
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 11, color: "#8E8E93", fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</div>
-        {sub && <div style={{ fontSize: 10, color: "#AEAEB2", marginTop: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{sub}</div>}
+      <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
+        <div style={{ fontSize: 11, color: "#8E8E93", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</div>
+        {sub && <div style={{ fontSize: 10, color: "#AEAEB2", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</div>}
       </div>
-      <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: 22, fontWeight: 800, color: "#1C1C1E", letterSpacing: "-0.5px", flexShrink: 0 }}>
+      <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: 20, fontWeight: 800, color: "#1C1C1E", letterSpacing: "-0.5px", flexShrink: 0 }}>
         {value}
       </div>
     </div>
