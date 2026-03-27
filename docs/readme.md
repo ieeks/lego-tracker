@@ -1,90 +1,65 @@
-# 🧱 LEGO Sammlung Tracker
+# LEGO Sammlung Tracker
 
-Eine mobile-first Web-App zur Verwaltung und Nachverfolgung einer privaten LEGO-Sammlung.
+Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung.
+Erstellt mit React + Vite, Firebase Firestore und Rebrickable API.
 
-Erstellt mit React und Firebase, Datenquelle ist die Rebrickable API.
-
----
-
-## ✨ Funktionen
-
-- 🔍 Suche nach LEGO Sets über die Set-Nummer
-- 🖼️ Automatisches Laden von Set-Daten (Bild, Name, etc.)
-- ➕ Hinzufügen zur Sammlung oder Wunschliste
-- 📦 Verwaltung des Status:
-  - ✅ Gebaut
-  - 📦 Ungeöffnet
-  - ❤️ Wunschliste
-- 📊 Statistikübersicht (Sets, Teile, Statusverteilung)
-- 📱 Optimiert für iPhone und iPad
+Live: https://ieeks.github.io/lego-tracker/
+GitHub: https://github.com/ieeks/lego-tracker
 
 ---
 
-## 🚀 Technologie-Stack
+## Funktionen
 
-- Frontend: React (Vite)
-- Backend: Firebase (Firestore)
-- API: Rebrickable
-- Hosting: Firebase Hosting
-
----
-
-## 🧠 Funktionsweise
-
-1. Eingabe einer LEGO Set-Nummer
-2. Daten werden über Rebrickable geladen
-3. Set kann:
-   - zur Sammlung hinzugefügt werden
-   - oder zur Wunschliste gespeichert werden
-4. Speicherung erfolgt in Firestore
-5. Anzeige im Grid mit Status
+- Set per Nummer suchen → Daten automatisch via Rebrickable laden
+- QR-Code aus der LEGO-Anleitung scannen → Set wird automatisch erkannt
+- Bild, Name, Teileanzahl, Theme automatisch befüllt
+- Hinzufügen zur Sammlung oder Wunschliste
+- Status verwalten: Gebaut / OVP / Wunschliste
+- Swipe-to-Delete auf Set-Cards
+- Dashboard mit Stats (Gesamt Sets, Teile, Wunschliste, OVP-Ratio)
+- Statistikübersicht
+- Optimiert für iPhone (Mobile-first, iOS-Design)
 
 ---
 
-## 🧭 Navigation
+## Technologie-Stack
 
-- 🏠 Sammlung
-- ➕ Hinzufügen
-- ❤️ Wunschliste
-- 📊 Statistik
-- ℹ️ Info
-
----
-
-## 📊 Statistik
-
-- Anzahl Sets
-- Gesamtteile
-- Statusverteilung (gebaut / ungeöffnet)
-- Erweiterbar um Wert, Themen etc.
+- Frontend: React + Vite
+- Datenbank: Firebase Firestore (Echtzeit via onSnapshot)
+- API: Rebrickable v3
+- QR-Scanner: jsQR (funktioniert auf Safari iOS)
+- Hosting: GitHub Pages (automatisch via GitHub Actions)
 
 ---
 
-## ℹ️ Info
+## Lokales Setup
 
-- App-Informationen
-- Datenverwaltung (Export, Reset)
-- API-Hinweise (Rebrickable)
+```bash
+git clone https://github.com/ieeks/lego-tracker
+cd lego-tracker
+npm install
+```
+
+`.env.local` anlegen:
+```
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+VITE_REBRICKABLE_KEY=...
+```
+
+```bash
+npm run dev
+```
+
+Oder Doppelklick auf **„LEGO Tracker starten.command"**.
 
 ---
 
-## ⚙️ Setup
-
-1. Repo klonen
-2. npm install
-3. Firebase konfigurieren
-4. Rebrickable API Key einfügen
-5. npm run dev
-
----
-
-## ☁️ Deployment
-
-firebase deploy
-
----
-
-## 📦 Datenstruktur (Firestore)
+## Datenstruktur (Firestore Collection: `sets`)
 
 ```json
 {
@@ -92,7 +67,29 @@ firebase deploy
   "name": "Lamborghini Sián FKP 37",
   "image": "https://...",
   "theme": 1,
-  "status": "built", 
+  "themeName": "Technic",
+  "parts": 3696,
+  "status": "built",
   "createdAt": "timestamp"
 }
 ```
+
+---
+
+## Navigation
+
+| Tab | Inhalt |
+|-----|--------|
+| Sammlung | Alle Sets mit Filter-Chips (Sammlung / Wunschliste / Gebaut) |
+| Wunschliste | Sets mit Status "wishlist" |
+| Statistik | Anzahl, Teile, Statusverteilung |
+| Info | App-Info, Export, Reset |
+
+Set hinzufügen: FAB-Button (+) oben rechts im Header
+
+---
+
+## Deployment
+
+Automatisch via GitHub Actions bei jedem Push auf `main`.
+Secrets müssen in GitHub → Settings → Secrets hinterlegt sein (siehe `.env.local`).

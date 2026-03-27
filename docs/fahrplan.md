@@ -1,16 +1,22 @@
-# 🧱 LEGO Tracker – Projektfahrplan
+# LEGO Tracker – Projektfahrplan
 
 ## Übersicht
 
 | Phase | Thema | Status |
 |-------|-------|--------|
 | 1 | Projekt Setup (React + Vite) | ✅ Fertig |
-| 2 | Firebase Setup | ✅ Fertig |
+| 2 | Firebase Setup + Firestore | ✅ Fertig |
 | 3 | Rebrickable API anbinden | ✅ Fertig |
-| 4 | Echte Daten statt Mock-Daten | ✅ Fertig |
-| 5 | UI ausbauen | 🔄 In Arbeit |
-| 6 | GitHub Repository | ⬜ Offen |
-| 7 | Deployment (Firebase Hosting) | ⬜ Offen |
+| 4 | Echte Daten via onSnapshot (Echtzeit) | ✅ Fertig |
+| 5 | iOS UI Redesign (Dashboard, Cards, BottomNav) | ✅ Fertig |
+| 6 | GitHub Repository (ieeks/lego-tracker) | ✅ Fertig |
+| 7 | QR-Code Scanner (jsQR, Safari iOS) | ✅ Fertig |
+| 8 | Swipe-to-Delete + Theme-Anzeige | ✅ Fertig |
+| 9 | Deployment via GitHub Pages + GitHub Actions | ✅ Fertig |
+| 10 | Statistik-Screen ausbauen | ⬜ Offen |
+| 11 | Suche nach Set-Name (ohne Nummer) | ⬜ Offen |
+
+Live: https://ieeks.github.io/lego-tracker/
 
 ---
 
@@ -20,17 +26,16 @@
 npm create vite@latest lego-tracker -- --template react
 cd lego-tracker
 npm install
-npm install firebase axios
+npm install firebase jsqr
 ```
 
 Ordnerstruktur:
 ```
 src/
-  components/      # UI-Komponenten
-  screens/         # Tab-Screens
-  hooks/           # Custom Hooks (useCollection, useFirestore)
-  services/        # Firebase, Rebrickable API
-  assets/
+  components/      # SetCard, StatusBadge, BottomNav
+  screens/         # CollectionScreen, AddScreen, WishlistScreen, StatsScreen, InfoScreen
+  hooks/           # useCollection
+  services/        # firebase.js, rebrickable.js, setService.js
 App.jsx
 main.jsx
 ```
@@ -53,10 +58,10 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  projectId: "...",
-  // ... rest der Config
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  // ...
 };
 
 const app = initializeApp(firebaseConfig);
@@ -65,13 +70,13 @@ export const db = getFirestore(app);
 
 ### 2.3 Firestore Collection: `sets`
 
-Dokument-Struktur:
 ```json
 {
   "setNumber": "42115-1",
   "name": "Lamborghini Sián FKP 37",
   "image": "https://...",
-  "theme": "Technic",
+  "theme": 1,
+  "themeName": "Technic",
   "parts": 3696,
   "status": "built",
   "createdAt": "timestamp"
@@ -82,30 +87,12 @@ Dokument-Struktur:
 
 ## Phase 3 – Rebrickable API
 
-### 3.1 API Key holen
-→ https://rebrickable.com/api/ → Account → API Key generieren
-
-### 3.2 Set-Daten abrufen
-
 Datei: `src/services/rebrickable.js`
-```js
-const API_KEY = import.meta.env.VITE_REBRICKABLE_KEY;
-const BASE = "https://rebrickable.com/api/v3/lego";
 
-export async function fetchSet(setNumber) {
-  const id = setNumber.includes("-") ? setNumber : `${setNumber}-1`;
-  const res = await fetch(`${BASE}/sets/${id}/`, {
-    headers: { Authorization: `key ${API_KEY}` }
-  });
-  if (!res.ok) throw new Error("Set nicht gefunden");
-  return res.json();
-}
-```
+- `fetchSet(setNumber)` → Set-Daten (Name, Bild, Teile, Theme-ID)
+- `fetchThemeName(themeId)` → Theme-Name (z.B. "City", "Technic")
 
-Rückgabe enthält: `name`, `num_parts`, `set_img_url`, `theme_id`
-
-### 3.3 .env Datei
-
+`.env.local`:
 ```
 VITE_REBRICKABLE_KEY=dein_api_key_hier
 ```
@@ -114,109 +101,75 @@ VITE_REBRICKABLE_KEY=dein_api_key_hier
 
 ## Phase 4 – Echte Daten (Firestore)
 
-### Hook: useCollection
+Hook `useCollection`: onSnapshot auf Collection `sets`, sortiert nach `createdAt desc`.
 
-Datei: `src/hooks/useCollection.js`
+`setService.js`:
+- `addSet({ setNumber, name, image, parts, theme, themeName, status })`
+- `updateSetStatus(id, status)`
+- `deleteSet(id)`
+
+---
+
+## Phase 5 – iOS UI Redesign
+
+- Header: blauer Gradient, gelber FAB-Button (+) oben rechts
+- Stats-Dashboard: 2×2 Grid (Gesamt Sets, Gesamt Teile, Wunschliste, OVP-Ratio)
+- Filter-Chips: Sammlung / Auf Wunschliste / Gebaut
+- Suchfeld mit Lupe-Icon und Clear-Button
+- Set-Cards: Bild links, Info rechts, Herz-Icon, Chevron
+- Bottom Nav: 4 Tabs, Wunschliste-Badge
+
+---
+
+## Phase 7 – QR-Code Scanner
+
+LEGO-Anleitungen enthalten QR-Codes mit URL:
+```
+https://LEGO.COM/GO/38/0075316/6382344/...
+                    ^^^^^^^^
+                    Set-Nummer (zero-padded, 7 Stellen)
+```
+
+Umsetzung:
+- `jsQR` Library (funktioniert auf Safari iOS, kein BarcodeDetector nötig)
+- Video-Stream via `getUserMedia`, Frames per Canvas auslesen
+- Set-Nummer extrahieren → automatische Rebrickable-Suche
+
+---
+
+## Phase 8 – Swipe-to-Delete & Theme
+
+**Swipe-to-Delete:**
+- Touch-Events auf SetCard
+- Links wischen → roter Löschen-Button (80px) erscheint
+- Snap-Mechanismus: öffnet/schließt bei >36px Swipe
+- Löschen direkt aus Firestore
+
+**Theme-Anzeige:**
+- `fetchThemeName(themeId)` beim Set-Preview aufrufen
+- `themeName` in Firestore speichern
+- Anzeige in SetCard: `60478-1 · City`
+
+---
+
+## Phase 9 – GitHub Pages Deployment
+
+```yaml
+# .github/workflows/deploy.yml
+# Trigger: Push auf main
+# Build: npm ci && npm run build (mit Secrets als Env-Vars)
+# Deploy: actions/deploy-pages@v4
+```
+
+`vite.config.js`:
 ```js
-import { useEffect, useState } from "react";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from "../services/firebase";
-
-export function useCollection() {
-  const [sets, setSets] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const q = query(collection(db, "sets"), orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(q, snap => {
-      setSets(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setLoading(false);
-    });
-    return unsub;
-  }, []);
-
-  return { sets, loading };
-}
+export default defineConfig({
+  plugins: [react()],
+  base: '/lego-tracker/',
+})
 ```
 
-### Set hinzufügen
-
-```js
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../services/firebase";
-import { fetchSet } from "./rebrickable";
-
-export async function addSet(setNumber, status = "built") {
-  const data = await fetchSet(setNumber);
-  await addDoc(collection(db, "sets"), {
-    setNumber: data.set_num,
-    name: data.name,
-    image: data.set_img_url,
-    parts: data.num_parts,
-    theme: data.theme_id,
-    status,
-    createdAt: serverTimestamp(),
-  });
-}
-```
-
----
-
-## Phase 5 – UI ausbauen
-
-Offene Punkte:
-- [ ] Set-Detail Screen (vollständig)
-- [ ] Status ändern (built / boxed / wishlist)
-- [ ] Set löschen (Swipe oder Longpress)
-- [ ] Suche / Filter in der Liste
-- [ ] Statistik Screen mit echten Daten
-- [ ] Wunschliste → Sammlung verschieben
-- [ ] Ladestate & Fehlermeldungen
-- [ ] Empty States (keine Sets)
-- [] add Suchfunktion (damit man Sets ohne Nummer hinzufuegen kann (aber wie soll das gehen?))
----
-
-## Phase 6 – Deployment
-
-### Firebase Hosting einrichten
-
-```bash
-npm install -g firebase-tools
-firebase login
-firebase init hosting
-```
-
-Einstellungen:
-- Public directory: `dist`
-- Single-page app: `Yes`
-- GitHub Actions: Optional
-
-### Build & Deploy
-
-```bash
-npm run build
-firebase deploy
-```
-
-App ist danach erreichbar unter:
-`https://DEIN-PROJEKT.web.app`
-
----
-
-## Empfohlene Reihenfolge
-
-1. `npm create vite` → Projekt anlegen
-2. Firebase Console → Projekt + Firestore
-3. Rebrickable Account → API Key
-4. `.env` Datei anlegen
-5. `firebase.js` + `rebrickable.js` Services bauen
-6. `useCollection` Hook integrieren
-7. UI mit echten Daten verdrahten
-8. Testen auf iPhone (Safari Dev Tools)
-9. `firebase deploy`
-
----
-
-## Nächster Schritt
-
-Sag mir, womit du anfangen möchtest – ich generiere dann den konkreten Code dafür.
+GitHub Secrets erforderlich:
+- `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`
+- `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`
+- `VITE_REBRICKABLE_KEY`
