@@ -5,7 +5,15 @@ const FILTERS = [
   { id: "sammlung", label: "Sammlung",        icon: "🏠" },
   { id: "wishlist", label: "Auf Wunschliste", icon: "❤️" },
   { id: "built",    label: "Gebaut",          icon: "✓"  },
+  { id: "boxed",    label: "OVP",             icon: "📦" },
 ];
+
+const EMPTY_LABELS = {
+  sammlung: "Noch keine Sets in der Sammlung",
+  wishlist: "Noch keine Wunsch-Sets",
+  built:    "Noch keine gebauten Sets",
+  boxed:    "Noch keine OVP-Sets",
+};
 
 export function CollectionScreen({ sets, loading, onSetClick }) {
   const [filter, setFilter] = useState("sammlung");
@@ -19,23 +27,28 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
     if (filter === "sammlung") return s.status !== "wishlist";
     if (filter === "wishlist") return s.status === "wishlist";
     if (filter === "built")    return s.status === "built";
+    if (filter === "boxed")    return s.status === "boxed";
     return true;
   });
 
-  const emptyLabel = {
-    sammlung: "Noch keine Sets in der Sammlung",
-    wishlist: "Noch keine Wunsch-Sets",
-    built: "Noch keine gebauten Sets",
-  };
-
   return (
     <div style={{ padding: "0 20px" }}>
-      {/* Section header + filter chips */}
+      {/* Section header */}
       <div style={{ marginBottom: 16 }}>
-        <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E", marginBottom: 12 }}>
+        <div style={{
+          fontFamily: "'SF Pro Display', -apple-system, sans-serif",
+          fontWeight: 800, fontSize: 20, color: "#1C1C1E", marginBottom: 12,
+        }}>
           Sammlung
         </div>
-        <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 2, scrollbarWidth: "none" }}>
+
+        {/* Filter chips – scrollbar hidden */}
+        <div style={{
+          display: "flex", gap: 8,
+          overflowX: "auto", paddingBottom: 4,
+          scrollbarWidth: "none", msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+        }}>
           {FILTERS.map(({ id, label, icon }) => {
             const isActive = filter === id;
             return (
@@ -44,8 +57,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 onClick={() => setFilter(id)}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
-                  padding: "8px 14px",
-                  borderRadius: 20, border: "none",
+                  padding: "8px 14px", borderRadius: 20, border: "none",
                   background: isActive ? "#1D6AE5" : "#EDECE8",
                   color: isActive ? "#FFFFFF" : "#636366",
                   fontSize: 13, fontWeight: 600,
@@ -97,8 +109,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
               position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
               background: "#AEAEB2", border: "none", borderRadius: "50%",
               width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", padding: 0,
-              WebkitTapHighlightColor: "transparent",
+              cursor: "pointer", padding: 0, WebkitTapHighlightColor: "transparent",
             }}
           >
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round">
@@ -117,7 +128,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
 
       {!loading && filtered.length === 0 && (
         <div style={{ textAlign: "center", padding: "48px 20px", color: "#AEAEB2", fontSize: 14, fontWeight: 500 }}>
-          {search ? "Keine Sets gefunden" : emptyLabel[filter]}
+          {search ? "Keine Sets gefunden" : EMPTY_LABELS[filter]}
         </div>
       )}
 

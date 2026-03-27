@@ -4,21 +4,15 @@
   padding: 0;
 }
 
-html {
-  overflow-x: clip;
-}
-
 body {
-  overflow-x: clip;
-  overscroll-behavior: none;
   background: #F4F3EE;
   font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
 }
 
 #root {
   min-height: 100svh;
-  overflow-x: clip;
   touch-action: pan-y;
 }
