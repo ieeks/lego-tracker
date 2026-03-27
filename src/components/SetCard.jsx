@@ -111,6 +111,7 @@ export function SetCard({ set, onClick }) {
           transform: `translateX(${offset}px)`,
           transition: animating ? "transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94)" : "none",
           position: "relative", zIndex: 1,
+          touchAction: "pan-y",
         }}
       >
         {/* Set image */}
