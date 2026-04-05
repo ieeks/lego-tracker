@@ -94,6 +94,7 @@ function DetailModal({ set, onClose }) {
             #{set.setNumber}
             {set.parts > 0 && ` · ${set.parts.toLocaleString("de-DE")} Teile`}
             {set.themeName && ` · ${set.themeName}`}
+            {set.year && ` · ${set.year}`}
           </div>
 
           {/* Status Badge */}

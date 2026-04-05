@@ -250,6 +250,7 @@ export function AddScreen({ onSuccess }) {
         parts: preview.num_parts,
         theme: preview.theme_id,
         themeName: preview.themeName ?? null,
+        year: preview.year ?? null,
         status,
       });
       setDone(true);
@@ -367,6 +368,7 @@ export function AddScreen({ onSuccess }) {
             <div style={{ fontSize: 13, color: "#8E8E93", marginBottom: 18 }}>
               {preview.num_parts?.toLocaleString("de-DE")} Teile
               {preview.themeName && <span style={{ marginLeft: 8, color: "#AEAEB2" }}>· {preview.themeName}</span>}
+              {preview.year && <span style={{ marginLeft: 8, color: "#AEAEB2" }}>· {preview.year}</span>}
             </div>
 
             <div style={{ fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 10 }}>Status wählen:</div>
