@@ -110,7 +110,19 @@ export function SetCard({ set, onClick }) {
               onError={(e) => { e.target.style.display = "none"; }}
             />
           ) : (
-            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}>🧱</div>
+            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#AEAEB2" }}>
+              <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg">
+                <rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" />
+                <circle cx="4"  cy="2" fill="currentColor" r="2" />
+                <circle cx="11" cy="2" fill="currentColor" r="2" />
+                <circle cx="18" cy="2" fill="currentColor" r="2" />
+                <circle cx="25" cy="2" fill="currentColor" r="2" />
+                <circle cx="4"  cy="7" fill="currentColor" opacity="0.3" r="2" />
+                <circle cx="11" cy="7" fill="currentColor" opacity="0.3" r="2" />
+                <circle cx="18" cy="7" fill="currentColor" opacity="0.3" r="2" />
+                <circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" />
+              </svg>
+            </div>
           )}
         </div>
 

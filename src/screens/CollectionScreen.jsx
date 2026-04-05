@@ -8,6 +8,11 @@ const FILTERS = [
   { id: "boxed",    label: "OVP",             icon: "📦" },
 ];
 
+const SORTS = [
+  { id: "date",  label: "Hinzugefügt", icon: "📅" },
+  { id: "parts", label: "Teile",       icon: "🧱" },
+];
+
 const EMPTY_LABELS = {
   sammlung: "Noch keine Sets in der Sammlung",
   wishlist: "Noch keine Wunsch-Sets",
@@ -18,6 +23,7 @@ const EMPTY_LABELS = {
 export function CollectionScreen({ sets, loading, onSetClick }) {
   const [filter, setFilter] = useState("sammlung");
   const [search, setSearch] = useState("");
+  const [sort,   setSort]   = useState("date");
 
   const filtered = sets.filter((s) => {
     const matchesSearch =
@@ -31,6 +37,10 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
     return true;
   });
 
+  const sorted = sort === "parts"
+    ? [...filtered].sort((a, b) => (b.parts || 0) - (a.parts || 0))
+    : filtered;
+
   return (
     <div style={{ padding: "0 20px" }}>
       {/* Section header */}
@@ -42,33 +52,64 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           Sammlung
         </div>
 
-        {/* Filter chips – scrollbar hidden */}
-        <div style={{
-          display: "flex", gap: 8,
-          overflowX: "auto", paddingBottom: 4,
-          scrollbarWidth: "none", msOverflowStyle: "none",
-          WebkitOverflowScrolling: "touch",
-        }}>
-          {FILTERS.map(({ id, label, icon }) => {
-            const isActive = filter === id;
+        {/* Filter chips – 2 Zeilen à 2 Chips */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {[FILTERS.slice(0, 2), FILTERS.slice(2)].map((row, rowIdx) => (
+            <div key={rowIdx} style={{ display: "flex", gap: 8 }}>
+              {row.map(({ id, label, icon }) => {
+                const isActive = filter === id;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => setFilter(id)}
+                    style={{
+                      flex: 1,
+                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5,
+                      padding: "8px 14px", borderRadius: 20, border: "none",
+                      background: isActive ? "#1D6AE5" : "#EDECE8",
+                      color: isActive ? "#FFFFFF" : "#636366",
+                      fontSize: 13, fontWeight: 600,
+                      cursor: "pointer", whiteSpace: "nowrap",
+                      WebkitTapHighlightColor: "transparent",
+                      transition: "all 0.15s ease",
+                      boxShadow: isActive ? "0 2px 10px rgba(29,106,229,0.3)" : "none",
+                    }}
+                  >
+                    <span style={{ fontSize: 12 }}>{icon}</span>
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Sort chips */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: "#AEAEB2", whiteSpace: "nowrap" }}>
+          Sortierung
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          {SORTS.map(({ id, label, icon }) => {
+            const isActive = sort === id;
             return (
               <button
                 key={id}
-                onClick={() => setFilter(id)}
+                onClick={() => setSort(id)}
                 style={{
-                  display: "inline-flex", alignItems: "center", gap: 5,
-                  padding: "8px 14px", borderRadius: 20, border: "none",
-                  background: isActive ? "#1D6AE5" : "#EDECE8",
+                  display: "inline-flex", alignItems: "center", gap: 4,
+                  padding: "6px 12px", borderRadius: 20, border: "none",
+                  background: isActive ? "#3A3A3C" : "#EDECE8",
                   color: isActive ? "#FFFFFF" : "#636366",
-                  fontSize: 13, fontWeight: 600,
+                  fontSize: 12, fontWeight: 600,
                   cursor: "pointer", whiteSpace: "nowrap",
                   WebkitTapHighlightColor: "transparent",
                   transition: "all 0.15s ease",
-                  boxShadow: isActive ? "0 2px 10px rgba(29,106,229,0.3)" : "none",
                   flexShrink: 0,
                 }}
               >
-                <span style={{ fontSize: 12 }}>{icon}</span>
+                <span style={{ fontSize: 11 }}>{icon}</span>
                 {label}
               </button>
             );
@@ -126,13 +167,13 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
         </div>
       )}
 
-      {!loading && filtered.length === 0 && (
+      {!loading && sorted.length === 0 && (
         <div style={{ textAlign: "center", padding: "48px 20px", color: "#AEAEB2", fontSize: 14, fontWeight: 500 }}>
           {search ? "Keine Sets gefunden" : EMPTY_LABELS[filter]}
         </div>
       )}
 
-      {filtered.map((set) => (
+      {sorted.map((set) => (
         <SetCard key={set.id} set={set} onClick={onSetClick} />
       ))}
     </div>

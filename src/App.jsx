@@ -189,32 +189,6 @@ function StatCardTop({ label, value, icon, accent, progress }) {
   );
 }
 
-function StatCardWide({ label, value, icon, accent, sub }) {
-  return (
-    <div style={{
-      background: "#FFFFFF", borderRadius: 20, padding: "14px 16px",
-      boxShadow: "0 2px 12px rgba(0,0,0,0.07)",
-      display: "flex", alignItems: "center", gap: 10,
-      height: 64,
-    }}>
-      <div style={{
-        width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-        background: accent + "20",
-        display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
-      }}>
-        {icon}
-      </div>
-      <div style={{ flex: 1, minWidth: 0, overflow: "hidden" }}>
-        <div style={{ fontSize: 11, color: "#8E8E93", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{label}</div>
-        {sub && <div style={{ fontSize: 10, color: "#AEAEB2", marginTop: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</div>}
-      </div>
-      <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontSize: 20, fontWeight: 800, color: "#1C1C1E", letterSpacing: "-0.5px", flexShrink: 0 }}>
-        {value}
-      </div>
-    </div>
-  );
-}
-
 export default function App() {
   const [tab, setTab] = useState("sammlung");
   const [selectedSet, setSelectedSet] = useState(null);
@@ -223,15 +197,12 @@ export default function App() {
   const owned        = sets.filter((s) => s.status !== "wishlist");
   const wishlistSets = sets.filter((s) => s.status === "wishlist");
   const builtSets    = owned.filter((s) => s.status === "built");
-  const boxedSets    = owned.filter((s) => s.status === "boxed");
 
   const totalSets   = owned.length;
   const totalParts  = owned.reduce((acc, s) => acc + (s.parts || 0), 0);
   const wishlistCount = wishlistSets.length;
   const builtCount  = builtSets.length;
-  const boxedCount  = boxedSets.length;
   const builtPercent = owned.length > 0 ? Math.round((builtCount / owned.length) * 100) : 0;
-  const ovpPercent   = owned.length > 0 ? Math.round((boxedCount / owned.length) * 100) : 0;
 
   return (
     <div style={{
@@ -282,15 +253,9 @@ export default function App() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <StatCardTop label="Gesamt Sets"  value={totalSets}                          icon="🧱" accent="#1D6AE5" />
+            <StatCardTop label="Gesamt Sets"  value={totalSets}                          icon={<svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" /><circle cx="4"  cy="2" fill="currentColor" r="2" /><circle cx="11" cy="2" fill="currentColor" r="2" /><circle cx="18" cy="2" fill="currentColor" r="2" /><circle cx="25" cy="2" fill="currentColor" r="2" /><circle cx="4"  cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="11" cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="18" cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" /></svg>} accent="#1D6AE5" />
             <StatCardTop label="Gesamt Teile" value={totalParts.toLocaleString("de-DE")} icon="⚙️" accent="#059669" progress={builtPercent} />
           </div>
-        </div>
-
-        {/* Bottom stat cards */}
-        <div style={{ padding: "0 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
-          <StatCardWide label="Auf Wunschliste" value={wishlistCount} icon="❤️" accent="#E11D48" />
-          <StatCardWide label="OVP-Ratio" value={`${ovpPercent}%`} icon="📦" accent="#F59E0B" sub={`${boxedCount} OVP / ${builtCount} gebaut`} />
         </div>
 
         {tab === "sammlung"    && <CollectionScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}

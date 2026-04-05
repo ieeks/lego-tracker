@@ -22,7 +22,8 @@ Ziel:
 - Swipe-to-Delete auf Set-Cards (Touch-Events, roter Button)
 - Theme-Name wird von Rebrickable geladen und in Firestore gespeichert
 - Dashboard: 2×2 Stats-Grid (Gesamt Sets, Gesamt Teile, Wunschliste, OVP-Ratio)
-- Filter-Chips: Sammlung / Auf Wunschliste / Gebaut
+- Filter-Chips: Sammlung / Auf Wunschliste / Gebaut / OVP — zweizeilig (2×2 Grid, kein horizontales Scrollen)
+- Sortierung nach Hinzufüge-Datum (Standard) oder Teileanzahl (absteigend)
 - Suche nach Name oder Set-Nummer
 - Bottom Sheet Detail-Modal mit Status-Wechsel und Löschen
 - Statistik, Info-Screen
@@ -98,3 +99,4 @@ Hinweis: `themeName` ist nur bei Sets vorhanden, die nach dem Update hinzugefüg
 - Statistik-Screen mit Charts ausbauen
 - Wunschliste → Sammlung mit einem Tap verschieben
 - Suche nach Set-Name (ohne Nummer) via Rebrickable
+- OVP-Ratio / Wunschliste-Zähler reaktivieren (z.B. im Statistik-Screen)
