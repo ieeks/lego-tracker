@@ -14,9 +14,11 @@ export function SetCard({ set, onClick }) {
   const [offset, setOffset]     = useState(0);
   const [animating, setAnimating] = useState(false);
   const touchStartX    = useRef(0);
+  const touchStartY    = useRef(0);
   const touchStartOff  = useRef(0);
   const dragging       = useRef(false);
   const movedHoriz     = useRef(false);
+  const lockDir        = useRef(null); // 'horiz' | 'vert' | null
 
   const isWishlist = set.status === "wishlist";
   const loc        = LOCATION_LABEL[set.location];
@@ -25,17 +27,27 @@ export function SetCard({ set, onClick }) {
 
   const handleTouchStart = (e) => {
     touchStartX.current   = e.touches[0].clientX;
+    touchStartY.current   = e.touches[0].clientY;
     touchStartOff.current = offset;
     dragging.current      = true;
     movedHoriz.current    = false;
+    lockDir.current       = null;
     setAnimating(false);
   };
 
   const handleTouchMove = (e) => {
     if (!dragging.current) return;
     const dx = e.touches[0].clientX - touchStartX.current;
-    if (!movedHoriz.current && Math.abs(dx) > 6) movedHoriz.current = true;
-    if (!movedHoriz.current) return;
+    const dy = e.touches[0].clientY - touchStartY.current;
+
+    // Richtung einmalig festlegen sobald Bewegung deutlich genug ist
+    if (!lockDir.current && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      lockDir.current = Math.abs(dx) > Math.abs(dy) ? 'horiz' : 'vert';
+    }
+
+    if (lockDir.current !== 'horiz') return;
+
+    movedHoriz.current = true;
     const clamped = Math.max(-REVEAL_WIDTH, Math.min(0, touchStartOff.current + dx));
     setOffset(clamped);
   };
