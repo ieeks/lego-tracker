@@ -1,16 +1,68 @@
-# React + Vite
+# LEGO Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschliste. Gebaut für den Alltag — schnelle Erfassung, kein Login, iOS-Feel.
 
-Currently, two official plugins are available:
+**Live:** [manuel-app.dev/lego](https://ieeks.github.io/lego-tracker/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Set per Nummer eingeben oder QR-Code aus der LEGO-Anleitung scannen
+- Rebrickable API lädt Name, Bild, Teileanzahl, Theme und Erscheinungsjahr automatisch
+- Echtzeit-Sync via Firebase Firestore
+- Status-System: **Gebaut** / **OVP** / **Wunschliste**
+- Standort pro Set: Daheim oder Oma/Opa
+- Swipe-to-Delete auf Set-Cards (mit Direction Lock gegen versehentliches Triggern beim Scrollen)
+- Filter-Chips (2×2 Grid): Sammlung / Wunschliste / Gebaut / OVP
+- Sortierung nach Hinzufüge-Datum oder Teileanzahl
+- Suche nach Set-Name oder Nummer
+- Bottom Sheet Detail-Modal mit Status-Wechsel, Standort und Löschen
+- Statistik-Screen und Info-Screen
 
-## Expanding the ESLint configuration
+## Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React + Vite
+- Firebase Firestore (Echtzeit via `onSnapshot`)
+- Rebrickable API v3
+- jsQR (QR-Code-Scanning, funktioniert auf Safari iOS)
+- Inline Styles, kein CSS-Framework
+- GitHub Pages via GitHub Actions
+
+## Datenstruktur (Firestore `sets`)
+
+```json
+{
+  "setNumber": "42115-1",
+  "name": "Lamborghini Sián FKP 37",
+  "image": "https://...",
+  "theme": 1,
+  "themeName": "Technic",
+  "parts": 3696,
+  "year": 2020,
+  "status": "built",
+  "location": "home",
+  "createdAt": "<timestamp>"
+}
+```
+
+## Lokale Entwicklung
+
+```bash
+npm install
+npm run dev
+```
+
+`.env.local` benötigt:
+
+```
+VITE_REBRICKABLE_KEY=your_key
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_APP_ID=...
+```
+
+## Deploy
+
+Push auf `main` → GitHub Actions baut und deployed automatisch auf GitHub Pages.
