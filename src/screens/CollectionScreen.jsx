@@ -66,13 +66,13 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                       flex: 1,
                       display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5,
                       padding: "8px 14px", borderRadius: 20, border: "none",
-                      background: isActive ? "#1D6AE5" : "#EDECE8",
-                      color: isActive ? "#FFFFFF" : "#636366",
+                      background: isActive ? "#7B4955" : "#EDE5D8",
+                      color: isActive ? "#F4EDDB" : "#636366",
                       fontSize: 13, fontWeight: 600,
                       cursor: "pointer", whiteSpace: "nowrap",
                       WebkitTapHighlightColor: "transparent",
                       transition: "all 0.15s ease",
-                      boxShadow: isActive ? "0 2px 10px rgba(29,106,229,0.3)" : "none",
+                      boxShadow: isActive ? "0 2px 10px rgba(123,73,85,0.3)" : "none",
                     }}
                   >
                     <span style={{ fontSize: 12 }}>{icon}</span>
@@ -100,8 +100,8 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 4,
                   padding: "6px 12px", borderRadius: 20, border: "none",
-                  background: isActive ? "#3A3A3C" : "#EDECE8",
-                  color: isActive ? "#FFFFFF" : "#636366",
+                  background: isActive ? "#7B4955" : "#EDE5D8",
+                  color: isActive ? "#F4EDDB" : "#636366",
                   fontSize: 12, fontWeight: 600,
                   cursor: "pointer", whiteSpace: "nowrap",
                   WebkitTapHighlightColor: "transparent",
@@ -140,7 +140,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
             boxSizing: "border-box",
             transition: "border-color 0.15s",
           }}
-          onFocus={(e) => { e.target.style.borderColor = "#1D6AE5"; }}
+          onFocus={(e) => { e.target.style.borderColor = "#7B4955"; }}
           onBlur={(e)  => { e.target.style.borderColor = "#E5E5EA"; }}
         />
         {search && (

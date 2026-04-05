@@ -74,7 +74,7 @@ function DetailModal({ set, onClose }) {
               alt={set.name}
               style={{
                 width: "100%", height: 190, objectFit: "contain",
-                borderRadius: 18, background: "#F4F3EE",
+                borderRadius: 18, background: "#F4EDDB",
                 padding: 12, marginBottom: 20, boxSizing: "border-box",
               }}
             />
@@ -115,9 +115,9 @@ function DetailModal({ set, onClose }) {
                     onClick={() => handleLocation(id)}
                     style={{
                       flex: 1, padding: "12px 8px", borderRadius: 14,
-                      border: active ? "2px solid #1D6AE5" : "2px solid #E5E5EA",
-                      background: active ? "#EEF4FF" : "#FAFAFA",
-                      color: active ? "#1D6AE5" : "#636366",
+                      border: active ? "2px solid #7B4955" : "2px solid #E5E5EA",
+                      background: active ? "rgba(123,73,85,0.08)" : "#FAFAF5",
+                      color: active ? "#7B4955" : "#636366",
                       fontWeight: 600, fontSize: 14, cursor: "pointer",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                       WebkitTapHighlightColor: "transparent",
@@ -180,7 +180,7 @@ function StatCardTop({ label, value, icon, accent, progress }) {
       {progress !== undefined && (
         <div style={{ marginTop: 4 }}>
           <div style={{ height: 4, background: "#F0EEE8", borderRadius: 2, overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${Math.max(progress, 0)}%`, background: "#1D6AE5", borderRadius: 2, transition: "width 0.4s ease" }} />
+            <div style={{ height: "100%", width: `${Math.max(progress, 0)}%`, background: "#7B4955", borderRadius: 2, transition: "width 0.4s ease" }} />
           </div>
           <div style={{ fontSize: 10, color: "#AEAEB2", marginTop: 3, textAlign: "right" }}>{progress} %</div>
         </div>
@@ -207,7 +207,7 @@ export default function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "#F4F3EE",
+      background: "#F4EDDB",
       fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
       maxWidth: 680,
       margin: "0 auto",
@@ -221,10 +221,10 @@ export default function App() {
         <div style={{
           paddingTop: "max(52px, calc(env(safe-area-inset-top, 0px) + 16px))",
           paddingLeft: 20, paddingRight: 20, paddingBottom: 24,
-          background: "linear-gradient(180deg, #2370E8 0%, #1650C4 100%)",
+          background: "linear-gradient(180deg, #7B4955 0%, #5E3442 100%)",
           borderRadius: "0 0 28px 28px",
           marginBottom: 14,
-          boxShadow: "0 8px 28px rgba(29,106,229,0.28)",
+          boxShadow: "0 8px 28px rgba(123,73,85,0.28)",
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <div style={{
@@ -238,14 +238,14 @@ export default function App() {
               onClick={() => setTab("hinzufuegen")}
               style={{
                 width: 50, height: 50, borderRadius: "50%",
-                background: "#F5CC00", border: "none", cursor: "pointer",
+                background: "#F4EDDB", border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 4px 18px rgba(245,204,0,0.45)",
+                boxShadow: "0 4px 18px rgba(123,73,85,0.25)",
                 WebkitTapHighlightColor: "transparent",
                 flexShrink: 0, marginLeft: 12,
               }}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C1C1E" strokeWidth="2.8" strokeLinecap="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7B4955" strokeWidth="2.8" strokeLinecap="round">
                 <line x1="12" y1="5" x2="12" y2="19"/>
                 <line x1="5" y1="12" x2="19" y2="12"/>
               </svg>
@@ -253,7 +253,7 @@ export default function App() {
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-            <StatCardTop label="Gesamt Sets"  value={totalSets}                          icon={<svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" /><circle cx="4"  cy="2" fill="currentColor" r="2" /><circle cx="11" cy="2" fill="currentColor" r="2" /><circle cx="18" cy="2" fill="currentColor" r="2" /><circle cx="25" cy="2" fill="currentColor" r="2" /><circle cx="4"  cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="11" cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="18" cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" /></svg>} accent="#1D6AE5" />
+            <StatCardTop label="Gesamt Sets"  value={totalSets}                          icon={<svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" /><circle cx="4"  cy="2" fill="currentColor" r="2" /><circle cx="11" cy="2" fill="currentColor" r="2" /><circle cx="18" cy="2" fill="currentColor" r="2" /><circle cx="25" cy="2" fill="currentColor" r="2" /><circle cx="4"  cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="11" cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="18" cy="7" fill="currentColor" opacity="0.3" r="2" /><circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" /></svg>} accent="#7B4955" />
             <StatCardTop label="Gesamt Teile" value={totalParts.toLocaleString("de-DE")} icon="⚙️" accent="#059669" progress={builtPercent} />
           </div>
         </div>
