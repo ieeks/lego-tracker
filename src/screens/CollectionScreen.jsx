@@ -22,19 +22,36 @@ const EMPTY_LABELS = {
 };
 
 export function CollectionScreen({ sets, loading, onSetClick }) {
-  const [filter, setFilter] = useState("sammlung");
-  const [search, setSearch] = useState("");
-  const [sort,   setSort]   = useState("date");
+  const [filter,      setFilter]      = useState("sammlung");
+  const [search,      setSearch]      = useState("");
+  const [sort,        setSort]        = useState("date");
+  const [themeFilter, setThemeFilter] = useState(null);
 
-  const filtered = sets.filter((s) => {
-    const matchesSearch =
-      s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.setNumber.includes(search);
-    if (!matchesSearch) return false;
+  // Status-Filter anwenden (vor Theme-Filter, damit Chips nur relevante Themes zeigen)
+  const statusFiltered = sets.filter((s) => {
     if (filter === "sammlung") return s.status !== "wishlist";
     if (filter === "wishlist") return s.status === "wishlist";
     if (filter === "built")    return s.status === "built";
     if (filter === "boxed")    return s.status === "boxed";
+    return true;
+  });
+
+  // Unique Parent-Themes aus dem aktuellen Status-Filter ableiten
+  const availableThemes = [...new Set(
+    statusFiltered
+      .map((s) => s.parentThemeName ?? s.themeName ?? null)
+      .filter(Boolean)
+  )].sort((a, b) => a.localeCompare(b, "de"));
+
+  const filtered = statusFiltered.filter((s) => {
+    const matchesSearch =
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.setNumber.includes(search);
+    if (!matchesSearch) return false;
+    if (themeFilter) {
+      const t = s.parentThemeName ?? s.themeName ?? null;
+      if (t !== themeFilter) return false;
+    }
     return true;
   });
 
@@ -62,7 +79,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           Sammlung
         </div>
 
-        {/* Filter chips – 2 Zeilen à 2 Chips */}
+        {/* Filter chips – 2 Zeilen à 2 Chips (Theme-Filter beim Wechsel zurücksetzen) */}
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[FILTERS.slice(0, 2), FILTERS.slice(2)].map((row, rowIdx) => (
             <div key={rowIdx} style={{ display: "flex", gap: 8 }}>
@@ -71,7 +88,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 return (
                   <button
                     key={id}
-                    onClick={() => setFilter(id)}
+                    onClick={() => { setFilter(id); setThemeFilter(null); }}
                     style={{
                       flex: 1,
                       display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5,
@@ -126,6 +143,50 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           })}
         </div>
       </div>
+
+      {/* Theme-Filter chips */}
+      {availableThemes.length > 0 && (
+        <div style={{
+          display: "flex", gap: 6, overflowX: "auto", marginBottom: 12,
+          paddingBottom: 4,
+          scrollbarWidth: "none", msOverflowStyle: "none",
+        }}>
+          <style>{`.theme-chips::-webkit-scrollbar { display: none; }`}</style>
+          <button
+            onClick={() => setThemeFilter(null)}
+            style={{
+              display: "inline-flex", alignItems: "center",
+              padding: "6px 12px", borderRadius: 20, border: "none",
+              background: !themeFilter ? "#7B4955" : "#EDE5D8",
+              color: !themeFilter ? "#F4EDDB" : "#636366",
+              fontSize: 12, fontWeight: 600,
+              cursor: "pointer", whiteSpace: "nowrap",
+              WebkitTapHighlightColor: "transparent",
+              flexShrink: 0,
+            }}
+          >
+            Alle
+          </button>
+          {availableThemes.map((theme) => (
+            <button
+              key={theme}
+              onClick={() => setThemeFilter(themeFilter === theme ? null : theme)}
+              style={{
+                display: "inline-flex", alignItems: "center",
+                padding: "6px 12px", borderRadius: 20, border: "none",
+                background: themeFilter === theme ? "#7B4955" : "#EDE5D8",
+                color: themeFilter === theme ? "#F4EDDB" : "#636366",
+                fontSize: 12, fontWeight: 600,
+                cursor: "pointer", whiteSpace: "nowrap",
+                WebkitTapHighlightColor: "transparent",
+                flexShrink: 0,
+              }}
+            >
+              {theme}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Search bar */}
       <div style={{ position: "relative", marginBottom: 16 }}>
