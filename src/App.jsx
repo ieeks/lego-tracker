@@ -93,7 +93,7 @@ function DetailModal({ set, onClose }) {
           <div style={{ fontSize: 13, color: "#8E8E93", marginBottom: 16 }}>
             #{set.setNumber}
             {set.parts > 0 && ` · ${set.parts.toLocaleString("de-DE")} Teile`}
-            {set.themeName && ` · ${set.themeName}`}
+            {set.themeName && ` · ${set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}`}
             {set.year && ` · ${set.year}`}
           </div>
 

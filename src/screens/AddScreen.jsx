@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import jsQR from "jsqr";
-import { fetchSet, fetchThemeName } from "../services/rebrickable";
+import { fetchSet, fetchThemeNames } from "../services/rebrickable";
 import { addSet } from "../services/setService";
 import { StatusBadge } from "../components/StatusBadge";
 
@@ -215,8 +215,8 @@ export function AddScreen({ onSuccess }) {
     setDone(false);
     try {
       const data = await fetchSet(setNumber.trim());
-      const themeName = await fetchThemeName(data.theme_id).catch(() => null);
-      setPreview({ ...data, themeName });
+      const { themeName, parentThemeName } = await fetchThemeNames(data.theme_id).catch(() => ({ themeName: null, parentThemeName: null }));
+      setPreview({ ...data, themeName, parentThemeName });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -250,6 +250,7 @@ export function AddScreen({ onSuccess }) {
         parts: preview.num_parts,
         theme: preview.theme_id,
         themeName: preview.themeName ?? null,
+        parentThemeName: preview.parentThemeName ?? null,
         year: preview.year ?? null,
         status,
       });

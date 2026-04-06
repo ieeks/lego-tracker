@@ -11,6 +11,7 @@ const FILTERS = [
 const SORTS = [
   { id: "date",  label: "Hinzugefügt", icon: "📅" },
   { id: "parts", label: "Teile",       icon: "🧱" },
+  { id: "theme", label: "Theme",       icon: "🏷️" },
 ];
 
 const EMPTY_LABELS = {
@@ -39,6 +40,15 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
 
   const sorted = sort === "parts"
     ? [...filtered].sort((a, b) => (b.parts || 0) - (a.parts || 0))
+    : sort === "theme"
+    ? [...filtered].sort((a, b) => {
+        const ta = a.parentThemeName ?? a.themeName ?? "";
+        const tb = b.parentThemeName ?? b.themeName ?? "";
+        if (!ta && !tb) return 0;
+        if (!ta) return 1;
+        if (!tb) return -1;
+        return ta.localeCompare(tb, "de");
+      })
     : filtered;
 
   return (

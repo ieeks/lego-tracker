@@ -10,16 +10,17 @@ import { db } from "./firebase";
 
 const COL = "sets";
 
-export async function addSet({ setNumber, name, image, parts, theme, themeName, year, status, location }) {
+export async function addSet({ setNumber, name, image, parts, theme, themeName, parentThemeName, year, status, location }) {
   const ref = await addDoc(collection(db, COL), {
     setNumber,
     name,
     image,
     parts,
     theme,
-    ...(themeName  ? { themeName }  : {}),
-    ...(year       ? { year }       : {}),
-    ...(location   ? { location }   : {}),
+    ...(themeName       ? { themeName }       : {}),
+    ...(parentThemeName ? { parentThemeName } : {}),
+    ...(year            ? { year }            : {}),
+    ...(location        ? { location }        : {}),
     status,
     createdAt: serverTimestamp(),
   });

@@ -2,18 +2,31 @@ const API_KEY = import.meta.env.VITE_REBRICKABLE_KEY;
 const BASE = "https://rebrickable.com/api/v3/lego";
 
 /**
- * Theme-Name von Rebrickable laden.
+ * Theme-Name und Parent-Theme-Name von Rebrickable laden.
  * @param {number} themeId
- * @returns {Promise<string>} Theme-Name (z.B. "City")
+ * @returns {Promise<{ themeName: string|null, parentThemeName: string|null }>}
  */
-export async function fetchThemeName(themeId) {
-  if (!themeId || !API_KEY) return null;
+export async function fetchThemeNames(themeId) {
+  if (!themeId || !API_KEY) return { themeName: null, parentThemeName: null };
   const res = await fetch(`${BASE}/themes/${themeId}/`, {
     headers: { Authorization: `key ${API_KEY}` },
   });
-  if (!res.ok) return null;
-  const data = await res.json();
-  return data.name ?? null;
+  if (!res.ok) return { themeName: null, parentThemeName: null };
+  const theme = await res.json();
+  const themeName = theme.name ?? null;
+
+  let parentThemeName = null;
+  if (theme.parent_id) {
+    const parentRes = await fetch(`${BASE}/themes/${theme.parent_id}/`, {
+      headers: { Authorization: `key ${API_KEY}` },
+    });
+    if (parentRes.ok) {
+      const parent = await parentRes.json();
+      parentThemeName = parent.name ?? null;
+    }
+  }
+
+  return { themeName, parentThemeName };
 }
 
 /**

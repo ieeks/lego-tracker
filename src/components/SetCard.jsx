@@ -161,7 +161,12 @@ export function SetCard({ set, onClick }) {
           {/* Set-Nr + Theme + Jahr */}
           <div style={{ fontSize: 12, color: "#8E8E93", fontWeight: 500, marginBottom: 6 }}>
             {set.setNumber}
-            {set.themeName && <span style={{ color: "#AEAEB2" }}> · {set.themeName}</span>}
+            {set.themeName && (
+              <span style={{ color: "#AEAEB2" }}>
+                {" · "}
+                {set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}
+              </span>
+            )}
             {set.year && <span style={{ color: "#AEAEB2" }}> · {set.year}</span>}
           </div>
 
