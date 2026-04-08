@@ -20,9 +20,12 @@ Ziel:
 - Speicherung in Firebase Firestore (Echtzeit via onSnapshot)
 - Status-System: built / boxed / wishlist
 - Swipe-to-Delete auf Set-Cards (Touch-Events, roter Button)
-- Theme-Name wird von Rebrickable geladen und in Firestore gespeichert
+- Theme-Name und Parent-Theme werden von Rebrickable geladen und in Firestore gespeichert
+  - Darstellung: „City › Arctic" Format in SetCard und DetailModal
+  - Backfill für bestehende Sets: `backfill-parent-theme.mjs`
 - Dashboard: 2×2 Stats-Grid (Gesamt Sets, Gesamt Teile, Wunschliste, OVP-Ratio)
 - Filter-Chips: Sammlung / Auf Wunschliste / Gebaut / OVP — zweizeilig (2×2 Grid, kein horizontales Scrollen)
+- Parent-Theme Filter-Chips: horizontales Scrollen unter der Sortierung, zeigt alle vorhandenen Parent-Themes der aktuellen Ansicht; Wechsel des Status-Filters setzt Theme-Filter zurück
 - Sortierung nach Hinzufüge-Datum (Standard) oder Teileanzahl (absteigend)
 - Suche nach Name oder Set-Nummer
 - Bottom Sheet Detail-Modal mit Status-Wechsel und Löschen

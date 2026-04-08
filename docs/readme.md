@@ -12,7 +12,7 @@ GitHub: https://github.com/ieeks/lego-tracker
 
 - Set per Nummer suchen → Daten automatisch via Rebrickable laden
 - QR-Code aus der LEGO-Anleitung scannen → Set wird automatisch erkannt
-- Bild, Name, Teileanzahl, Theme automatisch befüllt
+- Bild, Name, Teileanzahl, Theme und Parent-Theme automatisch befüllt (z.B. „City › Arctic")
 - Hinzufügen zur Sammlung oder Wunschliste
 - Status verwalten: Gebaut / OVP / Wunschliste
 - Standort pro Set: Daheim oder Oma/Opa
@@ -108,7 +108,7 @@ Das Script aktualisiert nur Sets ohne `retailPrice` und überschreibt keine vorh
 
 | Tab | Inhalt |
 |-----|--------|
-| Sammlung | Alle Sets mit Filter-Chips (Sammlung / Wunschliste / Gebaut) |
+| Sammlung | Alle Sets mit Status-Filter-Chips + Parent-Theme-Filter (horizontal scrollbar) |
 | Wunschliste | Sets mit Status "wishlist", inkl. „Alle Preise laden" Button |
 | Statistik | Anzahl, Teile, Statusverteilung, Gesamtwert Sammlung + Wunschliste |
 | Info | App-Info, Export, Reset |
