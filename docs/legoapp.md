@@ -26,7 +26,15 @@ Ziel:
 - Sortierung nach Hinzufüge-Datum (Standard) oder Teileanzahl (absteigend)
 - Suche nach Name oder Set-Nummer
 - Bottom Sheet Detail-Modal mit Status-Wechsel und Löschen
-- Statistik, Info-Screen
+- Statistik-Screen: Statusverteilung, Gesamtwert Sammlung, Gesamtwert Wunschliste
+- Info-Screen
+- BrickSet API v3 Integration für UVP-Preise (`retailPrice`)
+  - Cloudflare Worker als CORS-Proxy und Secret-Manager (`lego-brickset-proxy.gxnpny5jhn.workers.dev`)
+  - Preise werden in Firestore gecacht — einmaliger Fetch, kein automatisches Re-fetch
+  - 🔄 Button im Detail-Modal zum manuellen Aktualisieren einzelner Sets
+  - „Alle Preise laden" Button in WishlistScreen für alle Sets ohne Preis (mit Fortschrittsanzeige)
+  - Gesamtwert Sammlung + Wunschliste in StatsScreen
+  - Bulk-Backfill: `scripts/backfill-prices.mjs`
 
 ---
 
@@ -72,6 +80,8 @@ Set hinzufügen: Gelber FAB-Button (+) oben rechts im Header
 - jsQR für QR-Code-Scanning (kein nativer BarcodeDetector nötig)
 - Inline Styles (kein CSS-Framework)
 - GitHub Pages via GitHub Actions (automatisch bei Push auf main)
+- BrickSet API v3 für UVP-Preise (kein BrickLink, da Seller-only ohne offizielle DE-Preise)
+- Cloudflare Worker für CORS-Proxy + Secret Management (`BRICKSET_API_KEY` liegt nur im Worker)
 
 ---
 
@@ -84,19 +94,23 @@ Set hinzufügen: Gelber FAB-Button (+) oben rechts im Header
   "image": "https://...",
   "theme": 1,
   "themeName": "Technic",
+  "parentThemeName": "LEGO Technic",
   "parts": 3696,
+  "year": 2020,
   "status": "built",
+  "location": "home",
+  "retailPrice": 379.99,
   "createdAt": "timestamp"
 }
 ```
 
-Hinweis: `themeName` ist nur bei Sets vorhanden, die nach dem Update hinzugefügt wurden.
+Hinweise:
+- `themeName` / `parentThemeName` / `year` nur bei Sets vorhanden, die nach dem jeweiligen Update hinzugefügt wurden
+- `retailPrice`: optional, Float, von BrickSet DE via Cloudflare Worker; `null` wenn kein Preis verfügbar
 
 ---
 
 ## Nächste mögliche Schritte
 
-- Statistik-Screen mit Charts ausbauen
 - Wunschliste → Sammlung mit einem Tap verschieben
 - Suche nach Set-Name (ohne Nummer) via Rebrickable
-- OVP-Ratio / Wunschliste-Zähler reaktivieren (z.B. im Statistik-Screen)

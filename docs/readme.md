@@ -15,9 +15,11 @@ GitHub: https://github.com/ieeks/lego-tracker
 - Bild, Name, Teileanzahl, Theme automatisch befüllt
 - Hinzufügen zur Sammlung oder Wunschliste
 - Status verwalten: Gebaut / OVP / Wunschliste
+- Standort pro Set: Daheim oder Oma/Opa
 - Swipe-to-Delete auf Set-Cards
 - Dashboard mit Stats (Gesamt Sets, Teile, Wunschliste, OVP-Ratio)
-- Statistikübersicht
+- UVP-Preise via BrickSet API (Anzeige in Karten, Modal und Statistik)
+- Statistikübersicht mit Gesamtwert Sammlung und Wunschliste
 - Optimiert für iPhone (Mobile-first, iOS-Design)
 
 ---
@@ -26,7 +28,8 @@ GitHub: https://github.com/ieeks/lego-tracker
 
 - Frontend: React + Vite
 - Datenbank: Firebase Firestore (Echtzeit via onSnapshot)
-- API: Rebrickable v3
+- API: Rebrickable v3 (Set-Daten)
+- API: BrickSet v3 via Cloudflare Worker (UVP-Preise)
 - QR-Scanner: jsQR (funktioniert auf Safari iOS)
 - Hosting: GitHub Pages (automatisch via GitHub Actions)
 
@@ -68,11 +71,36 @@ Oder Doppelklick auf **„LEGO Tracker starten.command"**.
   "image": "https://...",
   "theme": 1,
   "themeName": "Technic",
+  "parentThemeName": "LEGO Technic",
   "parts": 3696,
+  "year": 2020,
   "status": "built",
+  "location": "home",
+  "retailPrice": 379.99,
   "createdAt": "timestamp"
 }
 ```
+
+`retailPrice`: optional, Float, von BrickSet DE. `null` wenn kein Preis verfügbar.
+
+---
+
+## UVP-Preise (BrickSet)
+
+Preise werden über einen Cloudflare Worker geladen, der die BrickSet API v3 aufruft und den API-Key serverseitig hält:
+
+```
+https://lego-brickset-proxy.gxnpny5jhn.workers.dev/?setNumber=42115-1
+→ { "retailPrice": 379.99 }
+```
+
+Preise werden in Firestore gecacht. Einmaliges Bulk-Backfill für bestehende Sets:
+
+```bash
+node scripts/backfill-prices.mjs
+```
+
+Das Script aktualisiert nur Sets ohne `retailPrice` und überschreibt keine vorhandenen Werte.
 
 ---
 
@@ -81,8 +109,8 @@ Oder Doppelklick auf **„LEGO Tracker starten.command"**.
 | Tab | Inhalt |
 |-----|--------|
 | Sammlung | Alle Sets mit Filter-Chips (Sammlung / Wunschliste / Gebaut) |
-| Wunschliste | Sets mit Status "wishlist" |
-| Statistik | Anzahl, Teile, Statusverteilung |
+| Wunschliste | Sets mit Status "wishlist", inkl. „Alle Preise laden" Button |
+| Statistik | Anzahl, Teile, Statusverteilung, Gesamtwert Sammlung + Wunschliste |
 | Info | App-Info, Export, Reset |
 
 Set hinzufügen: FAB-Button (+) oben rechts im Header
