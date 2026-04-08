@@ -35,6 +35,10 @@ export async function updateSetLocation(id, location) {
   await updateDoc(doc(db, COL, id), { location: location ?? null });
 }
 
+export async function updateSetPrice(id, retailPrice) {
+  await updateDoc(doc(db, COL, id), { retailPrice });
+}
+
 export async function deleteSet(id) {
   await deleteDoc(doc(db, COL, id));
 }

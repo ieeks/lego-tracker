@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCollection } from "./hooks/useCollection";
-import { updateSetStatus, updateSetLocation, deleteSet } from "./services/setService";
+import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
+import { fetchRetailPrice } from "./services/bricksetService";
 import { BottomNav } from "./components/BottomNav";
 import { StatusBadge } from "./components/StatusBadge";
 import { CollectionScreen } from "./screens/CollectionScreen";
@@ -19,9 +20,12 @@ const LOCATIONS = [
 
 function DetailModal({ set, onClose }) {
   const [location, setLocationState] = useState(set?.location ?? null);
+  const [retailPrice, setRetailPrice] = useState(set?.retailPrice ?? null);
+  const [priceLoading, setPriceLoading] = useState(false);
 
   useEffect(() => {
     setLocationState(set?.location ?? null);
+    setRetailPrice(set?.retailPrice ?? null);
   }, [set?.id]);
 
   if (!set) return null;
@@ -35,6 +39,19 @@ function DetailModal({ set, onClose }) {
     if (!window.confirm(`"${set.name}" wirklich löschen?`)) return;
     await deleteSet(set.id);
     onClose();
+  };
+
+  const handleRefreshPrice = async () => {
+    setPriceLoading(true);
+    try {
+      const price = await fetchRetailPrice(set.setNumber);
+      await updateSetPrice(set.id, price);
+      setRetailPrice(price);
+    } catch {
+      // ignore
+    } finally {
+      setPriceLoading(false);
+    }
   };
 
   const handleLocation = async (locId) => {
@@ -95,6 +112,31 @@ function DetailModal({ set, onClose }) {
             {set.parts > 0 && ` · ${set.parts.toLocaleString("de-DE")} Teile`}
             {set.themeName && ` · ${set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}`}
             {set.year && ` · ${set.year}`}
+          </div>
+
+          {/* UVP */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+            {retailPrice != null && (
+              <span style={{
+                fontSize: 13, fontWeight: 600, color: "#059669",
+                background: "rgba(5,150,105,0.10)",
+                borderRadius: 10, padding: "4px 10px",
+              }}>
+                UVP {retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+              </span>
+            )}
+            <button
+              onClick={handleRefreshPrice}
+              disabled={priceLoading}
+              style={{
+                background: "none", border: "none", cursor: priceLoading ? "default" : "pointer",
+                fontSize: 16, padding: "2px 4px", opacity: priceLoading ? 0.5 : 1,
+                WebkitTapHighlightColor: "transparent",
+              }}
+              title="Preis aktualisieren"
+            >
+              {priceLoading ? "…" : "🔄"}
+            </button>
           </div>
 
           {/* Status Badge */}

@@ -180,6 +180,20 @@ export function SetCard({ set, onClick }) {
             )}
           </div>
 
+          {/* UVP */}
+          {set.retailPrice != null && (
+            <div style={{ marginTop: 5 }}>
+              <span style={{
+                display: "inline-block",
+                fontSize: 11, fontWeight: 600, color: "#059669",
+                background: "rgba(5,150,105,0.10)",
+                borderRadius: 10, padding: "4px 10px",
+              }}>
+                UVP {set.retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+              </span>
+            </div>
+          )}
+
           {/* Standort */}
           {loc && (
             <div style={{ marginTop: 5, fontSize: 11, color: "#AEAEB2", fontWeight: 500 }}>
