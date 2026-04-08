@@ -1,8 +1,51 @@
+function priceSum(sets) {
+  return sets.filter((s) => s.retailPrice != null).reduce((acc, s) => acc + s.retailPrice, 0);
+}
+
+function priceLabel(sets) {
+  const priced = sets.filter((s) => s.retailPrice != null).length;
+  const total  = sets.length;
+  if (priced === 0) return null;
+  return `(${priced} von ${total} Sets)`;
+}
+
+function formatPrice(sum, hasPriced) {
+  if (!hasPriced) return "–";
+  return sum.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
+}
+
 export function StatsScreen({ sets }) {
   const built    = sets.filter((s) => s.status === "built").length;
   const boxed    = sets.filter((s) => s.status === "boxed").length;
   const wishlist = sets.filter((s) => s.status === "wishlist").length;
   const total    = sets.length;
+
+  const ownedSets    = sets.filter((s) => s.status !== "wishlist");
+  const wishlistSets = sets.filter((s) => s.status === "wishlist");
+
+  const ownedValue    = priceSum(ownedSets);
+  const wishlistValue = priceSum(wishlistSets);
+  const ownedHasPriced    = ownedSets.some((s) => s.retailPrice != null);
+  const wishlistHasPriced = wishlistSets.some((s) => s.retailPrice != null);
+
+  const valueCards = [
+    {
+      label: "Sammlungswert",
+      value: formatPrice(ownedValue, ownedHasPriced),
+      sub: priceLabel(ownedSets),
+      icon: "💰",
+      color: "#059669",
+      bg: "#D1FAE5",
+    },
+    {
+      label: "Wunschliste Wert",
+      value: formatPrice(wishlistValue, wishlistHasPriced),
+      sub: priceLabel(wishlistSets),
+      icon: "♥",
+      color: "#E11D48",
+      bg: "#FEE2E2",
+    },
+  ];
 
   const rows = [
     { label: "Gebaut",               count: built,    color: "#059669", bg: "#D1FAE5" },
@@ -21,6 +64,32 @@ export function StatsScreen({ sets }) {
       <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E", marginBottom: 18 }}>
         Statistik
       </div>
+
+      {valueCards.map((card) => (
+        <div key={card.label} style={{
+          background: "#FFF", borderRadius: 18, padding: "16px 20px",
+          marginBottom: 10, boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <div>
+            <div style={{ fontWeight: 600, fontSize: 15, color: "#1C1C1E", marginBottom: 2 }}>
+              {card.icon} {card.label}
+            </div>
+            {card.sub && (
+              <div style={{ fontSize: 11, color: "#8E8E93" }}>{card.sub}</div>
+            )}
+          </div>
+          <span style={{
+            background: card.bg, color: card.color,
+            borderRadius: 20, padding: "4px 14px",
+            fontWeight: 700, fontSize: 15,
+          }}>
+            {card.value}
+          </span>
+        </div>
+      ))}
+
+      <div style={{ height: 1, background: "#F0EEE8", margin: "6px 0 16px" }} />
 
       {rows.map((item) => (
         <div key={item.label} style={{
