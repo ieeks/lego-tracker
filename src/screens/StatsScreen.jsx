@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { fetchRetailPrice } from "../services/bricksetService";
+import { updateSetPrice } from "../services/setService";
+
 function priceSum(sets) {
   return sets.filter((s) => s.retailPrice != null).reduce((acc, s) => acc + s.retailPrice, 0);
 }
@@ -15,6 +19,33 @@ function formatPrice(sum, hasPriced) {
 }
 
 export function StatsScreen({ sets }) {
+  const [loadingPrices, setLoadingPrices] = useState(false);
+  const [loadedCount, setLoadedCount]     = useState(0);
+
+  const setsWithoutPrice = sets.filter((s) => s.retailPrice == null);
+  const showLoadButton   = setsWithoutPrice.length > 0;
+
+  async function handleLoadPrices() {
+    setLoadingPrices(true);
+    setLoadedCount(0);
+    const targets = sets.filter((s) => s.retailPrice == null);
+    for (let i = 0; i < targets.length; i++) {
+      try {
+        const price = await fetchRetailPrice(targets[i].setNumber);
+        if (price != null) {
+          await updateSetPrice(targets[i].id, price);
+        }
+      } catch {
+        // ignore
+      }
+      setLoadedCount(i + 1);
+      if (i < targets.length - 1) {
+        await new Promise((r) => setTimeout(r, 300));
+      }
+    }
+    setLoadingPrices(false);
+  }
+
   const built    = sets.filter((s) => s.status === "built").length;
   const boxed    = sets.filter((s) => s.status === "boxed").length;
   const wishlist = sets.filter((s) => s.status === "wishlist").length;
@@ -61,8 +92,24 @@ export function StatsScreen({ sets }) {
 
   return (
     <div style={{ padding: "0 20px" }}>
-      <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E", marginBottom: 18 }}>
-        Statistik
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+        <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E" }}>
+          Statistik
+        </div>
+        {showLoadButton && (
+          <button
+            onClick={handleLoadPrices}
+            disabled={loadingPrices}
+            style={{
+              background: "#F0EEE8", color: "#7B4955",
+              fontSize: 12, padding: "6px 12px", borderRadius: 20,
+              border: "none", cursor: loadingPrices ? "default" : "pointer",
+              fontWeight: 600,
+            }}
+          >
+            {loadingPrices ? `Lade… (${loadedCount}/${setsWithoutPrice.length})` : "🔄 Preise laden"}
+          </button>
+        )}
       </div>
 
       {valueCards.map((card) => (
