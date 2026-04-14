@@ -109,8 +109,8 @@ Das Script aktualisiert nur Sets ohne `retailPrice` und überschreibt keine vorh
 | Tab | Inhalt |
 |-----|--------|
 | Sammlung | Alle Sets mit Status-Filter-Chips + Parent-Theme-Filter (horizontal scrollbar) |
-| Wunschliste | Sets mit Status "wishlist", inkl. „Alle Preise laden" Button |
-| Statistik | Anzahl, Teile, Statusverteilung, Gesamtwert Sammlung + Wunschliste |
+| Wunschliste | Sets mit Status "wishlist" |
+| Statistik | Anzahl, Teile, Statusverteilung, Gesamtwert Sammlung + Wunschliste, inkl. „Alle Preise laden" Button |
 | Info | App-Info, Export, Reset |
 
 Set hinzufügen: FAB-Button (+) oben rechts im Header

@@ -35,7 +35,7 @@ Ziel:
   - Cloudflare Worker als CORS-Proxy und Secret-Manager (`lego-brickset-proxy.gxnpny5jhn.workers.dev`)
   - Preise werden in Firestore gecacht — einmaliger Fetch, kein automatisches Re-fetch
   - 🔄 Button im Detail-Modal zum manuellen Aktualisieren einzelner Sets
-  - „Alle Preise laden" Button in WishlistScreen für alle Sets ohne Preis (mit Fortschrittsanzeige)
+  - „Alle Preise laden" Button in StatsScreen für alle Sets ohne Preis (mit Fortschrittsanzeige: „Lade… (3/12)")
   - Gesamtwert Sammlung + Wunschliste in StatsScreen
   - Bulk-Backfill: `scripts/backfill-prices.mjs`
 

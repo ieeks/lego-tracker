@@ -21,14 +21,16 @@ function formatPrice(sum, hasPriced) {
 export function StatsScreen({ sets }) {
   const [loadingPrices, setLoadingPrices] = useState(false);
   const [loadedCount, setLoadedCount]     = useState(0);
+  const [totalCount, setTotalCount]       = useState(0);
 
   const setsWithoutPrice = sets.filter((s) => s.retailPrice == null);
   const showLoadButton   = setsWithoutPrice.length > 0;
 
   async function handleLoadPrices() {
+    const targets = sets.filter((s) => s.retailPrice == null);
     setLoadingPrices(true);
     setLoadedCount(0);
-    const targets = sets.filter((s) => s.retailPrice == null);
+    setTotalCount(targets.length);
     for (let i = 0; i < targets.length; i++) {
       try {
         const price = await fetchRetailPrice(targets[i].setNumber);
@@ -107,7 +109,7 @@ export function StatsScreen({ sets }) {
               fontWeight: 600,
             }}
           >
-            {loadingPrices ? `Lade… (${loadedCount}/${setsWithoutPrice.length})` : "🔄 Preise laden"}
+            {loadingPrices ? `Lade… (${loadedCount}/${totalCount})` : "🔄 Preise laden"}
           </button>
         )}
       </div>
