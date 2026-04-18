@@ -26,6 +26,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
   const [search,      setSearch]      = useState("");
   const [sort,        setSort]        = useState("date");
   const [themeFilter, setThemeFilter] = useState(null);
+  const [themeSheetOpen, setThemeSheetOpen] = useState(false);
 
   // Status-Filter anwenden (vor Theme-Filter, damit Chips nur relevante Themes zeigen)
   const statusFiltered = sets.filter((s) => {
@@ -88,7 +89,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 return (
                   <button
                     key={id}
-                    onClick={() => { setFilter(id); setThemeFilter(null); }}
+                    onClick={() => { setFilter(id); setThemeFilter(null); setThemeSheetOpen(false); }}
                     style={{
                       flex: 1,
                       display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5,
@@ -144,49 +145,35 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
         </div>
       </div>
 
-      {/* Theme-Filter chips */}
-      {availableThemes.length > 0 && (
-        <div style={{
-          display: "flex", gap: 6, overflowX: "auto", marginBottom: 12,
-          paddingBottom: 4,
-          scrollbarWidth: "none", msOverflowStyle: "none",
+      {/* Theme-Filter Button */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+        <span style={{
+          fontSize: 12, fontWeight: 600, color: "#AEAEB2",
+          whiteSpace: "nowrap", flexShrink: 0,
         }}>
-          <style>{`.theme-chips::-webkit-scrollbar { display: none; }`}</style>
-          <button
-            onClick={() => setThemeFilter(null)}
-            style={{
-              display: "inline-flex", alignItems: "center",
-              padding: "6px 12px", borderRadius: 20, border: "none",
-              background: !themeFilter ? "#7B4955" : "#EDE5D8",
-              color: !themeFilter ? "#F4EDDB" : "#636366",
-              fontSize: 12, fontWeight: 600,
-              cursor: "pointer", whiteSpace: "nowrap",
-              WebkitTapHighlightColor: "transparent",
-              flexShrink: 0,
-            }}
+          Theme
+        </span>
+        <button
+          onClick={() => setThemeSheetOpen(true)}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 5,
+            padding: "6px 14px", borderRadius: 20, border: "none",
+            fontSize: 12, fontWeight: 600, cursor: "pointer",
+            background: themeFilter ? "#7B4955" : "#EDE5D8",
+            color: themeFilter ? "#fff" : "#636366",
+            WebkitTapHighlightColor: "transparent",
+          }}
+        >
+          {themeFilter ?? "Alle"}
+          <svg
+            style={{ transform: themeSheetOpen ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}
+            width="10" height="10" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
           >
-            Alle
-          </button>
-          {availableThemes.map((theme) => (
-            <button
-              key={theme}
-              onClick={() => setThemeFilter(themeFilter === theme ? null : theme)}
-              style={{
-                display: "inline-flex", alignItems: "center",
-                padding: "6px 12px", borderRadius: 20, border: "none",
-                background: themeFilter === theme ? "#7B4955" : "#EDE5D8",
-                color: themeFilter === theme ? "#F4EDDB" : "#636366",
-                fontSize: 12, fontWeight: 600,
-                cursor: "pointer", whiteSpace: "nowrap",
-                WebkitTapHighlightColor: "transparent",
-                flexShrink: 0,
-              }}
-            >
-              {theme}
-            </button>
-          ))}
-        </div>
-      )}
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+      </div>
 
       {/* Search bar */}
       <div style={{ position: "relative", marginBottom: 16 }}>
@@ -247,6 +234,101 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
       {sorted.map((set) => (
         <SetCard key={set.id} set={set} onClick={onSetClick} />
       ))}
+
+      {themeSheetOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setThemeSheetOpen(false)}
+            style={{
+              position: "fixed", inset: 0, zIndex: 100,
+              background: "rgba(0,0,0,0.45)",
+              backdropFilter: "blur(6px)",
+            }}
+          />
+
+          {/* Sheet */}
+          <div style={{
+            position: "fixed", bottom: 0, left: "50%",
+            transform: "translateX(-50%)",
+            width: "100%", maxWidth: 680,
+            background: "#fff",
+            borderRadius: "28px 28px 0 0",
+            boxShadow: "0 -8px 40px rgba(0,0,0,0.15)",
+            zIndex: 101,
+            paddingBottom: "max(32px, env(safe-area-inset-bottom, 32px))",
+          }}>
+            {/* Handle */}
+            <div style={{
+              width: 40, height: 4, borderRadius: 2,
+              background: "#E5E5EA", margin: "14px auto 4px",
+            }} />
+
+            {/* Titel */}
+            <div style={{
+              fontSize: 15, fontWeight: 700, color: "#1C1C1E",
+              padding: "10px 20px 8px",
+            }}>
+              Theme wählen
+            </div>
+
+            {/* Liste */}
+            <div style={{ overflowY: "auto", maxHeight: "60vh" }}>
+
+              {/* "Alle" Option */}
+              <button
+                onClick={() => { setThemeFilter(null); setThemeSheetOpen(false); }}
+                style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  width: "100%", padding: "13px 20px",
+                  border: "none", background: !themeFilter ? "#FDF8F0" : "transparent",
+                  cursor: "pointer", textAlign: "left",
+                  fontSize: 15, fontWeight: !themeFilter ? 700 : 500,
+                  color: !themeFilter ? "#7B4955" : "#1C1C1E",
+                  WebkitTapHighlightColor: "transparent",
+                }}
+              >
+                Alle Themes
+                {!themeFilter && (
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="#7B4955" strokeWidth="2.5" strokeLinecap="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                )}
+              </button>
+
+              {/* Divider */}
+              <div style={{ height: 1, background: "#F0EEE8", margin: "0 20px" }} />
+
+              {/* Themes */}
+              {availableThemes.map((theme) => (
+                <button
+                  key={theme}
+                  onClick={() => { setThemeFilter(theme); setThemeSheetOpen(false); }}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    width: "100%", padding: "13px 20px",
+                    border: "none",
+                    background: themeFilter === theme ? "#FDF8F0" : "transparent",
+                    cursor: "pointer", textAlign: "left",
+                    fontSize: 15, fontWeight: themeFilter === theme ? 700 : 500,
+                    color: themeFilter === theme ? "#7B4955" : "#1C1C1E",
+                    WebkitTapHighlightColor: "transparent",
+                  }}
+                >
+                  {theme}
+                  {themeFilter === theme && (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="#7B4955" strokeWidth="2.5" strokeLinecap="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
