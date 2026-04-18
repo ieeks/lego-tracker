@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useCollection } from "./hooks/useCollection";
 import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
 import { fetchRetailPrice } from "./services/bricksetService";
@@ -10,8 +10,8 @@ import { WishlistScreen } from "./screens/WishlistScreen";
 import { StatsScreen } from "./screens/StatsScreen";
 import { InfoScreen } from "./screens/InfoScreen";
 
-const STATUS_CYCLE       = { built: "boxed", boxed: "wishlist", wishlist: "built" };
-const STATUS_CYCLE_LABEL = { built: "→ OVP", boxed: "→ Wunschliste", wishlist: "→ Gebaut" };
+const STATUS_CYCLE       = { built: "boxed", boxed: "built", wishlist: "built" };
+const STATUS_CYCLE_LABEL = { built: "→ OVP", boxed: "→ Gebaut", wishlist: "→ Gebaut" };
 
 const LOCATIONS = [
   { id: "home",         label: "Daheim",  icon: "🏠" },
@@ -19,11 +19,15 @@ const LOCATIONS = [
 ];
 
 function DetailModal({ set, onClose }) {
+  const [currentStatus, setCurrentStatus] = useState(set?.status ?? "boxed");
   const [location, setLocationState] = useState(set?.location ?? null);
   const [retailPrice, setRetailPrice] = useState(set?.retailPrice ?? null);
   const [priceLoading, setPriceLoading] = useState(false);
+  const sheetRef = useRef(null);
+  const dragStartY = useRef(null);
 
   useEffect(() => {
+    setCurrentStatus(set?.status ?? "boxed");
     setLocationState(set?.location ?? null);
     setRetailPrice(set?.retailPrice ?? null);
   }, [set?.id]);
@@ -31,8 +35,37 @@ function DetailModal({ set, onClose }) {
   if (!set) return null;
 
   const handleCycle = async () => {
-    await updateSetStatus(set.id, STATUS_CYCLE[set.status]);
-    onClose();
+    const next = STATUS_CYCLE[currentStatus];
+    setCurrentStatus(next);
+    await updateSetStatus(set.id, next);
+  };
+
+  const handleTouchStart = (e) => {
+    dragStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e) => {
+    if (dragStartY.current === null) return;
+    const delta = e.touches[0].clientY - dragStartY.current;
+    if (delta > 0 && sheetRef.current) {
+      sheetRef.current.style.transform = `translateY(${delta}px)`;
+      sheetRef.current.style.transition = "none";
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (dragStartY.current === null) return;
+    const delta = e.changedTouches[0].clientY - dragStartY.current;
+    dragStartY.current = null;
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = "transform 0.25s ease";
+      if (delta > 100) {
+        sheetRef.current.style.transform = "translateY(100%)";
+        setTimeout(onClose, 250);
+      } else {
+        sheetRef.current.style.transform = "translateY(0)";
+      }
+    }
   };
 
   const handleDelete = async () => {
@@ -70,12 +103,17 @@ function DetailModal({ set, onClose }) {
       }}
     >
       <div
+        ref={sheetRef}
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           width: "100%", maxWidth: 680, margin: "0 auto",
           background: "#FFFFFF", borderRadius: "28px 28px 0 0",
           boxShadow: "0 -8px 40px rgba(0,0,0,0.15)",
           paddingBottom: "max(32px, env(safe-area-inset-bottom, 32px))",
+          transition: "transform 0.25s ease",
         }}
       >
         {/* Handle */}
@@ -141,7 +179,7 @@ function DetailModal({ set, onClose }) {
 
           {/* Status Badge */}
           <div style={{ marginBottom: 20 }}>
-            <StatusBadge status={set.status} />
+            <StatusBadge status={currentStatus} />
           </div>
 
           {/* Standort */}
@@ -185,7 +223,7 @@ function DetailModal({ set, onClose }) {
               fontWeight: 600, fontSize: 14, color: "#3A3A3C", cursor: "pointer",
               WebkitTapHighlightColor: "transparent",
             }}>
-              Status {STATUS_CYCLE_LABEL[set.status]}
+              Status {STATUS_CYCLE_LABEL[currentStatus]}
             </button>
             <button onClick={handleDelete} style={{
               padding: "14px 20px", borderRadius: 14,
