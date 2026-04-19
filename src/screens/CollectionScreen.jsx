@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { SetCard } from "../components/SetCard";
 
 const FILTERS = [
@@ -27,6 +27,36 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
   const [sort,        setSort]        = useState("date");
   const [themeFilter, setThemeFilter] = useState(null);
   const [themeSheetOpen, setThemeSheetOpen] = useState(false);
+  const sheetRef = useRef(null);
+  const dragStartY = useRef(null);
+
+  const handleTouchStart = (e) => {
+    dragStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e) => {
+    if (dragStartY.current === null) return;
+    const delta = e.touches[0].clientY - dragStartY.current;
+    if (delta > 0 && sheetRef.current) {
+      sheetRef.current.style.transform = `translateX(-50%) translateY(${delta}px)`;
+      sheetRef.current.style.transition = "none";
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (dragStartY.current === null) return;
+    const delta = e.changedTouches[0].clientY - dragStartY.current;
+    dragStartY.current = null;
+    if (sheetRef.current) {
+      sheetRef.current.style.transition = "transform 0.25s ease";
+      if (delta > 100) {
+        sheetRef.current.style.transform = "translateX(-50%) translateY(100%)";
+        setTimeout(() => setThemeSheetOpen(false), 250);
+      } else {
+        sheetRef.current.style.transform = "translateX(-50%) translateY(0)";
+      }
+    }
+  };
 
   // Status-Filter anwenden (vor Theme-Filter, damit Chips nur relevante Themes zeigen)
   const statusFiltered = sets.filter((s) => {
@@ -248,16 +278,23 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           />
 
           {/* Sheet */}
-          <div style={{
-            position: "fixed", bottom: 0, left: "50%",
-            transform: "translateX(-50%)",
-            width: "100%", maxWidth: 680,
-            background: "#fff",
-            borderRadius: "28px 28px 0 0",
-            boxShadow: "0 -8px 40px rgba(0,0,0,0.15)",
-            zIndex: 101,
-            paddingBottom: "max(32px, env(safe-area-inset-bottom, 32px))",
-          }}>
+          <div
+            ref={sheetRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{
+              position: "fixed", bottom: 0, left: "50%",
+              transform: "translateX(-50%)",
+              width: "100%", maxWidth: 680,
+              background: "#fff",
+              borderRadius: "28px 28px 0 0",
+              boxShadow: "0 -8px 40px rgba(0,0,0,0.15)",
+              zIndex: 101,
+              paddingBottom: "max(32px, env(safe-area-inset-bottom, 32px))",
+              transition: "transform 0.25s ease",
+            }}
+          >
             {/* Handle */}
             <div style={{
               width: 40, height: 4, borderRadius: 2,
