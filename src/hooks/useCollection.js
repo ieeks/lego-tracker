@@ -9,20 +9,25 @@ export function useCollection() {
 
   useEffect(() => {
     let unsub = () => {};
-    authReady.then(() => {
-      const q = query(collection(db, "sets"), orderBy("createdAt", "desc"));
-      unsub = onSnapshot(
-        q,
-        (snap) => {
-          setSets(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-          setLoading(false);
-        },
-        (err) => {
-          setError(err.message);
-          setLoading(false);
-        }
-      );
-    });
+    authReady
+      .then(() => {
+        const q = query(collection(db, "sets"), orderBy("createdAt", "desc"));
+        unsub = onSnapshot(
+          q,
+          (snap) => {
+            setSets(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+            setLoading(false);
+          },
+          (err) => {
+            setError(err.message);
+            setLoading(false);
+          }
+        );
+      })
+      .catch((err) => {
+        setError("Anmeldung fehlgeschlagen: " + err.message);
+        setLoading(false);
+      });
     return () => unsub();
   }, []);
 

@@ -20,13 +20,18 @@ export const auth = getAuth(app);
 
 // Sign in anonymously so Firestore security rules (require auth) are satisfied.
 // Returns a promise that resolves once authentication is ready.
-export const authReady = new Promise((resolve) => {
+export const authReady = new Promise((resolve, reject) => {
   const unsub = onAuthStateChanged(auth, (user) => {
     unsub();
     if (user) {
       resolve(user);
     } else {
-      signInAnonymously(auth).then(resolve).catch(resolve);
+      signInAnonymously(auth)
+        .then((cred) => resolve(cred.user))
+        .catch((err) => {
+          console.error("Firebase anonymous sign-in failed:", err.code, err.message);
+          reject(err);
+        });
     }
   });
 });
