@@ -24,6 +24,7 @@ Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschlis
 
 - React + Vite
 - Firebase Firestore (Echtzeit via `onSnapshot`)
+- Firebase Authentication (anonymes Sign-in)
 - Rebrickable API v3
 - jsQR (QR-Code-Scanning, funktioniert auf Safari iOS)
 - Inline Styles, kein CSS-Framework
@@ -46,6 +47,31 @@ Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschlis
 }
 ```
 
+## Firebase Setup
+
+### Authentication
+In der Firebase Console muss **Anonymous Authentication** aktiviert sein:
+> Authentication → Sign-in method → Anonym → Aktivieren
+
+Die App meldet sich beim Start automatisch anonym an (`signInAnonymously`). Ohne diese Einstellung schlagen alle Schreibzugriffe fehl.
+
+### Firestore Security Rules
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /sets/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
+```
+
+Lesen ist ohne Auth erlaubt, Schreiben nur für authentifizierte (anonyme) Nutzer.
+
+---
+
 ## Lokale Entwicklung
 
 ```bash
@@ -60,6 +86,8 @@ VITE_REBRICKABLE_KEY=your_key
 VITE_FIREBASE_API_KEY=...
 VITE_FIREBASE_AUTH_DOMAIN=...
 VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
 VITE_FIREBASE_APP_ID=...
 ```
 
