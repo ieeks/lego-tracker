@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 // Deine Firebase-Konfiguration aus der Firebase Console:
 // Project Settings → General → Your apps → Firebase SDK snippet
@@ -17,3 +17,16 @@ const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+// Sign in anonymously so Firestore security rules (require auth) are satisfied.
+// Returns a promise that resolves once authentication is ready.
+export const authReady = new Promise((resolve) => {
+  const unsub = onAuthStateChanged(auth, (user) => {
+    unsub();
+    if (user) {
+      resolve(user);
+    } else {
+      signInAnonymously(auth).then(resolve).catch(resolve);
+    }
+  });
+});
