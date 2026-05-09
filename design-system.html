@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>LEGO Tracker — Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     BIRCHLINE TOKENS — LEGO TRACKER EDITION
+     Use this file as the design reference in Claude Code sessions.
+     Reference: --clay, --slate, --ivory, --oat + LEGO additions
+  ============================================================ */
+
+:root {
+  /* Core Palette — Birchline */
+  --clay:    #D97757;
+  --slate:   #141413;
+  --ivory:   #FAF9F5;
+  --oat:     #E3DACC;
+
+  /* Neutral Scale */
+  --white:     #FFFFFF;
+  --gray-100:  #F0EEE6;
+  --gray-300:  #D1CFC5;
+  --gray-500:  #87867F;
+  --gray-700:  #3D3D3A;
+
+  /* Semantic */
+  --success: #788C5D;
+  --warning: #C78E3F;
+  --danger:  #B04A4A;
+  --info:    #5C7CA3;
+
+  /* LEGO-specific extensions */
+  --lego-red:    #D97757; /* maps to clay */
+  --lego-accent: #C78E3F; /* maps to warning/amber for prices */
+  --lego-new:    #788C5D; /* maps to success/green for "New" badge */
+  --lego-owned:  #5C7CA3; /* maps to info/blue for owned state */
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+
+  /* Radius */
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 20px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(20,20,19,0.06);
+  --shadow-md: 0 4px 10px rgba(20,20,19,0.08);
+  --shadow-lg: 0 12px 28px rgba(20,20,19,0.12);
+}
+
+:root { color-scheme: light; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--ivory);
+  color: var(--slate);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  font-weight: 430;
+}
+
+/* ── Layout ── */
+.page { max-width: 960px; margin: 0 auto; padding: var(--sp-7) var(--sp-5); }
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,249,245,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gray-300);
+  padding: var(--sp-3) var(--sp-5);
+  display: flex; gap: var(--sp-4); align-items: center;
+  flex-wrap: wrap;
+}
+nav a {
+  font-size: 13px; font-weight: 500; color: var(--gray-500);
+  text-decoration: none; letter-spacing: 0.02em;
+  transition: color 0.15s;
+}
+nav a:hover { color: var(--clay); }
+nav .brand {
+  font-family: var(--font-display); font-size: 15px;
+  color: var(--slate); margin-right: auto; font-weight: 700;
+}
+
+section { margin-bottom: var(--sp-8); }
+.section-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  color: var(--clay); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: var(--sp-4);
+  display: flex; align-items: center; gap: var(--sp-3);
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px; background: var(--gray-300);
+}
+h2 {
+  font-family: var(--font-display); font-size: 28px; font-weight: 500;
+  line-height: 1.2; margin-bottom: var(--sp-5);
+}
+
+/* ── Hero ── */
+.hero {
+  padding: var(--sp-8) 0 var(--sp-7);
+  border-bottom: 1px solid var(--gray-300);
+  margin-bottom: var(--sp-7);
+}
+.hero-eyebrow {
+  font-family: var(--font-mono); font-size: 12px; color: var(--clay);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: var(--sp-3);
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: 52px; font-weight: 700;
+  line-height: 1.05; color: var(--slate); margin-bottom: var(--sp-4);
+}
+.hero h1 em { font-style: italic; color: var(--clay); }
+.hero p { color: var(--gray-700); max-width: 520px; }
+
+/* ── Color Swatches ── */
+.swatches { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.swatch {
+  width: 100px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.swatch-color { height: 64px; }
+.swatch-info {
+  background: var(--white); padding: var(--sp-2) var(--sp-3);
+}
+.swatch-name { font-size: 12px; font-weight: 600; color: var(--slate); }
+.swatch-hex { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); }
+.swatch-var { font-family: var(--font-mono); font-size: 10px; color: var(--clay); }
+
+.swatch-group-label {
+  font-size: 12px; font-weight: 600; color: var(--gray-500);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  width: 100%; margin-top: var(--sp-4); margin-bottom: var(--sp-2);
+}
+
+/* ── Typography ── */
+.type-row {
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--gray-100);
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: baseline; gap: var(--sp-4);
+}
+.type-meta { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); white-space: nowrap; }
+
+/* ── Spacing ── */
+.spacing-rows { display: flex; flex-direction: column; gap: var(--sp-3); }
+.spacing-row { display: flex; align-items: center; gap: var(--sp-4); }
+.spacing-bar { background: var(--clay); opacity: 0.7; height: 16px; border-radius: var(--r-xs); }
+.spacing-label { font-family: var(--font-mono); font-size: 12px; color: var(--gray-500); min-width: 120px; }
+
+/* ── Components ── */
+.component-grid { display: flex; flex-wrap: wrap; gap: var(--sp-5); align-items: flex-start; }
+.component-block { }
+.component-block h3 {
+  font-family: var(--font-mono); font-size: 11px; color: var(--gray-500);
+  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--sp-3);
+}
+.component-row { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+
+/* Buttons */
+.btn {
+  font-family: var(--font-body); font-size: 14px; font-weight: 500;
+  padding: var(--sp-2) var(--sp-4); border-radius: var(--r-sm);
+  border: none; cursor: pointer; transition: all 0.15s;
+  text-decoration: none; display: inline-flex; align-items: center; gap: var(--sp-2);
+}
+.btn-primary { background: var(--clay); color: var(--white); }
+.btn-primary:hover { background: #c5673f; box-shadow: var(--shadow-md); }
+.btn-secondary { background: var(--oat); color: var(--slate); }
+.btn-secondary:hover { background: var(--gray-300); }
+.btn-ghost { background: transparent; color: var(--gray-700); border: 1px solid var(--gray-300); }
+.btn-ghost:hover { background: var(--gray-100); }
+.btn-danger { background: var(--danger); color: var(--white); }
+.btn-sm { font-size: 12px; padding: var(--sp-1) var(--sp-3); border-radius: var(--r-xs); }
+
+/* Badges */
+.badge {
+  font-family: var(--font-body); font-size: 11px; font-weight: 600;
+  padding: 2px var(--sp-2); border-radius: var(--r-xs);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  display: inline-block;
+}
+.badge-theme  { background: var(--oat);   color: var(--gray-700); }
+.badge-new    { background: #EAF0E3; color: var(--success); }
+.badge-owned  { background: #E4EBF3; color: var(--lego-owned); }
+.badge-price  { background: #FBF0DC; color: var(--warning); font-family: var(--font-mono); }
+.badge-retired { background: var(--gray-100); color: var(--gray-500); }
+
+/* Input */
+.input {
+  font-family: var(--font-body); font-size: 14px; color: var(--slate);
+  background: var(--white); border: 1px solid var(--gray-300);
+  border-radius: var(--r-sm); padding: var(--sp-2) var(--sp-3);
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  width: 220px;
+}
+.input:focus { border-color: var(--clay); box-shadow: 0 0 0 3px rgba(217,119,87,0.12); }
+.input::placeholder { color: var(--gray-500); }
+
+/* ── LEGO Set Card ── */
+.set-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  width: 220px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  position: relative;
+}
+.set-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.set-card-img {
+  width: 100%; height: 140px;
+  background: var(--gray-100);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.set-card-img svg { opacity: 0.18; }
+.set-card-badges {
+  position: absolute; top: var(--sp-3); left: var(--sp-3);
+  display: flex; gap: var(--sp-1); flex-wrap: wrap;
+}
+.set-card-body { padding: var(--sp-4); }
+.set-card-number { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); margin-bottom: 2px; }
+.set-card-name { font-weight: 600; font-size: 14px; color: var(--slate); line-height: 1.3; margin-bottom: var(--sp-2); }
+.set-card-meta { display: flex; align-items: center; justify-content: space-between; }
+.set-card-pieces { font-family: var(--font-mono); font-size: 12px; color: var(--gray-500); }
+.set-card-price { font-family: var(--font-mono); font-size: 14px; font-weight: 500; color: var(--warning); }
+.set-card-footer {
+  padding: var(--sp-3) var(--sp-4);
+  border-top: 1px solid var(--gray-100);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.set-card-theme { font-size: 12px; color: var(--gray-500); }
+.wishlist-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--gray-300); font-size: 16px; transition: color 0.15s;
+  padding: 0;
+}
+.wishlist-btn:hover { color: var(--clay); }
+.wishlist-btn.active { color: var(--clay); }
+
+/* ── Stats Row ── */
+.stats-row { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+.stat-card {
+  background: var(--white);
+  border-radius: var(--r-md); padding: var(--sp-4) var(--sp-5);
+  box-shadow: var(--shadow-sm);
+  flex: 1; min-width: 140px;
+}
+.stat-label { font-size: 12px; color: var(--gray-500); margin-bottom: var(--sp-1); font-weight: 500; }
+.stat-value { font-family: var(--font-display); font-size: 32px; font-weight: 700; color: var(--slate); line-height: 1; }
+.stat-sub { font-size: 12px; color: var(--gray-500); margin-top: var(--sp-1); }
+.stat-card.accent .stat-value { color: var(--clay); }
+.stat-card.gold .stat-value { color: var(--warning); }
+
+/* ── Theme Chip ── */
+.theme-chip {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  background: var(--gray-100); border-radius: var(--r-lg);
+  padding: var(--sp-1) var(--sp-3); font-size: 13px; color: var(--gray-700);
+  cursor: pointer; transition: all 0.15s; border: 1.5px solid transparent;
+  font-weight: 500;
+}
+.theme-chip:hover { background: var(--oat); border-color: var(--gray-300); }
+.theme-chip.active { background: #FAF0EB; border-color: var(--clay); color: var(--clay); }
+.theme-chip-count {
+  background: var(--gray-300); color: var(--gray-700);
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  border-radius: 99px; padding: 1px 5px;
+}
+.theme-chip.active .theme-chip-count { background: var(--clay); color: var(--white); }
+
+/* ── Checkbox ── */
+.checkbox-label {
+  display: flex; align-items: center; gap: var(--sp-3);
+  cursor: pointer; font-size: 14px; color: var(--slate);
+}
+.checkbox-label input[type="checkbox"] {
+  appearance: none; width: 18px; height: 18px;
+  border: 2px solid var(--gray-300); border-radius: var(--r-xs);
+  background: var(--white); cursor: pointer; position: relative;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.checkbox-label input[type="checkbox"]:checked {
+  background: var(--clay); border-color: var(--clay);
+}
+.checkbox-label input[type="checkbox"]:checked::after {
+  content: '✓'; position: absolute; top: -1px; left: 2px;
+  color: var(--white); font-size: 12px; font-weight: 700;
+}
+
+/* ── Empty State ── */
+.empty-state {
+  background: var(--white); border-radius: var(--r-lg);
+  padding: var(--sp-8) var(--sp-5); text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.empty-state-icon { font-size: 40px; margin-bottom: var(--sp-4); opacity: 0.4; }
+.empty-state h3 { font-family: var(--font-display); font-size: 22px; margin-bottom: var(--sp-3); }
+.empty-state p { color: var(--gray-500); font-size: 14px; margin-bottom: var(--sp-5); }
+
+/* ── Shadow Demo ── */
+.shadow-demo {
+  display: flex; flex-wrap: wrap; gap: var(--sp-5);
+}
+.shadow-box {
+  width: 120px; height: 80px; background: var(--white);
+  border-radius: var(--r-md);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--sp-1);
+}
+.shadow-box-label { font-family: var(--font-mono); font-size: 11px; color: var(--gray-500); }
+.shadow-box-var { font-family: var(--font-mono); font-size: 10px; color: var(--clay); }
+
+/* ── Copy token helper ── */
+.token-copy {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  font-family: var(--font-mono); font-size: 12px;
+  background: var(--gray-100); color: var(--slate);
+  padding: var(--sp-1) var(--sp-2); border-radius: var(--r-xs);
+  cursor: pointer; border: 1px solid var(--gray-300);
+  transition: background 0.15s;
+}
+.token-copy:hover { background: var(--oat); }
+.token-copy.copied { color: var(--success); border-color: var(--success); }
+
+.tokens-grid { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* ── Radius demo ── */
+.radius-demo { display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: flex-end; }
+.radius-box {
+  background: var(--oat); width: 72px; height: 72px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+}
+.radius-box span { font-family: var(--font-mono); font-size: 10px; color: var(--gray-700); }
+
+footer {
+  margin-top: var(--sp-8); padding-top: var(--sp-5);
+  border-top: 1px solid var(--gray-300);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: var(--sp-3);
+  font-family: var(--font-mono); font-size: 11px; color: var(--gray-500);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">🧱 LEGO Tracker — Design System</span>
+  <a href="#colors">Colors</a>
+  <a href="#typography">Type</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#components">Components</a>
+  <a href="#patterns">Patterns</a>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Birchline · LEGO Tracker Edition</div>
+    <h1>Design<br><em>Reference</em></h1>
+    <p>Alle Tokens, Komponenten und Patterns für den LEGO Tracker. Diese Datei als <code>design-system.html</code> im Repo-Root ablegen und in <code>CLAUDE.md</code> referenzieren.</p>
+  </div>
+
+  <!-- COLORS -->
+  <section id="colors">
+    <div class="section-label">01 — Color Tokens</div>
+    <div class="swatches">
+      <div class="swatch-group-label">Core Palette</div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--clay)"></div>
+        <div class="swatch-info"><div class="swatch-name">Clay</div><div class="swatch-hex">#D97757</div><div class="swatch-var">--clay</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--slate)"></div>
+        <div class="swatch-info"><div class="swatch-name">Slate</div><div class="swatch-hex">#141413</div><div class="swatch-var">--slate</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--ivory);border:1px solid var(--gray-300)"></div>
+        <div class="swatch-info"><div class="swatch-name">Ivory</div><div class="swatch-hex">#FAF9F5</div><div class="swatch-var">--ivory</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--oat)"></div>
+        <div class="swatch-info"><div class="swatch-name">Oat</div><div class="swatch-hex">#E3DACC</div><div class="swatch-var">--oat</div></div>
+      </div>
+
+      <div class="swatch-group-label">Neutral</div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--gray-100);border:1px solid var(--gray-300)"></div>
+        <div class="swatch-info"><div class="swatch-name">Gray 100</div><div class="swatch-hex">#F0EEE6</div><div class="swatch-var">--gray-100</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--gray-300)"></div>
+        <div class="swatch-info"><div class="swatch-name">Gray 300</div><div class="swatch-hex">#D1CFC5</div><div class="swatch-var">--gray-300</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--gray-500)"></div>
+        <div class="swatch-info"><div class="swatch-name">Gray 500</div><div class="swatch-hex">#87867F</div><div class="swatch-var">--gray-500</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--gray-700)"></div>
+        <div class="swatch-info"><div class="swatch-name">Gray 700</div><div class="swatch-hex">#3D3D3A</div><div class="swatch-var">--gray-700</div></div>
+      </div>
+
+      <div class="swatch-group-label">Semantic / LEGO Extensions</div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--success)"></div>
+        <div class="swatch-info"><div class="swatch-name">New / Active</div><div class="swatch-hex">#788C5D</div><div class="swatch-var">--success</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--warning)"></div>
+        <div class="swatch-info"><div class="swatch-name">Price / UVP</div><div class="swatch-hex">#C78E3F</div><div class="swatch-var">--warning</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--info)"></div>
+        <div class="swatch-info"><div class="swatch-name">Owned</div><div class="swatch-hex">#5C7CA3</div><div class="swatch-var">--info</div></div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:var(--danger)"></div>
+        <div class="swatch-info"><div class="swatch-name">Retired</div><div class="swatch-hex">#B04A4A</div><div class="swatch-var">--danger</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section id="typography">
+    <div class="section-label">02 — Typography</div>
+    <div class="type-row">
+      <div style="font-family:var(--font-display);font-size:48px;font-weight:700;line-height:1.1">My LEGO Collection</div>
+      <div class="type-meta">Fraunces · 48 / 1.1 / 700<br>Display</div>
+    </div>
+    <div class="type-row">
+      <div style="font-family:var(--font-display);font-size:32px;font-weight:500;line-height:1.2">Technic · 847 Sets</div>
+      <div class="type-meta">Fraunces · 32 / 1.2 / 500<br>Heading 1</div>
+    </div>
+    <div class="type-row">
+      <div style="font-family:var(--font-display);font-size:24px;font-weight:500;line-height:1.3">Star Wars · 2023</div>
+      <div class="type-meta">Fraunces · 24 / 1.3 / 500<br>Heading 2</div>
+    </div>
+    <div class="type-row">
+      <div style="font-size:16px;font-weight:430;line-height:1.55;max-width:480px">Track your LEGO sets, wishlist items, and total collection value — all in one place.</div>
+      <div class="type-meta">DM Sans · 16 / 1.55 / 430<br>Body</div>
+    </div>
+    <div class="type-row">
+      <div style="font-size:14px;font-weight:430;line-height:1.5">842 pieces · UVP €179,99</div>
+      <div class="type-meta">DM Sans · 14 / 1.5 / 430<br>Small</div>
+    </div>
+    <div class="type-row">
+      <div style="font-size:12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;color:var(--gray-500)">LAST UPDATED 3 HOURS AGO</div>
+      <div class="type-meta">DM Sans · 12 / 1.4 / 500<br>Caption</div>
+    </div>
+    <div class="type-row">
+      <div style="font-family:var(--font-mono);font-size:13px;color:var(--clay)">#42131 · set-42131</div>
+      <div class="type-meta">DM Mono · 13px<br>Set Numbers / IDs</div>
+    </div>
+  </section>
+
+  <!-- SPACING -->
+  <section id="spacing">
+    <div class="section-label">03 — Spacing</div>
+    <div class="spacing-rows">
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-1)"></div><div class="spacing-label">--sp-1 · 4px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-2)"></div><div class="spacing-label">--sp-2 · 8px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-3)"></div><div class="spacing-label">--sp-3 · 12px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-4)"></div><div class="spacing-label">--sp-4 · 16px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-5)"></div><div class="spacing-label">--sp-5 · 24px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-6)"></div><div class="spacing-label">--sp-6 · 32px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-7)"></div><div class="spacing-label">--sp-7 · 48px</div></div>
+      <div class="spacing-row"><div class="spacing-bar" style="width:var(--sp-8)"></div><div class="spacing-label">--sp-8 · 64px</div></div>
+    </div>
+  </section>
+
+  <!-- RADIUS & SHADOWS -->
+  <section>
+    <div class="section-label">04 — Radius &amp; Elevation</div>
+    <div style="margin-bottom:var(--sp-5)">
+      <div class="radius-demo">
+        <div class="radius-box" style="border-radius:var(--r-xs)"><span>--r-xs</span><span>4px</span></div>
+        <div class="radius-box" style="border-radius:var(--r-sm)"><span>--r-sm</span><span>8px</span></div>
+        <div class="radius-box" style="border-radius:var(--r-md)"><span>--r-md</span><span>12px</span></div>
+        <div class="radius-box" style="border-radius:var(--r-lg)"><span>--r-lg</span><span>20px</span></div>
+      </div>
+    </div>
+    <div class="shadow-demo">
+      <div class="shadow-box" style="box-shadow:var(--shadow-sm)">
+        <div class="shadow-box-label">shadow-sm</div>
+        <div class="shadow-box-var">--shadow-sm</div>
+      </div>
+      <div class="shadow-box" style="box-shadow:var(--shadow-md)">
+        <div class="shadow-box-label">shadow-md</div>
+        <div class="shadow-box-var">--shadow-md</div>
+      </div>
+      <div class="shadow-box" style="box-shadow:var(--shadow-lg)">
+        <div class="shadow-box-label">shadow-lg</div>
+        <div class="shadow-box-var">--shadow-lg</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section id="components">
+    <div class="section-label">05 — Core Components</div>
+
+    <div class="component-grid">
+      <div class="component-block" style="width:100%">
+        <h3>Button</h3>
+        <div class="component-row">
+          <button class="btn btn-primary">Add to Collection</button>
+          <button class="btn btn-secondary">Filter</button>
+          <button class="btn btn-ghost">Cancel</button>
+          <button class="btn btn-danger btn-sm">Remove</button>
+          <button class="btn btn-primary btn-sm">+ Add Set</button>
+        </div>
+      </div>
+
+      <div class="component-block" style="width:100%">
+        <h3>Badge</h3>
+        <div class="component-row">
+          <span class="badge badge-theme">Technic</span>
+          <span class="badge badge-new">New 2024</span>
+          <span class="badge badge-owned">Owned</span>
+          <span class="badge badge-price">€179.99</span>
+          <span class="badge badge-retired">Retired</span>
+        </div>
+      </div>
+
+      <div class="component-block">
+        <h3>Input</h3>
+        <div class="component-row" style="flex-direction:column;align-items:flex-start">
+          <input class="input" placeholder="Search sets…">
+          <input class="input" value="42131" style="width:140px">
+        </div>
+      </div>
+
+      <div class="component-block">
+        <h3>Checkbox</h3>
+        <div class="component-row" style="flex-direction:column;align-items:flex-start;gap:var(--sp-3)">
+          <label class="checkbox-label"><input type="checkbox" checked> Show owned sets</label>
+          <label class="checkbox-label"><input type="checkbox"> Wishlist only</label>
+          <label class="checkbox-label"><input type="checkbox"> Retired sets</label>
+        </div>
+      </div>
+
+      <div class="component-block" style="width:100%">
+        <h3>Theme Chips (Filter)</h3>
+        <div class="component-row">
+          <div class="theme-chip active">🚂 Technic <span class="theme-chip-count">23</span></div>
+          <div class="theme-chip">⭐ Star Wars <span class="theme-chip-count">14</span></div>
+          <div class="theme-chip">🏙️ City <span class="theme-chip-count">8</span></div>
+          <div class="theme-chip">🏰 Icons <span class="theme-chip-count">5</span></div>
+          <div class="theme-chip">👤 Creator <span class="theme-chip-count">11</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATTERNS -->
+  <section id="patterns">
+    <div class="section-label">06 — LEGO-specific Patterns</div>
+
+    <!-- Stats -->
+    <div style="margin-bottom:var(--sp-6)">
+      <h2 style="font-size:20px;margin-bottom:var(--sp-4)">Stats Row</h2>
+      <div class="stats-row">
+        <div class="stat-card accent">
+          <div class="stat-label">Total Sets</div>
+          <div class="stat-value">47</div>
+          <div class="stat-sub">in collection</div>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-label">Total Value</div>
+          <div class="stat-value">€3.840</div>
+          <div class="stat-sub">UVP gesamt</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Wishlist</div>
+          <div class="stat-value">12</div>
+          <div class="stat-sub">sets</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pieces</div>
+          <div class="stat-value">24.182</div>
+          <div class="stat-sub">total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Set Cards -->
+    <div style="margin-bottom:var(--sp-6)">
+      <h2 style="font-size:20px;margin-bottom:var(--sp-4)">Set Card</h2>
+      <div style="display:flex;gap:var(--sp-4);flex-wrap:wrap">
+
+        <div class="set-card">
+          <div class="set-card-img">
+            <div class="set-card-badges">
+              <span class="badge badge-owned">Owned</span>
+            </div>
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect x="8" y="24" width="48" height="32" rx="4" fill="var(--clay)"/><circle cx="20" cy="20" r="8" fill="var(--clay)"/><circle cx="32" cy="16" r="8" fill="var(--clay)"/><circle cx="44" cy="20" r="8" fill="var(--clay)"/></svg>
+          </div>
+          <div class="set-card-body">
+            <div class="set-card-number">#42131</div>
+            <div class="set-card-name">Cat D11 Bulldozer</div>
+            <div class="set-card-meta">
+              <span class="set-card-pieces">3.854 pcs</span>
+              <span class="set-card-price">€449.99</span>
+            </div>
+          </div>
+          <div class="set-card-footer">
+            <span class="set-card-theme">Technic</span>
+            <button class="wishlist-btn active" title="On wishlist">♥</button>
+          </div>
+        </div>
+
+        <div class="set-card">
+          <div class="set-card-img">
+            <div class="set-card-badges">
+              <span class="badge badge-new">New 2024</span>
+            </div>
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect x="8" y="24" width="48" height="32" rx="4" fill="var(--info)"/><circle cx="20" cy="20" r="8" fill="var(--info)"/><circle cx="44" cy="20" r="8" fill="var(--info)"/></svg>
+          </div>
+          <div class="set-card-body">
+            <div class="set-card-number">#75367</div>
+            <div class="set-card-name">Venator-Class Republic Attack Cruiser</div>
+            <div class="set-card-meta">
+              <span class="set-card-pieces">5.374 pcs</span>
+              <span class="set-card-price">€649.99</span>
+            </div>
+          </div>
+          <div class="set-card-footer">
+            <span class="set-card-theme">Star Wars</span>
+            <button class="wishlist-btn" title="Add to wishlist">♡</button>
+          </div>
+        </div>
+
+        <div class="set-card">
+          <div class="set-card-img" style="background:var(--gray-100)">
+            <div class="set-card-badges">
+              <span class="badge badge-retired">Retired</span>
+            </div>
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none"><rect x="8" y="24" width="48" height="32" rx="4" fill="var(--gray-500)"/><circle cx="32" cy="16" r="8" fill="var(--gray-500)"/></svg>
+          </div>
+          <div class="set-card-body">
+            <div class="set-card-number">#10294</div>
+            <div class="set-card-name">Titanic</div>
+            <div class="set-card-meta">
+              <span class="set-card-pieces">9.090 pcs</span>
+              <span class="set-card-price">€629.99</span>
+            </div>
+          </div>
+          <div class="set-card-footer">
+            <span class="set-card-theme">Icons</span>
+            <button class="wishlist-btn active">♥</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div>
+      <h2 style="font-size:20px;margin-bottom:var(--sp-4)">Empty State</h2>
+      <div class="empty-state" style="max-width:400px">
+        <div class="empty-state-icon">🧱</div>
+        <h3>No sets found</h3>
+        <p>Try a different filter or add your first set to get started.</p>
+        <button class="btn btn-primary">Add your first set</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CSS TOKENS REFERENCE -->
+  <section>
+    <div class="section-label">07 — Token Reference (Copy-ready)</div>
+    <p style="font-size:13px;color:var(--gray-500);margin-bottom:var(--sp-4)">Diese CSS-Variablen in jede neue Datei übernehmen oder per <code>@import</code> einbinden.</p>
+    <div class="tokens-grid">
+      <code class="token-copy" onclick="copyToken(this, '--clay: #D97757')">--clay</code>
+      <code class="token-copy" onclick="copyToken(this, '--slate: #141413')">--slate</code>
+      <code class="token-copy" onclick="copyToken(this, '--ivory: #FAF9F5')">--ivory</code>
+      <code class="token-copy" onclick="copyToken(this, '--oat: #E3DACC')">--oat</code>
+      <code class="token-copy" onclick="copyToken(this, '--gray-100: #F0EEE6')">--gray-100</code>
+      <code class="token-copy" onclick="copyToken(this, '--gray-300: #D1CFC5')">--gray-300</code>
+      <code class="token-copy" onclick="copyToken(this, '--gray-500: #87867F')">--gray-500</code>
+      <code class="token-copy" onclick="copyToken(this, '--gray-700: #3D3D3A')">--gray-700</code>
+      <code class="token-copy" onclick="copyToken(this, '--success: #788C5D')">--success</code>
+      <code class="token-copy" onclick="copyToken(this, '--warning: #C78E3F')">--warning</code>
+      <code class="token-copy" onclick="copyToken(this, '--danger: #B04A4A')">--danger</code>
+      <code class="token-copy" onclick="copyToken(this, '--info: #5C7CA3')">--info</code>
+      <code class="token-copy" onclick="copyToken(this, &quot;font-family: 'Fraunces', Georgia, serif&quot;)">--font-display</code>
+      <code class="token-copy" onclick="copyToken(this, &quot;font-family: 'DM Sans', sans-serif&quot;)">--font-body</code>
+      <code class="token-copy" onclick="copyToken(this, &quot;font-family: 'DM Mono', monospace&quot;)">--font-mono</code>
+    </div>
+  </section>
+
+  <!-- USAGE INSTRUCTIONS -->
+  <section>
+    <div class="section-label">08 — Usage in Claude Code</div>
+    <div style="background:var(--slate);border-radius:var(--r-md);padding:var(--sp-5);font-family:var(--font-mono);font-size:13px;color:var(--oat);line-height:1.7">
+      <div style="color:var(--gray-500);"># In CLAUDE.md hinzufügen:</div>
+      <br>
+      <div style="color:var(--clay)">## Design System</div>
+      <div>Refer to <span style="color:var(--success)">design-system.html</span> for all UI decisions.</div>
+      <div>Use Birchline tokens (--clay, --slate, --ivory, --oat).</div>
+      <div>Fonts: Fraunces (display) + DM Sans (body) + DM Mono (numbers/IDs).</div>
+      <br>
+      <div style="color:var(--gray-500)"># Prompt-Einstieg für neue Sessions:</div>
+      <br>
+      <div>Read <span style="color:var(--success)">design-system.html</span> first, then...</div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Birchline × LEGO Tracker · Generated for ieeks/lego-tracker</span>
+    <span>Use as design-system.html in repo root</span>
+  </footer>
+
+</div>
+
+<script>
+  function copyToken(el, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      el.classList.add('copied');
+      el.textContent = '✓ copied';
+      setTimeout(() => {
+        el.classList.remove('copied');
+        el.textContent = '--' + text.split('--')[1]?.split(':')[0] || text;
+      }, 1500);
+    });
+  }
+
+  // Theme chip toggle demo
+  document.querySelectorAll('.theme-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('active');
+    });
+  });
+
+  // Wishlist toggle demo
+  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      btn.textContent = btn.classList.contains('active') ? '♥' : '♡';
+    });
+  });
+</script>
+
+</body>
+</html>
