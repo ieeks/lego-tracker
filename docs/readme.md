@@ -17,10 +17,15 @@ GitHub: https://github.com/ieeks/lego-tracker
 - Status verwalten: Gebaut / OVP / Wunschliste
 - Standort pro Set: Daheim oder Oma/Opa
 - Swipe-to-Delete auf Set-Cards
-- Dashboard mit Stats (Gesamt Sets, Teile, Wunschliste, OVP-Ratio)
+- Dashboard mit Stats (Gesamt Sets, Teile)
+- Filter-Chips (Pill-Style): Sammlung / Wunschliste / Gebaut / OVP
+- Theme-Filter mit Bottom Sheet (alle verfügbaren Themes der aktuellen Ansicht)
+- Sortierung nach Datum, Teileanzahl oder Theme
 - UVP-Preise via BrickSet API (Anzeige in Karten, Modal und Statistik)
 - Statistikübersicht mit Gesamtwert Sammlung und Wunschliste
-- Optimiert für iPhone (Mobile-first, iOS-Design)
+- Birchline Design System (Fraunces + DM Sans + DM Mono, CSS Custom Properties)
+- Lucide React Icons (konsistentes Icon-System, keine Emoji)
+- Optimiert für iPhone (Mobile-first, Touch-Gesten)
 
 ---
 
@@ -28,9 +33,11 @@ GitHub: https://github.com/ieeks/lego-tracker
 
 - Frontend: React + Vite
 - Datenbank: Firebase Firestore (Echtzeit via onSnapshot)
-- API: Rebrickable v3 (Set-Daten)
+- Auth: Firebase Anonymous Authentication
+- API: Rebrickable v3 (Set-Daten, Themes)
 - API: BrickSet v3 via Cloudflare Worker (UVP-Preise)
 - QR-Scanner: jsQR (funktioniert auf Safari iOS)
+- Icons: lucide-react
 - Hosting: GitHub Pages (automatisch via GitHub Actions)
 
 ---
@@ -57,8 +64,6 @@ VITE_REBRICKABLE_KEY=...
 ```bash
 npm run dev
 ```
-
-Oder Doppelklick auf **„LEGO Tracker starten.command"**.
 
 ---
 
@@ -108,12 +113,12 @@ Das Script aktualisiert nur Sets ohne `retailPrice` und überschreibt keine vorh
 
 | Tab | Inhalt |
 |-----|--------|
-| Sammlung | Alle Sets mit Status-Filter-Chips + Parent-Theme-Filter (horizontal scrollbar) |
-| Wunschliste | Sets mit Status "wishlist" |
-| Statistik | Anzahl, Teile, Statusverteilung, Gesamtwert Sammlung + Wunschliste, inkl. „Alle Preise laden" Button |
-| Info | App-Info, Export, Reset |
+| Sammlung | Alle Sets mit Pill-Filter-Chips + Theme Bottom Sheet + Sortierung |
+| Wunschliste | Sets mit Status „wishlist", inkl. „Alle Preise laden" |
+| Statistik | Anzahl, Statusverteilung, Gesamtwert Sammlung + Wunschliste |
+| Info | App-Info, JSON-Export, Sammlung zurücksetzen |
 
-Set hinzufügen: FAB-Button (+) oben rechts im Header
+Set hinzufügen: Plus-Button oben rechts im Header
 
 ---
 
