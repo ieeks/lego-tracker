@@ -8,7 +8,7 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
   const unpricedSets = wishlist.filter((s) => s.retailPrice == null);
 
   const [loadingPrices, setLoadingPrices] = useState(false);
-  const [progress, setProgress] = useState(null); // { done, total }
+  const [progress, setProgress] = useState(null);
 
   const handleLoadAllPrices = async () => {
     if (loadingPrices || unpricedSets.length === 0) return;
@@ -31,7 +31,7 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
   return (
     <div style={{ padding: "0 20px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E" }}>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)" }}>
           Meine Wunschliste
         </div>
 
@@ -40,9 +40,10 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
             onClick={handleLoadAllPrices}
             disabled={loadingPrices}
             style={{
-              background: loadingPrices ? "#E5E5EA" : "#059669",
-              color: loadingPrices ? "#8E8E93" : "#FFFFFF",
-              border: "none", borderRadius: 10, padding: "6px 12px",
+              background: loadingPrices ? "var(--oat)" : "var(--clay)",
+              color: loadingPrices ? "var(--gray-500)" : "var(--white)",
+              fontFamily: "var(--font-body)",
+              border: "none", borderRadius: "var(--r-sm)", padding: "6px 12px",
               fontSize: 13, fontWeight: 600, cursor: loadingPrices ? "default" : "pointer",
               WebkitTapHighlightColor: "transparent",
               whiteSpace: "nowrap",
@@ -56,13 +57,13 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
       </div>
 
       {loading && (
-        <div style={{ textAlign: "center", padding: "48px 0", color: "#AEAEB2", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "48px 0", color: "var(--gray-300)", fontSize: 14 }}>
           Lade Wunschliste…
         </div>
       )}
 
       {!loading && wishlist.length === 0 && (
-        <div style={{ textAlign: "center", padding: "48px 20px", color: "#AEAEB2", fontSize: 14, fontWeight: 500 }}>
+        <div style={{ textAlign: "center", padding: "48px 20px", color: "var(--gray-500)", fontSize: 14, fontWeight: 500 }}>
           Noch keine Wunsch-Sets
         </div>
       )}

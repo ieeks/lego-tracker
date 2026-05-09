@@ -67,35 +67,35 @@ export function StatsScreen({ sets }) {
       value: formatPrice(ownedValue, ownedHasPriced),
       sub: priceLabel(ownedSets),
       icon: "💰",
-      color: "#059669",
-      bg: "#D1FAE5",
+      color: "var(--warning)",
+      bg: "#FBF0DC",
     },
     {
       label: "Wunschliste Wert",
       value: formatPrice(wishlistValue, wishlistHasPriced),
       sub: priceLabel(wishlistSets),
       icon: "♥",
-      color: "#E11D48",
-      bg: "#FEE2E2",
+      color: "var(--clay)",
+      bg: "#FAF0EB",
     },
   ];
 
   const rows = [
-    { label: "Gebaut",               count: built,    color: "#059669", bg: "#D1FAE5" },
-    { label: "Ungeöffnet (OVP)",     count: boxed,    color: "#D97706", bg: "#FEF3C7" },
-    { label: "Wunschliste",          count: wishlist, color: "#E11D48", bg: "#FEE2E2" },
+    { label: "Gebaut",           count: built,    color: "var(--success)", bg: "#EAF0E3" },
+    { label: "Ungeöffnet (OVP)", count: boxed,    color: "var(--gray-500)", bg: "var(--gray-100)" },
+    { label: "Wunschliste",      count: wishlist, color: "var(--clay)",    bg: "#FAF0EB" },
   ];
 
   const bars = [
-    { status: "built",    color: "#059669" },
-    { status: "boxed",    color: "#D97706" },
-    { status: "wishlist", color: "#E11D48" },
+    { status: "built",    color: "var(--success)" },
+    { status: "boxed",    color: "var(--gray-300)" },
+    { status: "wishlist", color: "var(--clay)" },
   ];
 
   return (
     <div style={{ padding: "0 20px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-        <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E" }}>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)" }}>
           Statistik
         </div>
         {showLoadButton && (
@@ -103,8 +103,9 @@ export function StatsScreen({ sets }) {
             onClick={handleLoadPrices}
             disabled={loadingPrices}
             style={{
-              background: "#F0EEE8", color: "#7B4955",
-              fontSize: 12, padding: "6px 12px", borderRadius: 20,
+              background: "var(--oat)", color: "var(--clay)",
+              fontFamily: "var(--font-body)",
+              fontSize: 12, padding: "6px 12px", borderRadius: "var(--r-lg)",
               border: "none", cursor: loadingPrices ? "default" : "pointer",
               fontWeight: 600,
             }}
@@ -116,41 +117,43 @@ export function StatsScreen({ sets }) {
 
       {valueCards.map((card) => (
         <div key={card.label} style={{
-          background: "#FFF", borderRadius: 18, padding: "16px 20px",
-          marginBottom: 10, boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+          background: "var(--white)", borderRadius: "var(--r-md)", padding: "16px 20px",
+          marginBottom: 10, boxShadow: "var(--shadow-sm)",
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
           <div>
-            <div style={{ fontWeight: 600, fontSize: 15, color: "#1C1C1E", marginBottom: 2 }}>
+            <div style={{ fontWeight: 600, fontSize: 15, color: "var(--slate)", marginBottom: 2, fontFamily: "var(--font-body)" }}>
               {card.icon} {card.label}
             </div>
             {card.sub && (
-              <div style={{ fontSize: 11, color: "#8E8E93" }}>{card.sub}</div>
+              <div style={{ fontSize: 11, color: "var(--gray-500)", fontFamily: "var(--font-mono)" }}>{card.sub}</div>
             )}
           </div>
           <span style={{
             background: card.bg, color: card.color,
-            borderRadius: 20, padding: "4px 14px",
-            fontWeight: 700, fontSize: 15,
+            borderRadius: "var(--r-lg)", padding: "4px 14px",
+            fontWeight: 600, fontSize: 15,
+            fontFamily: "var(--font-mono)",
           }}>
             {card.value}
           </span>
         </div>
       ))}
 
-      <div style={{ height: 1, background: "#F0EEE8", margin: "6px 0 16px" }} />
+      <div style={{ height: 1, background: "var(--gray-100)", margin: "6px 0 16px" }} />
 
       {rows.map((item) => (
         <div key={item.label} style={{
-          background: "#FFF", borderRadius: 18, padding: "16px 20px",
-          marginBottom: 10, boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+          background: "var(--white)", borderRadius: "var(--r-md)", padding: "16px 20px",
+          marginBottom: 10, boxShadow: "var(--shadow-sm)",
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
-          <div style={{ fontWeight: 600, fontSize: 15, color: "#1C1C1E" }}>{item.label}</div>
+          <div style={{ fontWeight: 600, fontSize: 15, color: "var(--slate)", fontFamily: "var(--font-body)" }}>{item.label}</div>
           <span style={{
             background: item.bg, color: item.color,
-            borderRadius: 20, padding: "4px 14px",
-            fontWeight: 700, fontSize: 15,
+            borderRadius: "var(--r-lg)", padding: "4px 14px",
+            fontWeight: 600, fontSize: 15,
+            fontFamily: "var(--font-mono)",
           }}>
             {item.count}
           </span>
@@ -158,8 +161,8 @@ export function StatsScreen({ sets }) {
       ))}
 
       {total > 0 && (
-        <div style={{ background: "#FFF", borderRadius: 18, padding: 20, marginTop: 8, boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
-          <div style={{ fontWeight: 700, fontSize: 14, color: "#1C1C1E", marginBottom: 14 }}>Statusverteilung</div>
+        <div style={{ background: "var(--white)", borderRadius: "var(--r-md)", padding: 20, marginTop: 8, boxShadow: "var(--shadow-sm)" }}>
+          <div style={{ fontWeight: 600, fontSize: 13, color: "var(--slate)", marginBottom: 14, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Statusverteilung</div>
           <div style={{ display: "flex", height: 10, borderRadius: 10, overflow: "hidden", gap: 2 }}>
             {bars.map(({ status, color }) => {
               const pct = (sets.filter((s) => s.status === status).length / total) * 100;
@@ -169,8 +172,8 @@ export function StatsScreen({ sets }) {
             })}
           </div>
           <div style={{ display: "flex", gap: 16, marginTop: 12 }}>
-            {[["#059669", "Gebaut"], ["#D97706", "OVP"], ["#E11D48", "Wunsch"]].map(([color, label]) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "#8E8E93" }}>
+            {[["var(--success)", "Gebaut"], ["var(--gray-300)", "OVP"], ["var(--clay)", "Wunsch"]].map(([color, label]) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "var(--gray-500)", fontFamily: "var(--font-body)" }}>
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: color }} />
                 {label}
               </div>
@@ -180,7 +183,7 @@ export function StatsScreen({ sets }) {
       )}
 
       {total === 0 && (
-        <div style={{ textAlign: "center", padding: "48px 0", color: "#AEAEB2", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "48px 0", color: "var(--gray-300)", fontSize: 14 }}>
           Noch keine Daten vorhanden.
         </div>
       )}

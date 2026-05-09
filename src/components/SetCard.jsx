@@ -40,7 +40,6 @@ export function SetCard({ set, onClick }) {
     const dx = e.touches[0].clientX - touchStartX.current;
     const dy = e.touches[0].clientY - touchStartY.current;
 
-    // Richtung einmalig festlegen sobald Bewegung deutlich genug ist
     if (!lockDir.current && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
       lockDir.current = Math.abs(dx) > Math.abs(dy) ? 'horiz' : 'vert';
     }
@@ -74,14 +73,14 @@ export function SetCard({ set, onClick }) {
   };
 
   return (
-    <div style={{ position: "relative", marginBottom: 12, borderRadius: 20, overflow: "hidden" }}>
+    <div style={{ position: "relative", marginBottom: 12, borderRadius: "var(--r-lg)", overflow: "hidden" }}>
 
       {/* Delete button (behind card) */}
       <div
         onClick={handleDelete}
         style={{
           position: "absolute", right: 0, top: 0, bottom: 0, width: REVEAL_WIDTH,
-          background: "linear-gradient(135deg, #FF3B30, #E11D48)",
+          background: "var(--danger)",
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 5,
           cursor: "pointer", userSelect: "none",
         }}
@@ -103,8 +102,8 @@ export function SetCard({ set, onClick }) {
         onClick={handleCardClick}
         style={{
           display: "flex", alignItems: "center", gap: 14,
-          background: "#FFFFFF", borderRadius: 20, padding: "14px 16px",
-          boxShadow: "0 2px 14px rgba(0,0,0,0.07)",
+          background: "var(--white)", borderRadius: "var(--r-lg)", padding: "14px 16px",
+          boxShadow: "var(--shadow-sm)",
           cursor: "pointer", userSelect: "none",
           WebkitTapHighlightColor: "transparent",
           transform: `translateX(${offset}px)`,
@@ -113,8 +112,8 @@ export function SetCard({ set, onClick }) {
           touchAction: "pan-y",
         }}
       >
-        {/* Bild */}
-        <div style={{ width: 80, height: 80, borderRadius: 16, overflow: "hidden", flexShrink: 0, background: "#F0EEE8" }}>
+        {/* Thumbnail */}
+        <div style={{ width: 80, height: 80, borderRadius: "var(--r-md)", overflow: "hidden", flexShrink: 0, background: "var(--gray-100)" }}>
           {set.image ? (
             <img
               src={set.image} alt={set.name}
@@ -122,7 +121,7 @@ export function SetCard({ set, onClick }) {
               onError={(e) => { e.target.style.display = "none"; }}
             />
           ) : (
-            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#AEAEB2" }}>
+            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gray-300)" }}>
               <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg">
                 <rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" />
                 <circle cx="4"  cy="2" fill="currentColor" r="2" />
@@ -140,71 +139,72 @@ export function SetCard({ set, onClick }) {
 
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
-          {/* Titel + Herz */}
+          {/* Name + heart */}
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 2 }}>
             <div style={{
-              fontFamily: "'SF Pro Display', -apple-system, sans-serif",
-              fontWeight: 700, fontSize: 15, color: "#1C1C1E",
+              fontFamily: "var(--font-body)",
+              fontWeight: 600, fontSize: 15, color: "var(--slate)",
               whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1,
             }}>
               {set.name}
             </div>
             <svg width="20" height="20" viewBox="0 0 24 24"
-              fill={isWishlist ? "#1D6AE5" : "none"}
-              stroke={isWishlist ? "#1D6AE5" : "#D1D1D6"}
+              fill={isWishlist ? "var(--clay)" : "none"}
+              stroke={isWishlist ? "var(--clay)" : "var(--gray-300)"}
               strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
               style={{ flexShrink: 0, marginTop: 1 }}>
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
           </div>
 
-          {/* Set-Nr + Theme + Jahr */}
-          <div style={{ fontSize: 12, color: "#8E8E93", fontWeight: 500, marginBottom: 6 }}>
-            {set.setNumber}
+          {/* Set number + Theme + Year */}
+          <div style={{ fontSize: 12, color: "var(--gray-500)", fontWeight: 500, marginBottom: 6 }}>
+            <span style={{ fontFamily: "var(--font-mono)" }}>{set.setNumber}</span>
             {set.themeName && (
-              <span style={{ color: "#AEAEB2" }}>
+              <span style={{ color: "var(--gray-300)" }}>
                 {" · "}
                 {set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}
               </span>
             )}
-            {set.year && <span style={{ color: "#AEAEB2" }}> · {set.year}</span>}
+            {set.year && <span style={{ color: "var(--gray-300)" }}> · {set.year}</span>}
           </div>
 
-          {/* Badge + Teile */}
+          {/* Badge + Pieces */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <StatusBadge status={set.status} />
             {set.parts > 0 && (
-              <span style={{ fontSize: 12, color: "#AEAEB2", fontWeight: 500 }}>
+              <span style={{ fontSize: 12, color: "var(--gray-300)", fontFamily: "var(--font-mono)" }}>
                 {set.parts.toLocaleString("de-DE")} Teile
               </span>
             )}
           </div>
 
-          {/* UVP */}
+          {/* Retail price */}
           {set.retailPrice != null && (
             <div style={{ marginTop: 5 }}>
               <span style={{
                 display: "inline-block",
-                fontSize: 11, fontWeight: 600, color: "#059669",
-                background: "rgba(5,150,105,0.10)",
-                borderRadius: 10, padding: "4px 10px",
+                fontSize: 11, fontWeight: 500, color: "var(--warning)",
+                fontFamily: "var(--font-mono)",
+                background: "#FBF0DC",
+                borderRadius: "var(--r-xs)", padding: "2px 8px",
               }}>
-                UVP {set.retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
+                {set.retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
               </span>
             </div>
           )}
 
-          {/* Standort */}
+          {/* Location */}
           {loc && (
-            <div style={{ marginTop: 5, fontSize: 11, color: "#AEAEB2", fontWeight: 500 }}>
+            <div style={{ marginTop: 5, fontSize: 11, color: "var(--gray-500)", fontWeight: 500 }}>
               {loc.icon} {loc.text}
             </div>
           )}
         </div>
 
         {/* Chevron */}
-        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" style={{ flexShrink: 0, opacity: 0.25, marginLeft: 4 }}>
-          <path d="M1 1L7 7L1 13" stroke="#1C1C1E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <svg width="8" height="14" viewBox="0 0 8 14" fill="none" style={{ flexShrink: 0, opacity: 0.2, marginLeft: 4 }}>
+          <path d="M1 1L7 7L1 13" stroke="var(--slate)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
     </div>
