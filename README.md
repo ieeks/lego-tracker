@@ -2,7 +2,7 @@
 
 Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschliste. Gebaut für den Alltag — schnelle Erfassung, kein Login, iOS-Feel.
 
-**Live:** [manuel-app.dev/lego](https://ieeks.github.io/lego-tracker/)
+**Live:** [ieeks.github.io/lego-tracker](https://ieeks.github.io/lego-tracker/)
 
 ---
 
@@ -14,11 +14,15 @@ Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschlis
 - Status-System: **Gebaut** / **OVP** / **Wunschliste**
 - Standort pro Set: Daheim oder Oma/Opa
 - Swipe-to-Delete auf Set-Cards (mit Direction Lock gegen versehentliches Triggern beim Scrollen)
-- Filter-Chips (2×2 Grid): Sammlung / Wunschliste / Gebaut / OVP
-- Sortierung nach Hinzufüge-Datum oder Teileanzahl
+- Filter-Chips (2×2 Pill-Grid): Sammlung / Wunschliste / Gebaut / OVP
+- Theme-Filter mit Bottom Sheet
+- Sortierung nach Hinzufüge-Datum, Teileanzahl oder Theme
 - Suche nach Set-Name oder Nummer
 - Bottom Sheet Detail-Modal mit Status-Wechsel, Standort und Löschen
+- UVP-Preise via BrickSet API (Anzeige in Karten, Modal und Statistik)
 - Statistik-Screen und Info-Screen
+- Birchline Design System (CSS Custom Properties)
+- Lucide React Icon System (keine Emoji oder Unicode-Symbole)
 
 ## Stack
 
@@ -26,9 +30,24 @@ Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschlis
 - Firebase Firestore (Echtzeit via `onSnapshot`)
 - Firebase Authentication (anonymes Sign-in)
 - Rebrickable API v3
+- BrickSet API v3 via Cloudflare Worker (UVP-Preise)
 - jsQR (QR-Code-Scanning, funktioniert auf Safari iOS)
-- Inline Styles, kein CSS-Framework
+- lucide-react (Icon System)
+- Inline Styles + CSS Custom Properties, kein CSS-Framework
 - GitHub Pages via GitHub Actions
+
+## Design System (Birchline)
+
+```css
+--clay:   #D97757;   /* Primärfarbe */
+--slate:  #141413;   /* Überschriften */
+--ivory:  #FAF9F5;   /* Kartenhintergrund-Variante */
+--oat:    #E3DACC;   /* Seitenhintergrund */
+
+--font-display: 'Fraunces', Georgia, serif;
+--font-body:    'DM Sans', sans-serif;
+--font-mono:    'DM Mono', monospace;
+```
 
 ## Datenstruktur (Firestore `sets`)
 
@@ -39,10 +58,12 @@ Mobile-first Web-App zur Verwaltung einer privaten LEGO-Sammlung inkl. Wunschlis
   "image": "https://...",
   "theme": 1,
   "themeName": "Technic",
+  "parentThemeName": "LEGO Technic",
   "parts": 3696,
   "year": 2020,
   "status": "built",
   "location": "home",
+  "retailPrice": 379.99,
   "createdAt": "<timestamp>"
 }
 ```
@@ -67,8 +88,6 @@ service cloud.firestore {
   }
 }
 ```
-
-Lesen ist ohne Auth erlaubt, Schreiben nur für authentifizierte (anonyme) Nutzer.
 
 ---
 

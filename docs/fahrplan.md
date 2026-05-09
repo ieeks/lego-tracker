@@ -13,8 +13,11 @@
 | 7 | QR-Code Scanner (jsQR, Safari iOS) | ✅ Fertig |
 | 8 | Swipe-to-Delete + Theme-Anzeige | ✅ Fertig |
 | 9 | Deployment via GitHub Pages + GitHub Actions | ✅ Fertig |
-| 10 | Statistik-Screen ausbauen | ⬜ Offen |
-| 11 | Suche nach Set-Name (ohne Nummer) | ⬜ Offen |
+| 10 | BrickSet API + UVP-Preise | ✅ Fertig |
+| 11 | Birchline Design System | ✅ Fertig |
+| 12 | Lucide Icon System + Filter Redesign | ✅ Fertig |
+| 13 | Statistik-Screen ausbauen | ⬜ Offen |
+| 14 | Suche nach Set-Name (ohne Nummer) | ⬜ Offen |
 
 Live: https://ieeks.github.io/lego-tracker/
 
@@ -26,7 +29,7 @@ Live: https://ieeks.github.io/lego-tracker/
 npm create vite@latest lego-tracker -- --template react
 cd lego-tracker
 npm install
-npm install firebase jsqr
+npm install firebase jsqr lucide-react
 ```
 
 Ordnerstruktur:
@@ -35,9 +38,10 @@ src/
   components/      # SetCard, StatusBadge, BottomNav
   screens/         # CollectionScreen, AddScreen, WishlistScreen, StatsScreen, InfoScreen
   hooks/           # useCollection
-  services/        # firebase.js, rebrickable.js, setService.js
+  services/        # firebase.js, rebrickable.js, setService.js, bricksetService.js
 App.jsx
 main.jsx
+index.css          # Birchline CSS Custom Properties
 ```
 
 ---
@@ -48,7 +52,8 @@ main.jsx
 1. https://console.firebase.google.com
 2. Neues Projekt erstellen
 3. Firestore Database aktivieren (Testmodus)
-4. Web-App registrieren → Config kopieren
+4. Authentication → Anonymous aktivieren
+5. Web-App registrieren → Config kopieren
 
 ### 2.2 Config in Projekt einfügen
 
@@ -56,6 +61,7 @@ Datei: `src/services/firebase.js`
 ```js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -66,6 +72,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
 ```
 
 ### 2.3 Firestore Collection: `sets`
@@ -77,8 +84,12 @@ export const db = getFirestore(app);
   "image": "https://...",
   "theme": 1,
   "themeName": "Technic",
+  "parentThemeName": "LEGO Technic",
   "parts": 3696,
+  "year": 2020,
   "status": "built",
+  "location": "home",
+  "retailPrice": 379.99,
   "createdAt": "timestamp"
 }
 ```
@@ -89,8 +100,8 @@ export const db = getFirestore(app);
 
 Datei: `src/services/rebrickable.js`
 
-- `fetchSet(setNumber)` → Set-Daten (Name, Bild, Teile, Theme-ID)
-- `fetchThemeName(themeId)` → Theme-Name (z.B. "City", "Technic")
+- `fetchSet(setNumber)` → Set-Daten (Name, Bild, Teile, Theme-ID, Jahr)
+- `fetchThemeNames(themeId)` → `{ themeName, parentThemeName }`
 
 `.env.local`:
 ```
@@ -104,17 +115,19 @@ VITE_REBRICKABLE_KEY=dein_api_key_hier
 Hook `useCollection`: onSnapshot auf Collection `sets`, sortiert nach `createdAt desc`.
 
 `setService.js`:
-- `addSet({ setNumber, name, image, parts, theme, themeName, status })`
+- `addSet({ setNumber, name, image, parts, theme, themeName, parentThemeName, year, status })`
 - `updateSetStatus(id, status)`
+- `updateSetLocation(id, location)`
+- `updateSetPrice(id, price)`
 - `deleteSet(id)`
 
 ---
 
 ## Phase 5 – iOS UI Redesign
 
-- Header: blauer Gradient, gelber FAB-Button (+) oben rechts
-- Stats-Dashboard: 2×2 Grid (Gesamt Sets, Gesamt Teile, Wunschliste, OVP-Ratio)
-- Filter-Chips: Sammlung / Auf Wunschliste / Gebaut
+- Header: clay-farbiger Hintergrund, Plus-Button oben rechts
+- Stats-Dashboard: 2-Card Grid (Gesamt Sets, Gesamt Teile)
+- Filter-Chips: Sammlung / Auf Wunschliste / Gebaut / OVP
 - Suchfeld mit Lupe-Icon und Clear-Button
 - Set-Cards: Bild links, Info rechts, Herz-Icon, Chevron
 - Bottom Nav: 4 Tabs, Wunschliste-Badge
@@ -140,15 +153,15 @@ Umsetzung:
 ## Phase 8 – Swipe-to-Delete & Theme
 
 **Swipe-to-Delete:**
-- Touch-Events auf SetCard
+- Touch-Events auf SetCard mit Direction Lock (verhindert versehentliches Triggern beim Scrollen)
 - Links wischen → roter Löschen-Button (80px) erscheint
 - Snap-Mechanismus: öffnet/schließt bei >36px Swipe
 - Löschen direkt aus Firestore
 
 **Theme-Anzeige:**
-- `fetchThemeName(themeId)` beim Set-Preview aufrufen
-- `themeName` in Firestore speichern
-- Anzeige in SetCard: `60478-1 · City`
+- `fetchThemeNames(themeId)` beim Set-Preview aufrufen
+- `themeName` und `parentThemeName` in Firestore speichern
+- Anzeige in SetCard: `42115-1 · Technic · 2020`
 
 ---
 
@@ -173,3 +186,56 @@ GitHub Secrets erforderlich:
 - `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_AUTH_DOMAIN`, `VITE_FIREBASE_PROJECT_ID`
 - `VITE_FIREBASE_STORAGE_BUCKET`, `VITE_FIREBASE_MESSAGING_SENDER_ID`, `VITE_FIREBASE_APP_ID`
 - `VITE_REBRICKABLE_KEY`
+
+---
+
+## Phase 10 – BrickSet API + UVP-Preise
+
+- Cloudflare Worker als CORS-Proxy für BrickSet API v3
+- Endpoint: `lego-brickset-proxy.gxnpny5jhn.workers.dev/?setNumber=42115-1`
+- Response: `{ "retailPrice": 379.99 }`
+- Preise in Firestore gecacht (`retailPrice` Feld)
+- Refresh-Button im Detail-Modal
+- „Alle Preise laden" in StatsScreen und WishlistScreen
+- Bulk-Backfill via `scripts/backfill-prices.mjs`
+
+---
+
+## Phase 11 – Birchline Design System
+
+CSS Custom Properties in `src/index.css`:
+
+```css
+--clay: #D97757;   --slate: #141413;
+--ivory: #FAF9F5;  --oat: #E3DACC;
+--white: #FFFFFF;
+--gray-100: #F0EEE6;  --gray-300: #D1CFC5;
+--gray-500: #87867F;  --gray-700: #3D3D3A;
+--success: #788C5D;   --warning: #C78E3F;
+--danger: #B04A4A;    --info: #5C7CA3;
+--font-display: 'Fraunces', Georgia, serif;
+--font-body:    'DM Sans', sans-serif;
+--font-mono:    'DM Mono', monospace;
+```
+
+Google Fonts via `<link>` in `index.html` eingebunden.
+
+Hintergrund-Hierarchie:
+- Seite: `var(--oat)` #E3DACC
+- Karten / Modals: `var(--white)` #FFFFFF
+- Inputs: `var(--ivory)` #FAF9F5
+
+---
+
+## Phase 12 – Lucide Icon System + Filter Redesign
+
+**Icon-Migration:**
+- `npm install lucide-react`
+- Alle Emoji und Unicode-Symbole (🏠 ❤️ ✓ 📦 🔄 ⚙️ 📥 etc.) ersetzt durch Lucide-Komponenten
+- Einheitliche Parameter: `strokeWidth={1.75}`, `size={16}` inline / `size={22}` BottomNav
+
+**Filter-Button Redesign:**
+- Pill-Form: `borderRadius: 999px`
+- Inaktiv: transparent, `1.5px solid var(--gray-300)`, `var(--gray-700)` Text
+- Aktiv: `var(--clay)` Hintergrund + Border, weißer Text
+- Gleiche Behandlung für Sort-Chips und Theme-Filter-Button
