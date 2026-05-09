@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import { deleteSet } from "../services/setService";
 
 const INFO_ROWS = [
@@ -50,8 +51,9 @@ export function InfoScreen({ sets }) {
           borderBottom: "1px solid var(--gray-100)",
           WebkitTapHighlightColor: "transparent",
         }}>
-          <span style={{ fontWeight: 600, fontSize: 14, color: "var(--clay)", fontFamily: "var(--font-body)" }}>
-            📥 Sammlung exportieren ({sets.length} Sets)
+          <span style={{ fontWeight: 600, fontSize: 14, color: "var(--clay)", fontFamily: "var(--font-body)", display: "flex", alignItems: "center", gap: 6 }}>
+            <Download size={14} strokeWidth={1.75} color="var(--clay)" />
+            Sammlung exportieren ({sets.length} Sets)
           </span>
           <svg width="8" height="14" viewBox="0 0 8 14" fill="none" style={{ opacity: 0.25 }}>
             <path d="M1 1L7 7L1 13" stroke="var(--slate)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

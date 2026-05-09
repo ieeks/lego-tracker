@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Home, Users } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 import { deleteSet } from "../services/setService";
 
@@ -6,8 +7,8 @@ const REVEAL_WIDTH   = 80;
 const SWIPE_THRESHOLD = 36;
 
 const LOCATION_LABEL = {
-  home:         { icon: "🏠", text: "Daheim"  },
-  grandparents: { icon: "👵", text: "Oma/Opa" },
+  home:         { Icon: Home,  text: "Daheim"  },
+  grandparents: { Icon: Users, text: "Oma/Opa" },
 };
 
 export function SetCard({ set, onClick }) {
@@ -196,8 +197,9 @@ export function SetCard({ set, onClick }) {
 
           {/* Location */}
           {loc && (
-            <div style={{ marginTop: 5, fontSize: 11, color: "var(--gray-500)", fontWeight: 500 }}>
-              {loc.icon} {loc.text}
+            <div style={{ marginTop: 5, fontSize: 11, color: "var(--gray-500)", fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}>
+              <loc.Icon size={11} strokeWidth={1.75} />
+              {loc.text}
             </div>
           )}
         </div>

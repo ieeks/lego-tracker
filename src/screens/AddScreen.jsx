@@ -3,11 +3,12 @@ import jsQR from "jsqr";
 import { fetchSet, fetchThemeNames } from "../services/rebrickable";
 import { addSet } from "../services/setService";
 import { StatusBadge } from "../components/StatusBadge";
+import { Hammer, Package, Heart, Check, Camera } from "lucide-react";
 
 const STATUS_OPTIONS = [
-  { id: "built",    label: "Gebaut",      icon: "✓" },
-  { id: "boxed",    label: "OVP",         icon: "📦" },
-  { id: "wishlist", label: "Wunschliste", icon: "♥" },
+  { id: "built",    label: "Gebaut",      Icon: Hammer },
+  { id: "boxed",    label: "OVP",         Icon: Package },
+  { id: "wishlist", label: "Wunschliste", Icon: Heart },
 ];
 
 function extractSetNumberFromLegoUrl(raw) {
@@ -160,7 +161,7 @@ function QrScannerModal({ onDetect, onClose }) {
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
             padding: 32, textAlign: "center",
           }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>📷</div>
+            <div style={{ marginBottom: 16, color: "#FFF" }}><Camera size={48} strokeWidth={1.75} /></div>
             <div style={{ color: "#FFF", fontWeight: 600, fontSize: 15, lineHeight: 1.5, whiteSpace: "pre-line" }}>{error}</div>
           </div>
         )}
@@ -273,8 +274,9 @@ export function AddScreen({ onSuccess }) {
         </div>
 
         {done && (
-          <div style={{ background: "#EAF0E3", color: "var(--success)", borderRadius: "var(--r-sm)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14 }}>
-            ✓ Set wurde zur Sammlung hinzugefügt!
+          <div style={{ background: "#EAF0E3", color: "var(--success)", borderRadius: "var(--r-sm)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+            <Check size={14} strokeWidth={2} color="var(--success)" />
+            Set wurde zur Sammlung hinzugefügt!
           </div>
         )}
 
@@ -378,7 +380,7 @@ export function AddScreen({ onSuccess }) {
                   onClick={() => setStatus(opt.id)}
                   style={{
                     flex: 1,
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                    display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
                     padding: "10px 4px",
                     border: status === opt.id ? "2px solid var(--clay)" : "2px solid var(--gray-300)",
                     borderRadius: "var(--r-sm)",
@@ -391,7 +393,7 @@ export function AddScreen({ onSuccess }) {
                     transition: "all 0.15s",
                   }}
                 >
-                  <span style={{ fontSize: 20 }}>{opt.icon}</span>
+                  <opt.Icon size={20} strokeWidth={1.75} />
                   {opt.label}
                 </button>
               ))}

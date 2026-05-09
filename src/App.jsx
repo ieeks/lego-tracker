@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { Home, Users, RotateCw, Layers, Plus } from "lucide-react";
 import { useCollection } from "./hooks/useCollection";
 import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
 import { fetchRetailPrice } from "./services/bricksetService";
@@ -14,8 +15,8 @@ const STATUS_CYCLE       = { built: "boxed", boxed: "built", wishlist: "built" }
 const STATUS_CYCLE_LABEL = { built: "→ OVP", boxed: "→ Gebaut", wishlist: "→ Gebaut" };
 
 const LOCATIONS = [
-  { id: "home",         label: "Daheim",  icon: "🏠" },
-  { id: "grandparents", label: "Oma/Opa", icon: "👵" },
+  { id: "home",         label: "Daheim",  Icon: Home },
+  { id: "grandparents", label: "Oma/Opa", Icon: Users },
 ];
 
 function DetailModal({ set, onClose }) {
@@ -173,7 +174,7 @@ function DetailModal({ set, onClose }) {
               }}
               title="Preis aktualisieren"
             >
-              {priceLoading ? "…" : "🔄"}
+              {priceLoading ? "…" : <RotateCw size={16} strokeWidth={1.75} />}
             </button>
           </div>
 
@@ -188,7 +189,7 @@ function DetailModal({ set, onClose }) {
               Standort
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              {LOCATIONS.map(({ id, label, icon }) => {
+              {LOCATIONS.map(({ id, label, Icon }) => {
                 const active = location === id;
                 return (
                   <button
@@ -206,7 +207,7 @@ function DetailModal({ set, onClose }) {
                       transition: "all 0.15s",
                     }}
                   >
-                    <span>{icon}</span> {label}
+                    <Icon size={16} strokeWidth={1.75} /> {label}
                   </button>
                 );
               })}
@@ -331,10 +332,7 @@ export default function App() {
                 flexShrink: 0, marginLeft: 12,
               }}
             >
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--clay)" strokeWidth="2.8" strokeLinecap="round">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
+              <Plus size={22} strokeWidth={2.8} color="var(--clay)" />
             </button>
           </div>
 
@@ -360,7 +358,7 @@ export default function App() {
             <StatCardTop
               label="Gesamt Teile"
               value={totalParts.toLocaleString("de-DE")}
-              icon="⚙️"
+              icon={<Layers size={18} strokeWidth={1.75} color="#788C5D" />}
               accentColor="#788C5D"
               progress={builtPercent}
             />

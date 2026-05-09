@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Tag, Heart, RotateCw } from "lucide-react";
 import { fetchRetailPrice } from "../services/bricksetService";
 import { updateSetPrice } from "../services/setService";
 
@@ -66,7 +67,7 @@ export function StatsScreen({ sets }) {
       label: "Sammlungswert",
       value: formatPrice(ownedValue, ownedHasPriced),
       sub: priceLabel(ownedSets),
-      icon: "💰",
+      Icon: Tag,
       color: "var(--warning)",
       bg: "#FBF0DC",
     },
@@ -74,7 +75,7 @@ export function StatsScreen({ sets }) {
       label: "Wunschliste Wert",
       value: formatPrice(wishlistValue, wishlistHasPriced),
       sub: priceLabel(wishlistSets),
-      icon: "♥",
+      Icon: Heart,
       color: "var(--clay)",
       bg: "#FAF0EB",
     },
@@ -108,9 +109,11 @@ export function StatsScreen({ sets }) {
               fontSize: 12, padding: "6px 12px", borderRadius: "var(--r-lg)",
               border: "none", cursor: loadingPrices ? "default" : "pointer",
               fontWeight: 600,
+              display: "flex", alignItems: "center", gap: 6,
             }}
           >
-            {loadingPrices ? `Lade… (${loadedCount}/${totalCount})` : "🔄 Preise laden"}
+            <RotateCw size={12} strokeWidth={2} />
+            {loadingPrices ? `Lade… (${loadedCount}/${totalCount})` : "Preise laden"}
           </button>
         )}
       </div>
@@ -122,8 +125,9 @@ export function StatsScreen({ sets }) {
           display: "flex", alignItems: "center", justifyContent: "space-between",
         }}>
           <div>
-            <div style={{ fontWeight: 600, fontSize: 15, color: "var(--slate)", marginBottom: 2, fontFamily: "var(--font-body)" }}>
-              {card.icon} {card.label}
+            <div style={{ fontWeight: 600, fontSize: 15, color: "var(--slate)", marginBottom: 2, fontFamily: "var(--font-body)", display: "flex", alignItems: "center", gap: 6 }}>
+              <card.Icon size={14} strokeWidth={1.75} color={card.color} />
+              {card.label}
             </div>
             {card.sub && (
               <div style={{ fontSize: 11, color: "var(--gray-500)", fontFamily: "var(--font-mono)" }}>{card.sub}</div>
