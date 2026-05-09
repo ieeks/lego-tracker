@@ -11,10 +11,8 @@ const STATUS_OPTIONS = [
 ];
 
 function extractSetNumberFromLegoUrl(raw) {
-  // https://LEGO.COM/GO/38/0075316/6382344/...
   const goMatch = raw.match(/\/GO\/38\/(\d+)/i);
   if (goMatch) return parseInt(goMatch[1], 10).toString();
-  // https://www.lego.com/.../product/.../60478
   const productMatch = raw.match(/\/product\/[^/?#]*\/(\d{4,6})/i);
   if (productMatch) return productMatch[1];
   return null;
@@ -102,7 +100,7 @@ function QrScannerModal({ onDetect, onClose }) {
         background: "rgba(0,0,0,0.6)", backdropFilter: "blur(10px)",
         zIndex: 10,
       }}>
-        <div style={{ color: "#FFF", fontWeight: 700, fontSize: 17 }}>QR-Code scannen</div>
+        <div style={{ color: "#FFF", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 17 }}>QR-Code scannen</div>
         <button onClick={handleClose} style={{
           background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%",
           width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
@@ -125,35 +123,30 @@ function QrScannerModal({ onDetect, onClose }) {
         />
         <canvas ref={canvasRef} style={{ display: "none" }} />
 
-        {/* Viewfinder overlay */}
         {!error && (
           <div style={{
             position: "absolute", inset: 0,
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            {/* Dark corners */}
             <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)" }} />
-            {/* Cutout */}
             <div style={{
               position: "relative", zIndex: 1,
               width: 240, height: 240,
               boxShadow: "0 0 0 9999px rgba(0,0,0,0.45)",
               borderRadius: 20,
             }}>
-              {/* Corner brackets */}
               {[
-                { top: 0, left: 0,   borderTop: "3px solid #FFF",   borderLeft:  "3px solid #FFF",  borderRadius: "12px 0 0 0" },
-                { top: 0, right: 0,  borderTop: "3px solid #FFF",   borderRight: "3px solid #FFF",  borderRadius: "0 12px 0 0" },
+                { top: 0, left: 0,     borderTop: "3px solid #FFF",    borderLeft:  "3px solid #FFF",  borderRadius: "12px 0 0 0" },
+                { top: 0, right: 0,    borderTop: "3px solid #FFF",    borderRight: "3px solid #FFF",  borderRadius: "0 12px 0 0" },
                 { bottom: 0, left: 0,  borderBottom: "3px solid #FFF", borderLeft:  "3px solid #FFF",  borderRadius: "0 0 0 12px" },
                 { bottom: 0, right: 0, borderBottom: "3px solid #FFF", borderRight: "3px solid #FFF",  borderRadius: "0 0 12px 0" },
               ].map((s, i) => (
                 <div key={i} style={{ position: "absolute", width: 28, height: 28, ...s }} />
               ))}
-              {/* Scan line */}
               {ready && (
                 <div style={{
                   position: "absolute", left: 0, right: 0, height: 2,
-                  background: "linear-gradient(90deg, transparent, #1D6AE5, transparent)",
+                  background: "linear-gradient(90deg, transparent, var(--clay), transparent)",
                   animation: "scanline 1.8s ease-in-out infinite",
                 }} />
               )}
@@ -275,17 +268,17 @@ export function AddScreen({ onSuccess }) {
       )}
 
       <div style={{ padding: "0 20px" }}>
-        <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E", marginBottom: 18 }}>
+        <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 18 }}>
           Set hinzufügen
         </div>
 
         {done && (
-          <div style={{ background: "#D1FAE5", color: "#059669", borderRadius: 14, padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14 }}>
+          <div style={{ background: "#EAF0E3", color: "var(--success)", borderRadius: "var(--r-sm)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14 }}>
             ✓ Set wurde zur Sammlung hinzugefügt!
           </div>
         )}
 
-        <div style={{ background: "#FFF", borderRadius: 20, padding: 20, boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}>
+        <div style={{ background: "var(--white)", borderRadius: "var(--r-lg)", padding: 20, boxShadow: "var(--shadow-sm)" }}>
           <form onSubmit={handleSearch}>
             <input
               value={input}
@@ -293,13 +286,15 @@ export function AddScreen({ onSuccess }) {
               placeholder="Set-Nummer eingeben (z.B. 42115)"
               inputMode="numeric"
               style={{
-                width: "100%", padding: "14px 16px",
-                borderRadius: 14, border: "1.5px solid #E5E5EA",
-                fontSize: 15, color: "#1C1C1E", outline: "none",
-                background: "#FAFAFA", boxSizing: "border-box",
+                width: "100%", padding: "13px 16px",
+                borderRadius: "var(--r-sm)", border: "1.5px solid var(--gray-300)",
+                fontSize: 15, color: "var(--slate)", outline: "none",
+                fontFamily: "var(--font-body)",
+                background: "var(--ivory)", boxSizing: "border-box",
+                transition: "border-color 0.15s, box-shadow 0.15s",
               }}
-              onFocus={(e) => { e.target.style.borderColor = "#1D6AE5"; }}
-              onBlur={(e)  => { e.target.style.borderColor = "#E5E5EA"; }}
+              onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,119,87,0.12)"; }}
+              onBlur={(e)  => { e.target.style.borderColor = "var(--gray-300)"; e.target.style.boxShadow = "none"; }}
             />
 
             {/* QR Button */}
@@ -308,9 +303,10 @@ export function AddScreen({ onSuccess }) {
               onClick={() => setScanning(true)}
               style={{
                 width: "100%", marginTop: 12, padding: 14,
-                borderRadius: 14,
-                background: "#F1F0EB", border: "none",
-                fontWeight: 600, fontSize: 15, color: "#1C1C1E",
+                borderRadius: "var(--r-sm)",
+                background: "var(--oat)", border: "none",
+                fontWeight: 600, fontSize: 15, color: "var(--slate)",
+                fontFamily: "var(--font-body)",
                 cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
                 WebkitTapHighlightColor: "transparent",
@@ -335,44 +331,46 @@ export function AddScreen({ onSuccess }) {
 
             <button type="submit" disabled={searching} style={{
               width: "100%", marginTop: 10, padding: 15,
-              borderRadius: 14,
-              background: searching ? "#93B4F0" : "linear-gradient(135deg, #1D6AE5, #1855C0)",
-              border: "none", color: "#FFF",
-              fontWeight: 700, fontSize: 15, cursor: searching ? "not-allowed" : "pointer",
-              boxShadow: "0 4px 14px rgba(29,106,229,0.35)",
+              borderRadius: "var(--r-sm)",
+              background: searching ? "var(--oat)" : "var(--clay)",
+              border: "none", color: searching ? "var(--gray-500)" : "var(--white)",
+              fontWeight: 600, fontSize: 15,
+              fontFamily: "var(--font-body)",
+              cursor: searching ? "not-allowed" : "pointer",
+              transition: "background 0.15s",
             }}>
               {searching ? "Suche läuft…" : "Suchen"}
             </button>
           </form>
 
           {error && (
-            <p style={{ color: "#E11D48", fontSize: 13, marginTop: 12, fontWeight: 500, whiteSpace: "pre-line" }}>{error}</p>
+            <p style={{ color: "var(--danger)", fontSize: 13, marginTop: 12, fontWeight: 500, whiteSpace: "pre-line" }}>{error}</p>
           )}
         </div>
 
         {/* Preview */}
         {preview && (
-          <div style={{ background: "#FFF", borderRadius: 20, padding: 20, marginTop: 16, boxShadow: "0 2px 16px rgba(0,0,0,0.07)" }}>
+          <div style={{ background: "var(--white)", borderRadius: "var(--r-lg)", padding: 20, marginTop: 16, boxShadow: "var(--shadow-sm)" }}>
             {preview.set_img_url && (
               <img
                 src={preview.set_img_url}
                 alt={preview.name}
-                style={{ width: "100%", height: 200, objectFit: "contain", borderRadius: 14, background: "#F4F3EE", padding: 8, marginBottom: 14 }}
+                style={{ width: "100%", height: 200, objectFit: "contain", borderRadius: "var(--r-md)", background: "var(--gray-100)", padding: 8, marginBottom: 14 }}
               />
             )}
-            <div style={{ fontSize: 12, color: "#8E8E93", fontWeight: 500, marginBottom: 4 }}>
+            <div style={{ fontSize: 12, color: "var(--gray-500)", fontWeight: 500, marginBottom: 4, fontFamily: "var(--font-mono)" }}>
               #{preview.set_num}
             </div>
-            <div style={{ fontFamily: "'SF Pro Display', -apple-system, sans-serif", fontWeight: 800, fontSize: 20, color: "#1C1C1E", marginBottom: 4 }}>
+            <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 4 }}>
               {preview.name}
             </div>
-            <div style={{ fontSize: 13, color: "#8E8E93", marginBottom: 18 }}>
+            <div style={{ fontSize: 13, color: "var(--gray-500)", marginBottom: 18, fontFamily: "var(--font-mono)" }}>
               {preview.num_parts?.toLocaleString("de-DE")} Teile
-              {preview.themeName && <span style={{ marginLeft: 8, color: "#AEAEB2" }}>· {preview.themeName}</span>}
-              {preview.year && <span style={{ marginLeft: 8, color: "#AEAEB2" }}>· {preview.year}</span>}
+              {preview.themeName && <span style={{ marginLeft: 8, color: "var(--gray-300)" }}>· {preview.themeName}</span>}
+              {preview.year && <span style={{ marginLeft: 8, color: "var(--gray-300)" }}>· {preview.year}</span>}
             </div>
 
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 10 }}>Status wählen:</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--gray-700)", marginBottom: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Status wählen</div>
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
               {STATUS_OPTIONS.map((opt) => (
                 <button
@@ -382,13 +380,15 @@ export function AddScreen({ onSuccess }) {
                     flex: 1,
                     display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
                     padding: "10px 4px",
-                    border: status === opt.id ? "2px solid #1D6AE5" : "2px solid #E5E5EA",
-                    borderRadius: 14,
-                    background: status === opt.id ? "#EEF4FF" : "#FAFAFA",
+                    border: status === opt.id ? "2px solid var(--clay)" : "2px solid var(--gray-300)",
+                    borderRadius: "var(--r-sm)",
+                    background: status === opt.id ? "#FAF0EB" : "var(--ivory)",
                     cursor: "pointer",
+                    fontFamily: "var(--font-body)",
                     fontSize: 12, fontWeight: 600,
-                    color: status === opt.id ? "#1D6AE5" : "#636366",
+                    color: status === opt.id ? "var(--clay)" : "var(--gray-700)",
                     WebkitTapHighlightColor: "transparent",
+                    transition: "all 0.15s",
                   }}
                 >
                   <span style={{ fontSize: 20 }}>{opt.icon}</span>
@@ -403,11 +403,13 @@ export function AddScreen({ onSuccess }) {
                 onClick={handleAdd}
                 disabled={saving}
                 style={{
-                  padding: "13px 24px", borderRadius: 14,
-                  background: saving ? "#93B4F0" : "linear-gradient(135deg, #1D6AE5, #1855C0)",
-                  border: "none", color: "#FFF",
-                  fontWeight: 700, fontSize: 14, cursor: saving ? "not-allowed" : "pointer",
-                  boxShadow: "0 4px 14px rgba(29,106,229,0.3)",
+                  padding: "13px 24px", borderRadius: "var(--r-sm)",
+                  background: saving ? "var(--oat)" : "var(--clay)",
+                  border: "none", color: saving ? "var(--gray-500)" : "var(--white)",
+                  fontWeight: 600, fontSize: 14,
+                  fontFamily: "var(--font-body)",
+                  cursor: saving ? "not-allowed" : "pointer",
+                  transition: "background 0.15s",
                 }}
               >
                 {saving ? "Speichern…" : "Hinzufügen"}
