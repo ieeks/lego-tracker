@@ -358,16 +358,16 @@ export function AddScreen({ onSuccess }) {
                 style={{ width: "100%", height: 200, objectFit: "contain", borderRadius: "var(--r-md)", background: "var(--gray-100)", padding: 8, marginBottom: 14 }}
               />
             )}
-            <div style={{ fontSize: 12, color: "var(--gray-500)", fontWeight: 500, marginBottom: 4, fontFamily: "var(--font-mono)" }}>
+            <div style={{ fontSize: 12, color: "var(--gray-700)", fontWeight: 500, marginBottom: 4, fontFamily: "var(--font-mono)" }}>
               #{preview.set_num}
             </div>
             <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 4 }}>
               {preview.name}
             </div>
-            <div style={{ fontSize: 13, color: "var(--gray-500)", marginBottom: 18, fontFamily: "var(--font-mono)" }}>
+            <div style={{ fontSize: 13, color: "var(--gray-700)", marginBottom: 18, fontFamily: "var(--font-mono)" }}>
               {preview.num_parts?.toLocaleString("de-DE")} Teile
-              {preview.themeName && <span style={{ marginLeft: 8, color: "var(--gray-300)" }}>· {preview.themeName}</span>}
-              {preview.year && <span style={{ marginLeft: 8, color: "var(--gray-300)" }}>· {preview.year}</span>}
+              {preview.themeName && <span style={{ marginLeft: 8, color: "var(--gray-700)" }}>· {preview.themeName}</span>}
+              {preview.year && <span style={{ marginLeft: 8, color: "var(--gray-700)" }}>· {preview.year}</span>}
             </div>
 
             <div style={{ fontSize: 12, fontWeight: 600, color: "var(--gray-700)", marginBottom: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Status wählen</div>

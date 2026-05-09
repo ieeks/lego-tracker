@@ -158,22 +158,22 @@ export function SetCard({ set, onClick }) {
           </div>
 
           {/* Set number + Theme + Year */}
-          <div style={{ fontSize: 12, color: "var(--gray-500)", fontWeight: 500, marginBottom: 6 }}>
+          <div style={{ fontSize: 12, color: "var(--gray-700)", fontWeight: 500, marginBottom: 6 }}>
             <span style={{ fontFamily: "var(--font-mono)" }}>{set.setNumber}</span>
             {set.themeName && (
-              <span style={{ color: "var(--gray-300)" }}>
+              <span style={{ color: "var(--gray-700)" }}>
                 {" · "}
                 {set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}
               </span>
             )}
-            {set.year && <span style={{ color: "var(--gray-300)" }}> · {set.year}</span>}
+            {set.year && <span style={{ color: "var(--gray-700)" }}> · {set.year}</span>}
           </div>
 
           {/* Badge + Pieces */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <StatusBadge status={set.status} />
             {set.parts > 0 && (
-              <span style={{ fontSize: 12, color: "var(--gray-300)", fontFamily: "var(--font-mono)" }}>
+              <span style={{ fontSize: 12, color: "var(--gray-700)", fontFamily: "var(--font-mono)" }}>
                 {set.parts.toLocaleString("de-DE")} Teile
               </span>
             )}

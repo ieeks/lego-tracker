@@ -144,7 +144,7 @@ function DetailModal({ set, onClose }) {
           </div>
 
           {/* Meta */}
-          <div style={{ fontSize: 13, color: "var(--gray-500)", marginBottom: 16, fontFamily: "var(--font-mono)" }}>
+          <div style={{ fontSize: 13, color: "var(--gray-700)", marginBottom: 16, fontFamily: "var(--font-mono)" }}>
             #{set.setNumber}
             {set.parts > 0 && ` · ${set.parts.toLocaleString("de-DE")} Teile`}
             {set.themeName && ` · ${set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}`}
@@ -259,7 +259,7 @@ function StatCardTop({ label, value, icon, accentColor, progress }) {
       }}>
         {icon}
       </div>
-      <div style={{ fontSize: 11, color: "var(--gray-500)", fontWeight: 500, marginTop: 4, fontFamily: "var(--font-body)" }}>{label}</div>
+      <div style={{ fontSize: 11, color: "var(--gray-700)", fontWeight: 500, marginTop: 4, fontFamily: "var(--font-body)" }}>{label}</div>
       <div style={{ fontFamily: "var(--font-display)", fontSize: 30, fontWeight: 700, color: "var(--slate)", letterSpacing: "-0.5px", lineHeight: 1 }}>
         {value}
       </div>
@@ -293,7 +293,7 @@ export default function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "var(--ivory)",
+      background: "var(--oat)",
       fontFamily: "var(--font-body)",
       maxWidth: 680,
       margin: "0 auto",
