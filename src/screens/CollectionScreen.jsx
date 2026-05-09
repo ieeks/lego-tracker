@@ -1,17 +1,18 @@
 import { useState, useRef } from "react";
 import { SetCard } from "../components/SetCard";
+import { Home, Heart, Hammer, Package, Calendar, Layers, Tag } from "lucide-react";
 
 const FILTERS = [
-  { id: "sammlung", label: "Sammlung",        icon: "🏠" },
-  { id: "wishlist", label: "Auf Wunschliste", icon: "❤️" },
-  { id: "built",    label: "Gebaut",          icon: "✓"  },
-  { id: "boxed",    label: "OVP",             icon: "📦" },
+  { id: "sammlung", label: "Sammlung",        Icon: Home },
+  { id: "wishlist", label: "Auf Wunschliste", Icon: Heart },
+  { id: "built",    label: "Gebaut",          Icon: Hammer },
+  { id: "boxed",    label: "OVP",             Icon: Package },
 ];
 
 const SORTS = [
-  { id: "date",  label: "Hinzugefügt", icon: "📅" },
-  { id: "parts", label: "Teile",       icon: "🧱" },
-  { id: "theme", label: "Theme",       icon: "🏷️" },
+  { id: "date",  label: "Hinzugefügt", Icon: Calendar },
+  { id: "parts", label: "Teile",       Icon: Layers },
+  { id: "theme", label: "Theme",       Icon: Tag },
 ];
 
 const EMPTY_LABELS = {
@@ -112,7 +113,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[FILTERS.slice(0, 2), FILTERS.slice(2)].map((row, rowIdx) => (
             <div key={rowIdx} style={{ display: "flex", gap: 8 }}>
-              {row.map(({ id, label, icon }) => {
+              {row.map(({ id, label, Icon }) => {
                 const isActive = filter === id;
                 return (
                   <button
@@ -120,19 +121,19 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                     onClick={() => { setFilter(id); setThemeFilter(null); setThemeSheetOpen(false); }}
                     style={{
                       flex: 1,
-                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 5,
-                      padding: "8px 14px", borderRadius: "var(--r-lg)",
-                      border: isActive ? "1.5px solid var(--clay)" : "1.5px solid transparent",
-                      background: isActive ? "#FAF0EB" : "var(--oat)",
-                      color: isActive ? "var(--clay)" : "var(--gray-700)",
-                      fontSize: 13, fontWeight: 600,
+                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
+                      padding: "6px 14px", borderRadius: "999px",
+                      border: isActive ? "1.5px solid var(--clay)" : "1.5px solid var(--gray-300)",
+                      background: isActive ? "var(--clay)" : "transparent",
+                      color: isActive ? "#FFFFFF" : "var(--gray-700)",
+                      fontSize: 14, fontWeight: 500,
                       fontFamily: "var(--font-body)",
                       cursor: "pointer", whiteSpace: "nowrap",
                       WebkitTapHighlightColor: "transparent",
                       transition: "all 0.15s ease",
                     }}
                   >
-                    <span style={{ fontSize: 12 }}>{icon}</span>
+                    <Icon size={14} strokeWidth={1.75} />
                     {label}
                   </button>
                 );
@@ -148,7 +149,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           Sortierung
         </span>
         <div style={{ display: "flex", gap: 6 }}>
-          {SORTS.map(({ id, label, icon }) => {
+          {SORTS.map(({ id, label, Icon }) => {
             const isActive = sort === id;
             return (
               <button
@@ -156,11 +157,11 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 onClick={() => setSort(id)}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 4,
-                  padding: "5px 10px", borderRadius: "var(--r-lg)",
-                  border: isActive ? "1.5px solid var(--clay)" : "1.5px solid transparent",
-                  background: isActive ? "#FAF0EB" : "var(--gray-100)",
-                  color: isActive ? "var(--clay)" : "var(--gray-700)",
-                  fontSize: 12, fontWeight: 600,
+                  padding: "5px 10px", borderRadius: "999px",
+                  border: isActive ? "1.5px solid var(--clay)" : "1.5px solid var(--gray-300)",
+                  background: isActive ? "var(--clay)" : "transparent",
+                  color: isActive ? "#FFFFFF" : "var(--gray-700)",
+                  fontSize: 12, fontWeight: 500,
                   fontFamily: "var(--font-body)",
                   cursor: "pointer", whiteSpace: "nowrap",
                   WebkitTapHighlightColor: "transparent",
@@ -168,7 +169,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                   flexShrink: 0,
                 }}
               >
-                <span style={{ fontSize: 11 }}>{icon}</span>
+                <Icon size={12} strokeWidth={1.75} />
                 {label}
               </button>
             );
@@ -185,12 +186,12 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           onClick={() => setThemeSheetOpen(true)}
           style={{
             display: "inline-flex", alignItems: "center", gap: 5,
-            padding: "5px 12px", borderRadius: "var(--r-lg)",
-            border: themeFilter ? "1.5px solid var(--clay)" : "1.5px solid transparent",
-            fontSize: 12, fontWeight: 600, cursor: "pointer",
+            padding: "5px 12px", borderRadius: "999px",
+            border: themeFilter ? "1.5px solid var(--clay)" : "1.5px solid var(--gray-300)",
+            fontSize: 12, fontWeight: 500, cursor: "pointer",
             fontFamily: "var(--font-body)",
-            background: themeFilter ? "#FAF0EB" : "var(--gray-100)",
-            color: themeFilter ? "var(--clay)" : "var(--gray-700)",
+            background: themeFilter ? "var(--clay)" : "transparent",
+            color: themeFilter ? "#FFFFFF" : "var(--gray-700)",
             WebkitTapHighlightColor: "transparent",
           }}
         >
