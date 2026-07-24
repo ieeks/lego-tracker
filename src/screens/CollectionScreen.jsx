@@ -230,7 +230,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
             boxSizing: "border-box",
             transition: "border-color 0.15s, box-shadow 0.15s",
           }}
-          onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,119,87,0.12)"; }}
+          onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,58,43,0.14)"; }}
           onBlur={(e)  => { e.target.style.borderColor = "var(--gray-300)"; e.target.style.boxShadow = "none"; }}
         />
         {search && (
@@ -320,7 +320,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   width: "100%", padding: "13px 20px",
-                  border: "none", background: !themeFilter ? "#FAF0EB" : "transparent",
+                  border: "none", background: !themeFilter ? "var(--blush)" : "transparent",
                   cursor: "pointer", textAlign: "left",
                   fontFamily: "var(--font-body)",
                   fontSize: 15, fontWeight: !themeFilter ? 700 : 500,
@@ -347,7 +347,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                     display: "flex", alignItems: "center", justifyContent: "space-between",
                     width: "100%", padding: "13px 20px",
                     border: "none",
-                    background: themeFilter === theme ? "#FAF0EB" : "transparent",
+                    background: themeFilter === theme ? "var(--blush)" : "transparent",
                     cursor: "pointer", textAlign: "left",
                     fontFamily: "var(--font-body)",
                     fontSize: 15, fontWeight: themeFilter === theme ? 700 : 500,

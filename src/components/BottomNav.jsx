@@ -24,36 +24,42 @@ export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
       {TABS.map((tab) => {
         const isActive = active === tab.id;
         const showBadge = tab.id === "wishlist" && wishlistCount > 0;
-        const iconColor = isActive ? "var(--clay)" : "var(--gray-500)";
-        const iconFill = isActive && tab.fillActive ? "var(--clay)" : "none";
+        const iconColor = isActive ? "var(--lego-red)" : "var(--nav-inactive)";
+        const iconFill = isActive && tab.fillActive ? "var(--lego-red)" : "none";
         return (
           <button
             key={tab.id}
             onClick={() => onNavigate(tab.id)}
             style={{
               flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
-              gap: 3, padding: "10px 4px 6px",
+              gap: 4, padding: "10px 4px 6px",
               background: "none", border: "none", cursor: "pointer",
               WebkitTapHighlightColor: "transparent",
               position: "relative",
             }}
           >
-            <div style={{ position: "relative" }}>
+            <div style={{
+              position: "relative",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: 52, height: 30, borderRadius: 999,
+              background: isActive ? "var(--blush)" : "transparent",
+              transition: "background 0.18s ease",
+            }}>
               <tab.Icon
-                size={22}
-                strokeWidth={1.75}
+                size={21}
+                strokeWidth={2}
                 color={iconColor}
                 fill={iconFill}
               />
               {showBadge && (
                 <div style={{
-                  position: "absolute", top: -4, right: -6,
-                  background: "var(--clay)", color: "var(--white)",
+                  position: "absolute", top: -2, right: 6,
+                  background: "var(--lego-red)", color: "var(--white)",
                   borderRadius: "50%", minWidth: 16, height: 16,
                   fontSize: 9, fontWeight: 700,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   padding: "0 3px",
-                  border: "1.5px solid rgba(250,249,245,0.9)",
+                  border: "1.5px solid var(--card)",
                 }}>
                   {wishlistCount > 99 ? "99+" : wishlistCount}
                 </div>
@@ -62,8 +68,8 @@ export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
             <span style={{
               fontSize: 10,
               fontFamily: "var(--font-body)",
-              fontWeight: isActive ? 600 : 400,
-              color: isActive ? "var(--clay)" : "var(--gray-500)",
+              fontWeight: isActive ? 700 : 500,
+              color: isActive ? "var(--lego-red)" : "var(--nav-inactive)",
             }}>
               {tab.label}
             </span>

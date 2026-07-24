@@ -1,27 +1,39 @@
 :root {
-  /* Core Palette — Birchline */
-  --clay:   #D97757;
-  --slate:  #141413;
-  --ivory:  #FAF9F5;
-  --oat:    #E3DACC;
+  /* Core Palette — Warm Premium */
+  --clay:   #d93a2b;   /* primary accent = LEGO red */
+  --slate:  #2e2620;   /* ink — headings & primary text */
+  --ivory:  #FFFFFF;   /* card surface */
+  --oat:    #f4efe4;   /* page background — warm cream */
 
-  /* Neutral Scale */
+  /* Named warm accents */
+  --lego-red:   #d93a2b;
+  --orange:     #e8913a;
+  --terracotta: #d95d39;
+  --olive:      #7d8a5a;   /* piece-count chips */
+  --amber:      #c07a1e;   /* price pills */
+  --taupe:      #a08b72;   /* secondary text */
+  --nav-inactive: #a89a86;
+  --card:   #FFFFFF;
+  --blush:  #fbe6e2;       /* soft red pill background */
+
+  /* Neutral Scale (warm) */
   --white:    #FFFFFF;
-  --gray-100: #F0EEE6;
-  --gray-300: #D1CFC5;
-  --gray-500: #87867F;
-  --gray-700: #3D3D3A;
+  --gray-100: #efe8db;   /* hairlines / faint fills */
+  --gray-300: #d9cdba;   /* borders */
+  --gray-500: #a08b72;   /* secondary text = taupe */
+  --gray-700: #8a7860;   /* meta text — darker taupe */
 
   /* Semantic */
-  --success: #788C5D;
-  --warning: #C78E3F;
-  --danger:  #B04A4A;
+  --success: #7d8a5a;   /* olive */
+  --warning: #c07a1e;   /* amber */
+  --danger:  #c0463a;   /* warm delete red */
   --info:    #5C7CA3;
 
   /* Typography */
   --font-display: 'Fraunces', Georgia, serif;
-  --font-body:    'DM Sans', sans-serif;
-  --font-mono:    'DM Mono', monospace;
+  --font-body:    'Outfit', system-ui, sans-serif;
+  --font-mono:    'Space Grotesk', ui-monospace, monospace;
+  --font-stat:    'Space Grotesk', 'Outfit', sans-serif;
 
   /* Spacing */
   --sp-1: 4px;
@@ -34,15 +46,15 @@
   --sp-8: 64px;
 
   /* Radius */
-  --r-xs: 4px;
-  --r-sm: 8px;
-  --r-md: 12px;
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;
   --r-lg: 20px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(20,20,19,0.06);
-  --shadow-md: 0 4px 10px rgba(20,20,19,0.08);
-  --shadow-lg: 0 12px 28px rgba(20,20,19,0.12);
+  /* Shadows — warm, layered */
+  --shadow-sm: 0 2px 8px rgba(90,70,45,0.06);
+  --shadow-md: 0 8px 20px rgba(90,70,45,0.08);
+  --shadow-lg: 0 16px 36px rgba(90,70,45,0.10);
 }
 
 :root { color-scheme: light; }
@@ -54,7 +66,8 @@
 }
 
 body {
-  background: var(--oat);
+  background: radial-gradient(130% 100% at 50% 0%, #efe3d0 0%, #e6d8c2 100%);
+  background-attachment: fixed;
   color: var(--slate);
   font-family: var(--font-body);
   font-size: 16px;

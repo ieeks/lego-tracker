@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Home, Users } from "lucide-react";
+import { Home, Users, Check } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
 import { deleteSet } from "../services/setService";
 
@@ -141,10 +141,10 @@ export function SetCard({ set, onClick }) {
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Name + heart */}
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 2 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 3 }}>
             <div style={{
               fontFamily: "var(--font-body)",
-              fontWeight: 600, fontSize: 15, color: "var(--slate)",
+              fontWeight: 700, fontSize: 15, color: "var(--slate)",
               whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1,
             }}>
               {set.name}
@@ -170,30 +170,33 @@ export function SetCard({ set, onClick }) {
             {set.year && <span style={{ color: "var(--gray-700)" }}> · {set.year}</span>}
           </div>
 
-          {/* Badge + Pieces */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <StatusBadge status={set.status} />
+          {/* Chips: status / pieces / price */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+            {set.status !== "built" && <StatusBadge status={set.status} />}
             {set.parts > 0 && (
-              <span style={{ fontSize: 12, color: "var(--gray-700)", fontFamily: "var(--font-mono)" }}>
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                fontSize: 12, fontWeight: 600, color: "var(--olive)",
+                fontFamily: "var(--font-mono)",
+                background: "rgba(125,138,90,0.12)",
+                borderRadius: 999, padding: "3px 10px",
+              }}>
+                {set.status === "built" && <Check size={12} strokeWidth={2.5} />}
                 {set.parts.toLocaleString("de-DE")} Teile
               </span>
             )}
-          </div>
-
-          {/* Retail price */}
-          {set.retailPrice != null && (
-            <div style={{ marginTop: 5 }}>
+            {set.retailPrice != null && (
               <span style={{
                 display: "inline-block",
-                fontSize: 11, fontWeight: 500, color: "var(--warning)",
+                fontSize: 12, fontWeight: 600, color: "var(--amber)",
                 fontFamily: "var(--font-mono)",
-                background: "#FBF0DC",
-                borderRadius: "var(--r-xs)", padding: "2px 8px",
+                background: "rgba(192,122,30,0.12)",
+                borderRadius: 999, padding: "3px 10px",
               }}>
                 {set.retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
               </span>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Location */}
           {loc && (
