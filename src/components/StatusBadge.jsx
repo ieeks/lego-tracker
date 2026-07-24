@@ -1,9 +1,9 @@
 import { Check, Package, Heart } from "lucide-react";
 
 const CONFIG = {
-  built:    { bg: "#EAF0E3",          color: "var(--success)", label: "Gebaut",  Icon: Check },
-  boxed:    { bg: "var(--gray-100)",  color: "var(--gray-500)", label: "OVP",    Icon: Package },
-  wishlist: { bg: "#FAF0EB",          color: "var(--clay)",    label: "Wunsch",  Icon: Heart },
+  built:    { bg: "rgba(125,138,90,0.14)", color: "var(--olive)",  label: "Gebaut",  Icon: Check },
+  boxed:    { bg: "var(--gray-100)",       color: "var(--gray-500)", label: "OVP",   Icon: Package },
+  wishlist: { bg: "var(--blush)",          color: "var(--lego-red)", label: "Wunsch", Icon: Heart },
 };
 
 export function StatusBadge({ status }) {

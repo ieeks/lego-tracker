@@ -274,7 +274,7 @@ export function AddScreen({ onSuccess }) {
         </div>
 
         {done && (
-          <div style={{ background: "#EAF0E3", color: "var(--success)", borderRadius: "var(--r-sm)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ background: "rgba(125,138,90,0.14)", color: "var(--success)", borderRadius: "var(--r-sm)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
             <Check size={14} strokeWidth={2} color="var(--success)" />
             Set wurde zur Sammlung hinzugefügt!
           </div>
@@ -295,7 +295,7 @@ export function AddScreen({ onSuccess }) {
                 background: "var(--ivory)", boxSizing: "border-box",
                 transition: "border-color 0.15s, box-shadow 0.15s",
               }}
-              onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,119,87,0.12)"; }}
+              onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,58,43,0.14)"; }}
               onBlur={(e)  => { e.target.style.borderColor = "var(--gray-300)"; e.target.style.boxShadow = "none"; }}
             />
 
@@ -384,7 +384,7 @@ export function AddScreen({ onSuccess }) {
                     padding: "10px 4px",
                     border: status === opt.id ? "2px solid var(--clay)" : "2px solid var(--gray-300)",
                     borderRadius: "var(--r-sm)",
-                    background: status === opt.id ? "#FAF0EB" : "var(--ivory)",
+                    background: status === opt.id ? "var(--blush)" : "var(--ivory)",
                     cursor: "pointer",
                     fontFamily: "var(--font-body)",
                     fontSize: 12, fontWeight: 600,

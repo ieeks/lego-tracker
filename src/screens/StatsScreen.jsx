@@ -69,7 +69,7 @@ export function StatsScreen({ sets }) {
       sub: priceLabel(ownedSets),
       Icon: Tag,
       color: "var(--warning)",
-      bg: "#FBF0DC",
+      bg: "rgba(192,122,30,0.12)",
     },
     {
       label: "Wunschliste Wert",
@@ -77,14 +77,14 @@ export function StatsScreen({ sets }) {
       sub: priceLabel(wishlistSets),
       Icon: Heart,
       color: "var(--clay)",
-      bg: "#FAF0EB",
+      bg: "var(--blush)",
     },
   ];
 
   const rows = [
-    { label: "Gebaut",           count: built,    color: "var(--success)", bg: "#EAF0E3" },
+    { label: "Gebaut",           count: built,    color: "var(--success)", bg: "rgba(125,138,90,0.14)" },
     { label: "Ungeöffnet (OVP)", count: boxed,    color: "var(--gray-500)", bg: "var(--gray-100)" },
-    { label: "Wunschliste",      count: wishlist, color: "var(--clay)",    bg: "#FAF0EB" },
+    { label: "Wunschliste",      count: wishlist, color: "var(--clay)",    bg: "var(--blush)" },
   ];
 
   const bars = [
