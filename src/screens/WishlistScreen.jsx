@@ -31,7 +31,7 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
   return (
     <div style={{ padding: "0 20px" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)" }}>
+        <div className="display" style={{ fontSize: 20 }}>
           Meine Wunschliste
         </div>
 
@@ -40,10 +40,10 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
             onClick={handleLoadAllPrices}
             disabled={loadingPrices}
             style={{
-              background: loadingPrices ? "var(--oat)" : "var(--clay)",
-              color: loadingPrices ? "var(--gray-500)" : "var(--white)",
+              background: loadingPrices ? "var(--neutral-soft)" : "var(--stud-soft)",
+              color: loadingPrices ? "var(--ink-soft)" : "var(--stud-ink)",
               fontFamily: "var(--font-body)",
-              border: "none", borderRadius: "var(--r-sm)", padding: "6px 12px",
+              border: "none", borderRadius: "var(--r-pill)", padding: "6px 12px",
               fontSize: 13, fontWeight: 600, cursor: loadingPrices ? "default" : "pointer",
               WebkitTapHighlightColor: "transparent",
               whiteSpace: "nowrap",
@@ -57,13 +57,13 @@ export function WishlistScreen({ sets, loading, onSetClick }) {
       </div>
 
       {loading && (
-        <div style={{ textAlign: "center", padding: "48px 0", color: "var(--gray-300)", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "48px 0", color: "var(--ink-soft)", fontSize: 14 }}>
           Lade Wunschliste…
         </div>
       )}
 
       {!loading && wishlist.length === 0 && (
-        <div style={{ textAlign: "center", padding: "48px 20px", color: "var(--gray-500)", fontSize: 14, fontWeight: 500 }}>
+        <div style={{ textAlign: "center", padding: "48px 20px", color: "var(--ink-soft)", fontSize: 14, fontWeight: 500 }}>
           Noch keine Wunsch-Sets
         </div>
       )}

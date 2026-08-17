@@ -5,10 +5,12 @@ import { addSet } from "../services/setService";
 import { StatusBadge } from "../components/StatusBadge";
 import { Hammer, Package, Heart, Check, Camera } from "lucide-react";
 
+/* Jede Option färbt sich in ihrer eigenen Statusfarbe —
+   dieselbe Kodierung wie die Rails an den Karten. */
 const STATUS_OPTIONS = [
-  { id: "built",    label: "Gebaut",      Icon: Hammer },
-  { id: "boxed",    label: "OVP",         Icon: Package },
-  { id: "wishlist", label: "Wunschliste", Icon: Heart },
+  { id: "built",    label: "Gebaut",      Icon: Hammer,  accent: "var(--leaf)",     soft: "var(--leaf-soft)" },
+  { id: "boxed",    label: "OVP",         Icon: Package, accent: "var(--stud-ink)", soft: "var(--stud-soft)" },
+  { id: "wishlist", label: "Wunschliste", Icon: Heart,   accent: "var(--brick)",    soft: "var(--brick-soft)" },
 ];
 
 function extractSetNumberFromLegoUrl(raw) {
@@ -90,7 +92,7 @@ function QrScannerModal({ onDetect, onClose }) {
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 200,
-      background: "#000",
+      background: "var(--camera-bg)",
       display: "flex", flexDirection: "column",
     }}>
       {/* Top bar */}
@@ -98,16 +100,16 @@ function QrScannerModal({ onDetect, onClose }) {
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "env(safe-area-inset-top, 20px) 20px 16px",
         paddingTop: "max(env(safe-area-inset-top, 20px), 20px)",
-        background: "rgba(0,0,0,0.6)", backdropFilter: "blur(10px)",
+        background: "var(--camera-chrome)", backdropFilter: "blur(10px)",
         zIndex: 10,
       }}>
-        <div style={{ color: "#FFF", fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 17 }}>QR-Code scannen</div>
-        <button onClick={handleClose} style={{
-          background: "rgba(255,255,255,0.15)", border: "none", borderRadius: "50%",
+        <div className="display" style={{ color: "var(--camera-fg)", fontSize: 17 }}>QR-Code scannen</div>
+        <button onClick={handleClose} aria-label="Scanner schließen" style={{
+          background: "var(--camera-control)", border: "none", borderRadius: "var(--r-pill)",
           width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center",
           cursor: "pointer", WebkitTapHighlightColor: "transparent",
         }}>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--camera-fg)" strokeWidth="2" strokeLinecap="round">
             <line x1="1" y1="1" x2="15" y2="15"/>
             <line x1="15" y1="1" x2="1" y2="15"/>
           </svg>
@@ -129,25 +131,25 @@ function QrScannerModal({ onDetect, onClose }) {
             position: "absolute", inset: 0,
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
-            <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "var(--camera-mask)" }} />
             <div style={{
               position: "relative", zIndex: 1,
               width: 240, height: 240,
-              boxShadow: "0 0 0 9999px rgba(0,0,0,0.45)",
+              boxShadow: "0 0 0 9999px var(--camera-mask)",
               borderRadius: 20,
             }}>
               {[
-                { top: 0, left: 0,     borderTop: "3px solid #FFF",    borderLeft:  "3px solid #FFF",  borderRadius: "12px 0 0 0" },
-                { top: 0, right: 0,    borderTop: "3px solid #FFF",    borderRight: "3px solid #FFF",  borderRadius: "0 12px 0 0" },
-                { bottom: 0, left: 0,  borderBottom: "3px solid #FFF", borderLeft:  "3px solid #FFF",  borderRadius: "0 0 0 12px" },
-                { bottom: 0, right: 0, borderBottom: "3px solid #FFF", borderRight: "3px solid #FFF",  borderRadius: "0 0 12px 0" },
+                { top: 0, left: 0,     borderTop: "3px solid var(--camera-fg)",    borderLeft:  "3px solid var(--camera-fg)",  borderRadius: "12px 0 0 0" },
+                { top: 0, right: 0,    borderTop: "3px solid var(--camera-fg)",    borderRight: "3px solid var(--camera-fg)",  borderRadius: "0 12px 0 0" },
+                { bottom: 0, left: 0,  borderBottom: "3px solid var(--camera-fg)", borderLeft:  "3px solid var(--camera-fg)",  borderRadius: "0 0 0 12px" },
+                { bottom: 0, right: 0, borderBottom: "3px solid var(--camera-fg)", borderRight: "3px solid var(--camera-fg)",  borderRadius: "0 0 12px 0" },
               ].map((s, i) => (
                 <div key={i} style={{ position: "absolute", width: 28, height: 28, ...s }} />
               ))}
               {ready && (
                 <div style={{
                   position: "absolute", left: 0, right: 0, height: 2,
-                  background: "linear-gradient(90deg, transparent, var(--clay), transparent)",
+                  background: "linear-gradient(90deg, transparent, var(--brick), transparent)",
                   animation: "scanline 1.8s ease-in-out infinite",
                 }} />
               )}
@@ -161,8 +163,8 @@ function QrScannerModal({ onDetect, onClose }) {
             display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
             padding: 32, textAlign: "center",
           }}>
-            <div style={{ marginBottom: 16, color: "#FFF" }}><Camera size={48} strokeWidth={1.75} /></div>
-            <div style={{ color: "#FFF", fontWeight: 600, fontSize: 15, lineHeight: 1.5, whiteSpace: "pre-line" }}>{error}</div>
+            <div style={{ marginBottom: 16, color: "var(--camera-fg)" }}><Camera size={48} strokeWidth={1.75} /></div>
+            <div style={{ color: "var(--camera-fg)", fontWeight: 600, fontSize: 15, lineHeight: 1.5, whiteSpace: "pre-line" }}>{error}</div>
           </div>
         )}
       </div>
@@ -171,10 +173,10 @@ function QrScannerModal({ onDetect, onClose }) {
       <div style={{
         padding: "16px 20px",
         paddingBottom: "max(env(safe-area-inset-bottom, 20px), 20px)",
-        background: "rgba(0,0,0,0.6)", backdropFilter: "blur(10px)",
+        background: "var(--camera-chrome)", backdropFilter: "blur(10px)",
         textAlign: "center",
       }}>
-        <div style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }}>
+        <div style={{ color: "var(--camera-fg-soft)", fontSize: 13 }}>
           Halte die Kamera auf den QR-Code in der LEGO® Anleitung
         </div>
       </div>
@@ -269,34 +271,26 @@ export function AddScreen({ onSuccess }) {
       )}
 
       <div style={{ padding: "0 20px" }}>
-        <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 18 }}>
+        <div className="display" style={{ fontSize: 20, marginBottom: 18 }}>
           Set hinzufügen
         </div>
 
         {done && (
-          <div style={{ background: "rgba(125,138,90,0.14)", color: "var(--success)", borderRadius: "var(--r-sm)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
-            <Check size={14} strokeWidth={2} color="var(--success)" />
+          <div style={{ background: "var(--leaf-soft)", color: "var(--leaf)", borderRadius: "var(--r-field)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+            <Check size={14} strokeWidth={2} color="var(--leaf)" />
             Set wurde zur Sammlung hinzugefügt!
           </div>
         )}
 
-        <div style={{ background: "var(--white)", borderRadius: "var(--r-lg)", padding: 20, boxShadow: "var(--shadow-sm)" }}>
+        <div style={{ background: "var(--card)", borderRadius: "var(--r-card)", padding: 20, boxShadow: "var(--shadow-sm)" }}>
           <form onSubmit={handleSearch}>
             <input
+              className="field"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Set-Nummer eingeben (z.B. 42115)"
               inputMode="numeric"
-              style={{
-                width: "100%", padding: "13px 16px",
-                borderRadius: "var(--r-sm)", border: "1.5px solid var(--gray-300)",
-                fontSize: 15, color: "var(--slate)", outline: "none",
-                fontFamily: "var(--font-body)",
-                background: "var(--ivory)", boxSizing: "border-box",
-                transition: "border-color 0.15s, box-shadow 0.15s",
-              }}
-              onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,58,43,0.14)"; }}
-              onBlur={(e)  => { e.target.style.borderColor = "var(--gray-300)"; e.target.style.boxShadow = "none"; }}
+              style={{ padding: "13px 16px", fontSize: 15 }}
             />
 
             {/* QR Button */}
@@ -305,9 +299,9 @@ export function AddScreen({ onSuccess }) {
               onClick={() => setScanning(true)}
               style={{
                 width: "100%", marginTop: 12, padding: 14,
-                borderRadius: "var(--r-sm)",
-                background: "var(--oat)", border: "none",
-                fontWeight: 600, fontSize: 15, color: "var(--slate)",
+                borderRadius: "var(--r-field)",
+                background: "var(--neutral-soft)", border: "none",
+                fontWeight: 600, fontSize: 15, color: "var(--ink)",
                 fontFamily: "var(--font-body)",
                 cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
@@ -333,9 +327,9 @@ export function AddScreen({ onSuccess }) {
 
             <button type="submit" disabled={searching} style={{
               width: "100%", marginTop: 10, padding: 15,
-              borderRadius: "var(--r-sm)",
-              background: searching ? "var(--oat)" : "var(--clay)",
-              border: "none", color: searching ? "var(--gray-500)" : "var(--white)",
+              borderRadius: "var(--r-field)",
+              background: searching ? "var(--neutral-soft)" : "var(--brick)",
+              border: "none", color: searching ? "var(--ink-soft)" : "var(--on-accent)",
               fontWeight: 600, fontSize: 15,
               fontFamily: "var(--font-body)",
               cursor: searching ? "not-allowed" : "pointer",
@@ -352,51 +346,58 @@ export function AddScreen({ onSuccess }) {
 
         {/* Preview */}
         {preview && (
-          <div style={{ background: "var(--white)", borderRadius: "var(--r-lg)", padding: 20, marginTop: 16, boxShadow: "var(--shadow-sm)" }}>
+          <div style={{ background: "var(--card)", borderRadius: "var(--r-card)", padding: 20, marginTop: 16, boxShadow: "var(--shadow-sm)" }}>
             {preview.set_img_url && (
               <img
                 src={preview.set_img_url}
                 alt={preview.name}
-                style={{ width: "100%", height: 200, objectFit: "contain", borderRadius: "var(--r-md)", background: "var(--gray-100)", padding: 8, marginBottom: 14 }}
+                style={{ width: "100%", height: 200, objectFit: "contain", borderRadius: "var(--r-thumb)", background: "var(--neutral-soft)", padding: 8, marginBottom: 14 }}
               />
             )}
-            <div style={{ fontSize: 12, color: "var(--gray-700)", fontWeight: 500, marginBottom: 4, fontFamily: "var(--font-mono)" }}>
-              #{preview.set_num}
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 6 }}>
+              {preview.set_num}
+              {preview.themeName && ` · ${preview.themeName}`}
+              {preview.year && ` · ${preview.year}`}
             </div>
-            <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 4 }}>
+            <div className="display" style={{ fontSize: 20, marginBottom: 10 }}>
               {preview.name}
             </div>
-            <div style={{ fontSize: 13, color: "var(--gray-700)", marginBottom: 18, fontFamily: "var(--font-mono)" }}>
-              {preview.num_parts?.toLocaleString("de-DE")} Teile
-              {preview.themeName && <span style={{ marginLeft: 8, color: "var(--gray-700)" }}>· {preview.themeName}</span>}
-              {preview.year && <span style={{ marginLeft: 8, color: "var(--gray-700)" }}>· {preview.year}</span>}
+            <div style={{ marginBottom: 18 }}>
+              {preview.num_parts > 0 && (
+                <span className="tag tag--parts">
+                  {preview.num_parts.toLocaleString("de-DE")} Teile
+                </span>
+              )}
             </div>
 
-            <div style={{ fontSize: 12, fontWeight: 600, color: "var(--gray-700)", marginBottom: 10, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em" }}>Status wählen</div>
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 10 }}>Status wählen</div>
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-              {STATUS_OPTIONS.map((opt) => (
-                <button
-                  key={opt.id}
-                  onClick={() => setStatus(opt.id)}
-                  style={{
-                    flex: 1,
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
-                    padding: "10px 4px",
-                    border: status === opt.id ? "2px solid var(--clay)" : "2px solid var(--gray-300)",
-                    borderRadius: "var(--r-sm)",
-                    background: status === opt.id ? "var(--blush)" : "var(--ivory)",
-                    cursor: "pointer",
-                    fontFamily: "var(--font-body)",
-                    fontSize: 12, fontWeight: 600,
-                    color: status === opt.id ? "var(--clay)" : "var(--gray-700)",
-                    WebkitTapHighlightColor: "transparent",
-                    transition: "all 0.15s",
-                  }}
-                >
-                  <opt.Icon size={20} strokeWidth={1.75} />
-                  {opt.label}
-                </button>
-              ))}
+              {STATUS_OPTIONS.map((opt) => {
+                const active = status === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => setStatus(opt.id)}
+                    style={{
+                      flex: 1, minWidth: 0,
+                      display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+                      padding: "10px 4px",
+                      border: active ? `2px solid ${opt.accent}` : "2px solid var(--line)",
+                      borderRadius: "var(--r-field)",
+                      background: active ? opt.soft : "var(--card)",
+                      cursor: "pointer",
+                      fontFamily: "var(--font-body)",
+                      fontSize: 12, fontWeight: 600,
+                      color: active ? opt.accent : "var(--ink-soft)",
+                      WebkitTapHighlightColor: "transparent",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    <opt.Icon size={20} strokeWidth={1.75} />
+                    {opt.label}
+                  </button>
+                );
+              })}
             </div>
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -405,9 +406,9 @@ export function AddScreen({ onSuccess }) {
                 onClick={handleAdd}
                 disabled={saving}
                 style={{
-                  padding: "13px 24px", borderRadius: "var(--r-sm)",
-                  background: saving ? "var(--oat)" : "var(--clay)",
-                  border: "none", color: saving ? "var(--gray-500)" : "var(--white)",
+                  padding: "13px 24px", borderRadius: "var(--r-field)",
+                  background: saving ? "var(--neutral-soft)" : "var(--brick)",
+                  border: "none", color: saving ? "var(--ink-soft)" : "var(--on-accent)",
                   fontWeight: 600, fontSize: 14,
                   fontFamily: "var(--font-body)",
                   cursor: saving ? "not-allowed" : "pointer",

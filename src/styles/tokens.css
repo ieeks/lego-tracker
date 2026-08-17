@@ -1,0 +1,79 @@
+/* ============================================================
+   LEGO TRACKER — DESIGN TOKENS
+   Einzige Quelle für Farbe, Typografie, Radien, Schatten.
+
+   Grundregel: FARBE KODIERT STATUS, NIE DEKORATION.
+   Jeder Akzent unten ist an genau eine Bedeutung gebunden.
+   Wird eine Farbe rein optisch gesetzt, gehört sie nicht hierher.
+   ============================================================ */
+
+:root {
+  /* --- Basis ------------------------------------------------ */
+  --paper:      #F4EDE1;
+  --card:       #FFFFFF;
+  --ink:        #2A2118;
+  --ink-soft:   #8A7A66;
+  --line:       rgba(42, 33, 24, 0.10);
+
+  /* --- Akzente – jeweils an eine Bedeutung gebunden ---------- */
+  --brick:      #C8452E;   /* Primär / Wunschliste */
+  --brick-soft: #FBE7E2;
+  --stud:       #E5A427;   /* OVP, ungebaut */
+  --leaf:       #5E8C4A;   /* Gebaut */
+  --petrol:     #2A6F7B;   /* Theme-Akzent, Statistik */
+
+  /* Chip-Flächen: gedämpfte Träger der Akzente oben.
+     Nur als Hintergrund eines Werts derselben Bedeutung. */
+  --leaf-soft:    #EDF3EA;   /* Teile-Chip */
+  --stud-soft:    #FBF0DC;   /* Preis-Chip */
+  --stud-ink:     #A5701A;   /* Preis-Text, lesbar auf --stud-soft */
+  --neutral-soft: #F3EFE7;   /* Chip ohne Statusbedeutung */
+  --petrol-soft:  #E4EEF0;   /* Theme-Chip */
+
+  /* Destruktiv — eigene Bedeutung, bewusst nicht --brick,
+     damit "Löschen" nie wie "Wunschliste" liest. */
+  --danger:      #8E3323;
+  --danger-soft: #F6E4E0;
+
+  /* Text auf gefüllten Akzentflächen */
+  --on-accent: #FFFFFF;
+
+  /* Overlay hinter Bottom-Sheets */
+  --scrim: rgba(42, 33, 24, 0.48);
+
+  /* Kamera-Overlay: eigener Kontext über dem Videobild. Bewusst
+     außerhalb der Papier-Palette — auf Kamerabild trägt nur
+     Schwarz/Weiß genug Kontrast. */
+  --camera-bg:      #000000;
+  --camera-fg:      #FFFFFF;
+  --camera-fg-soft: rgba(255, 255, 255, 0.70);
+  --camera-control: rgba(255, 255, 255, 0.15);
+  --camera-chrome:  rgba(0, 0, 0, 0.60);
+  --camera-mask:    rgba(0, 0, 0, 0.45);
+
+  /* --- Typografie ------------------------------------------- */
+  --font-display: "Fraunces", Georgia, serif;      /* nie für Ziffern */
+  --font-body:    "DM Sans", system-ui, sans-serif; /* inkl. aller Zahlen */
+  --font-mono:    "IBM Plex Mono", ui-monospace, monospace; /* nur Mikrolabels */
+
+  /* --- Radien ------------------------------------------------ */
+  --r-card:  22px;
+  --r-pill:  999px;
+  --r-thumb: 16px;
+  --r-field: 12px;   /* Inputs, Buttons */
+  --r-chip:  8px;    /* Tag-Chips */
+
+  /* --- Abstände ---------------------------------------------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+
+  /* --- Schatten – neutral aus --ink, nie eingefärbt ---------- */
+  --shadow-sm: 0 1px 2px rgba(42, 33, 24, 0.05), 0 2px 8px rgba(42, 33, 24, 0.04);
+  --shadow-md: 0 2px 4px rgba(42, 33, 24, 0.05), 0 8px 22px rgba(42, 33, 24, 0.06);
+  --shadow-lg: 0 12px 40px rgba(42, 33, 24, 0.10);
+  --shadow-sheet: 0 -8px 40px rgba(42, 33, 24, 0.16);
+}

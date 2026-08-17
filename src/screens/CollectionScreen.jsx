@@ -1,12 +1,14 @@
 import { useState, useRef } from "react";
 import { SetCard } from "../components/SetCard";
-import { Home, Heart, Hammer, Package, Calendar, Layers, Tag } from "lucide-react";
+import { Calendar, Layers, Tag } from "lucide-react";
 
+/* `status` trägt dieselbe Kodierung wie die Rails an den Karten —
+   der Punkt in der Pill macht sie selbsterklärend. */
 const FILTERS = [
-  { id: "sammlung", label: "Sammlung",        Icon: Home },
-  { id: "wishlist", label: "Auf Wunschliste", Icon: Heart },
-  { id: "built",    label: "Gebaut",          Icon: Hammer },
-  { id: "boxed",    label: "OVP",             Icon: Package },
+  { id: "sammlung", label: "Sammlung",        status: "besitz" },
+  { id: "wishlist", label: "Auf Wunschliste", status: "wunsch" },
+  { id: "built",    label: "Gebaut",          status: "gebaut" },
+  { id: "boxed",    label: "OVP",             status: "ovp"    },
 ];
 
 const SORTS = [
@@ -102,30 +104,28 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
     <div style={{ padding: "0 20px" }}>
       {/* Section header */}
       <div style={{ marginBottom: 16 }}>
-        <div style={{
-          fontFamily: "var(--font-display)",
-          fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 12,
-        }}>
+        <div className="display" style={{ fontSize: 20, marginBottom: 12 }}>
           Sammlung
         </div>
 
-        {/* Filter chips — 2 rows */}
+        {/* Filter chips — 2 rows.
+            Die Fläche kodiert nur "ausgewählt"; den Status trägt der Punkt. */}
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[FILTERS.slice(0, 2), FILTERS.slice(2)].map((row, rowIdx) => (
             <div key={rowIdx} style={{ display: "flex", gap: 8 }}>
-              {row.map(({ id, label, Icon }) => {
+              {row.map(({ id, label, status }) => {
                 const isActive = filter === id;
                 return (
                   <button
                     key={id}
                     onClick={() => { setFilter(id); setThemeFilter(null); setThemeSheetOpen(false); }}
                     style={{
-                      flex: 1,
-                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 6,
-                      padding: "6px 14px", borderRadius: "999px",
-                      border: isActive ? "1.5px solid var(--clay)" : "1.5px solid var(--gray-300)",
-                      background: isActive ? "var(--clay)" : "transparent",
-                      color: isActive ? "#FFFFFF" : "var(--gray-700)",
+                      flex: 1, minWidth: 0,
+                      display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 7,
+                      padding: "7px 12px", borderRadius: "var(--r-pill)",
+                      border: isActive ? "1.5px solid var(--ink)" : "1.5px solid var(--line)",
+                      background: isActive ? "var(--ink)" : "transparent",
+                      color: isActive ? "var(--on-accent)" : "var(--ink-soft)",
                       fontSize: 14, fontWeight: 500,
                       fontFamily: "var(--font-body)",
                       cursor: "pointer", whiteSpace: "nowrap",
@@ -133,8 +133,8 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                       transition: "all 0.15s ease",
                     }}
                   >
-                    <Icon size={14} strokeWidth={1.75} />
-                    {label}
+                    <span className="dot" data-status={status} />
+                    <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{label}</span>
                   </button>
                 );
               })}
@@ -145,10 +145,10 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
 
       {/* Sort chips */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-        <span style={{ fontSize: 11, fontWeight: 500, color: "var(--gray-500)", whiteSpace: "nowrap", fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <span className="mono" style={{ color: "var(--ink-soft)", whiteSpace: "nowrap", flexShrink: 0 }}>
           Sortierung
         </span>
-        <div style={{ display: "flex", gap: 6 }}>
+        <div style={{ display: "flex", gap: 6, minWidth: 0 }}>
           {SORTS.map(({ id, label, Icon }) => {
             const isActive = sort === id;
             return (
@@ -157,10 +157,10 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 onClick={() => setSort(id)}
                 style={{
                   display: "inline-flex", alignItems: "center", gap: 4,
-                  padding: "5px 10px", borderRadius: "999px",
-                  border: isActive ? "1.5px solid var(--clay)" : "1.5px solid var(--gray-300)",
-                  background: isActive ? "var(--clay)" : "transparent",
-                  color: isActive ? "#FFFFFF" : "var(--gray-700)",
+                  padding: "5px 10px", borderRadius: "var(--r-pill)",
+                  border: isActive ? "1.5px solid var(--ink)" : "1.5px solid var(--line)",
+                  background: isActive ? "var(--ink)" : "transparent",
+                  color: isActive ? "var(--on-accent)" : "var(--ink-soft)",
                   fontSize: 12, fontWeight: 500,
                   fontFamily: "var(--font-body)",
                   cursor: "pointer", whiteSpace: "nowrap",
@@ -179,20 +179,21 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
 
       {/* Theme filter button */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-        <span style={{ fontSize: 11, fontWeight: 500, color: "var(--gray-500)", whiteSpace: "nowrap", flexShrink: 0, fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+        <span className="mono" style={{ color: "var(--ink-soft)", whiteSpace: "nowrap", flexShrink: 0 }}>
           Theme
         </span>
         <button
           onClick={() => setThemeSheetOpen(true)}
           style={{
-            display: "inline-flex", alignItems: "center", gap: 5,
-            padding: "5px 12px", borderRadius: "999px",
-            border: themeFilter ? "1.5px solid var(--clay)" : "1.5px solid var(--gray-300)",
+            display: "inline-flex", alignItems: "center", gap: 5, minWidth: 0,
+            padding: "5px 12px", borderRadius: "var(--r-pill)",
+            border: themeFilter ? "1.5px solid var(--petrol)" : "1.5px solid var(--line)",
             fontSize: 12, fontWeight: 500, cursor: "pointer",
             fontFamily: "var(--font-body)",
-            background: themeFilter ? "var(--clay)" : "transparent",
-            color: themeFilter ? "#FFFFFF" : "var(--gray-700)",
+            background: themeFilter ? "var(--petrol)" : "transparent",
+            color: themeFilter ? "var(--on-accent)" : "var(--ink-soft)",
             WebkitTapHighlightColor: "transparent",
+            overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis",
           }}
         >
           {themeFilter ?? "Alle"}
@@ -210,40 +211,35 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
       <div style={{ position: "relative", marginBottom: 16 }}>
         <svg
           width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="var(--gray-300)" strokeWidth="2" strokeLinecap="round"
+          stroke="var(--ink-soft)" strokeWidth="2" strokeLinecap="round"
           style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}
         >
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         <input
+          className="field"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Set-Name oder Nummer suchen…"
           style={{
-            width: "100%", padding: "11px 14px 11px 40px",
+            padding: "11px 14px 11px 40px",
             paddingRight: search ? 40 : 14,
-            borderRadius: "var(--r-sm)", border: "1.5px solid var(--gray-300)",
-            fontSize: 14, color: "var(--slate)",
-            fontFamily: "var(--font-body)",
-            outline: "none", background: "var(--white)",
-            boxSizing: "border-box",
-            transition: "border-color 0.15s, box-shadow 0.15s",
+            fontSize: 14,
           }}
-          onFocus={(e) => { e.target.style.borderColor = "var(--clay)"; e.target.style.boxShadow = "0 0 0 3px rgba(217,58,43,0.14)"; }}
-          onBlur={(e)  => { e.target.style.borderColor = "var(--gray-300)"; e.target.style.boxShadow = "none"; }}
         />
         {search && (
           <button
             onClick={() => setSearch("")}
+            aria-label="Suche löschen"
             style={{
               position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-              background: "var(--gray-300)", border: "none", borderRadius: "50%",
+              background: "var(--ink-soft)", border: "none", borderRadius: "var(--r-pill)",
               width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center",
               cursor: "pointer", padding: 0, WebkitTapHighlightColor: "transparent",
             }}
           >
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="var(--on-accent)" strokeWidth="1.8" strokeLinecap="round">
               <line x1="1" y1="1" x2="9" y2="9"/>
               <line x1="9" y1="1" x2="1" y2="9"/>
             </svg>
@@ -252,13 +248,13 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
       </div>
 
       {loading && (
-        <div style={{ textAlign: "center", padding: "48px 0", color: "var(--gray-300)", fontSize: 14 }}>
+        <div style={{ textAlign: "center", padding: "48px 0", color: "var(--ink-soft)", fontSize: 14 }}>
           Lade Sets…
         </div>
       )}
 
       {!loading && sorted.length === 0 && (
-        <div style={{ textAlign: "center", padding: "48px 20px", color: "var(--gray-500)", fontSize: 14, fontWeight: 500 }}>
+        <div style={{ textAlign: "center", padding: "48px 20px", color: "var(--ink-soft)", fontSize: 14, fontWeight: 500 }}>
           {search ? "Keine Sets gefunden" : EMPTY_LABELS[filter]}
         </div>
       )}
@@ -274,7 +270,7 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
             onClick={() => setThemeSheetOpen(false)}
             style={{
               position: "fixed", inset: 0, zIndex: 100,
-              background: "rgba(20,20,19,0.5)",
+              background: "var(--scrim)",
               backdropFilter: "blur(6px)",
             }}
           />
@@ -289,9 +285,9 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
               position: "fixed", bottom: 0, left: "50%",
               transform: "translateX(-50%)",
               width: "100%", maxWidth: 680,
-              background: "var(--white)",
-              borderRadius: "28px 28px 0 0",
-              boxShadow: "0 -8px 40px rgba(20,20,19,0.15)",
+              background: "var(--card)",
+              borderRadius: "var(--r-card) var(--r-card) 0 0",
+              boxShadow: "var(--shadow-sheet)",
               zIndex: 101,
               paddingBottom: "max(32px, env(safe-area-inset-bottom, 32px))",
               transition: "transform 0.25s ease",
@@ -299,16 +295,12 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
           >
             {/* Handle */}
             <div style={{
-              width: 40, height: 4, borderRadius: 2,
-              background: "var(--gray-300)", margin: "14px auto 4px",
+              width: 40, height: 4, borderRadius: "var(--r-pill)",
+              background: "var(--ink-soft)", opacity: 0.3, margin: "14px auto 4px",
             }} />
 
             {/* Title */}
-            <div style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 15, fontWeight: 500, color: "var(--slate)",
-              padding: "10px 20px 8px",
-            }}>
+            <div className="display" style={{ fontSize: 16, padding: "10px 20px 8px" }}>
               Theme wählen
             </div>
 
@@ -320,24 +312,24 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                 style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between",
                   width: "100%", padding: "13px 20px",
-                  border: "none", background: !themeFilter ? "var(--blush)" : "transparent",
+                  border: "none", background: !themeFilter ? "var(--petrol-soft)" : "transparent",
                   cursor: "pointer", textAlign: "left",
                   fontFamily: "var(--font-body)",
                   fontSize: 15, fontWeight: !themeFilter ? 700 : 500,
-                  color: !themeFilter ? "var(--clay)" : "var(--slate)",
+                  color: !themeFilter ? "var(--petrol)" : "var(--ink)",
                   WebkitTapHighlightColor: "transparent",
                 }}
               >
                 Alle Themes
                 {!themeFilter && (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                    stroke="var(--clay)" strokeWidth="2.5" strokeLinecap="round">
+                    stroke="var(--petrol)" strokeWidth="2.5" strokeLinecap="round">
                     <polyline points="20 6 9 17 4 12"/>
                   </svg>
                 )}
               </button>
 
-              <div style={{ height: 1, background: "var(--gray-100)", margin: "0 20px" }} />
+              <div style={{ height: 1, background: "var(--line)", margin: "0 20px" }} />
 
               {availableThemes.map((theme) => (
                 <button
@@ -347,18 +339,18 @@ export function CollectionScreen({ sets, loading, onSetClick }) {
                     display: "flex", alignItems: "center", justifyContent: "space-between",
                     width: "100%", padding: "13px 20px",
                     border: "none",
-                    background: themeFilter === theme ? "var(--blush)" : "transparent",
+                    background: themeFilter === theme ? "var(--petrol-soft)" : "transparent",
                     cursor: "pointer", textAlign: "left",
                     fontFamily: "var(--font-body)",
                     fontSize: 15, fontWeight: themeFilter === theme ? 700 : 500,
-                    color: themeFilter === theme ? "var(--clay)" : "var(--slate)",
+                    color: themeFilter === theme ? "var(--petrol)" : "var(--ink)",
                     WebkitTapHighlightColor: "transparent",
                   }}
                 >
                   {theme}
                   {themeFilter === theme && (
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                      stroke="var(--clay)" strokeWidth="2.5" strokeLinecap="round">
+                      stroke="var(--petrol)" strokeWidth="2.5" strokeLinecap="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
                   )}

@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
-import { Home, Users, Check } from "lucide-react";
+import { Home, Users, Check, Trash2 } from "lucide-react";
 import { StatusBadge } from "./StatusBadge";
+import { setStatus } from "../lib/setStatus";
 import { deleteSet } from "../services/setService";
 
 const REVEAL_WIDTH   = 80;
@@ -22,6 +23,7 @@ export function SetCard({ set, onClick }) {
   const lockDir        = useRef(null); // 'horiz' | 'vert' | null
 
   const isWishlist = set.status === "wishlist";
+  const status     = setStatus(set);
   const loc        = LOCATION_LABEL[set.location];
 
   const snapTo = (target) => { setAnimating(true); setOffset(target); };
@@ -73,8 +75,12 @@ export function SetCard({ set, onClick }) {
     await deleteSet(set.id);
   };
 
+  const themePath = set.parentThemeName
+    ? `${set.parentThemeName} › ${set.themeName}`
+    : set.themeName;
+
   return (
-    <div style={{ position: "relative", marginBottom: 12, borderRadius: "var(--r-lg)", overflow: "hidden" }}>
+    <div style={{ position: "relative", marginBottom: 12, borderRadius: "var(--r-card)", overflow: "hidden" }}>
 
       {/* Delete button (behind card) */}
       <div
@@ -86,35 +92,33 @@ export function SetCard({ set, onClick }) {
           cursor: "pointer", userSelect: "none",
         }}
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-        </svg>
-        <span style={{ color: "#FFF", fontSize: 11, fontWeight: 600 }}>Löschen</span>
+        <Trash2 size={20} strokeWidth={2} color="var(--on-accent)" />
+        <span className="mono" style={{ color: "var(--on-accent)", fontSize: 9, letterSpacing: "0.1em" }}>Löschen</span>
       </div>
 
       {/* Card */}
       <div
+        className="set"
+        data-status={status}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={handleCardClick}
         style={{
           display: "flex", alignItems: "center", gap: 14,
-          background: "var(--white)", borderRadius: "var(--r-lg)", padding: "14px 16px",
+          background: "var(--card)", borderRadius: "var(--r-card)",
+          paddingTop: 14, paddingRight: 16, paddingBottom: 14,
           boxShadow: "var(--shadow-sm)",
           cursor: "pointer", userSelect: "none",
           WebkitTapHighlightColor: "transparent",
           transform: `translateX(${offset}px)`,
           transition: animating ? "transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94)" : "none",
-          position: "relative", zIndex: 1,
+          zIndex: 1,
           touchAction: "pan-y",
         }}
       >
         {/* Thumbnail */}
-        <div style={{ width: 80, height: 80, borderRadius: "var(--r-md)", overflow: "hidden", flexShrink: 0, background: "var(--gray-100)" }}>
+        <div style={{ width: 80, height: 80, borderRadius: "var(--r-thumb)", overflow: "hidden", flexShrink: 0, background: "var(--neutral-soft)" }}>
           {set.image ? (
             <img
               src={set.image} alt={set.name}
@@ -122,7 +126,7 @@ export function SetCard({ set, onClick }) {
               onError={(e) => { e.target.style.display = "none"; }}
             />
           ) : (
-            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gray-300)" }}>
+            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--ink-soft)", opacity: 0.35 }}>
               <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg">
                 <rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" />
                 <circle cx="4"  cy="2" fill="currentColor" r="2" />
@@ -142,57 +146,48 @@ export function SetCard({ set, onClick }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           {/* Name + heart */}
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 3 }}>
-            <div style={{
-              fontFamily: "var(--font-body)",
-              fontWeight: 700, fontSize: 15, color: "var(--slate)",
+            <div className="display" style={{
+              fontSize: 15, lineHeight: 1.25,
               whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1,
             }}>
               {set.name}
             </div>
-            <svg width="20" height="20" viewBox="0 0 24 24"
-              fill={isWishlist ? "var(--clay)" : "none"}
-              stroke={isWishlist ? "var(--clay)" : "var(--gray-300)"}
+            <svg width="18" height="18" viewBox="0 0 24 24"
+              fill={isWishlist ? "var(--brick)" : "none"}
+              stroke={isWishlist ? "var(--brick)" : "var(--ink-soft)"}
               strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-              style={{ flexShrink: 0, marginTop: 1 }}>
+              style={{ flexShrink: 0, marginTop: 2, opacity: isWishlist ? 1 : 0.35 }}>
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
           </div>
 
-          {/* Set number + Theme + Year */}
-          <div style={{ fontSize: 12, color: "var(--gray-700)", fontWeight: 500, marginBottom: 6 }}>
-            <span style={{ fontFamily: "var(--font-mono)" }}>{set.setNumber}</span>
-            {set.themeName && (
-              <span style={{ color: "var(--gray-700)" }}>
-                {" · "}
-                {set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}
+          {/* Set number · Theme · Year — der Theme-Pfad ist der einzige
+              Teil variabler Länge und schluckt deshalb die Kürzung;
+              Nummer und Jahr bleiben immer vollständig lesbar. */}
+          <div className="mono" style={{
+            color: "var(--ink-soft)", marginBottom: 7,
+            display: "flex", whiteSpace: "nowrap", minWidth: 0,
+          }}>
+            <span style={{ flexShrink: 0 }}>{set.setNumber}</span>
+            {themePath && (
+              <span style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+                {` · ${themePath}`}
               </span>
             )}
-            {set.year && <span style={{ color: "var(--gray-700)" }}> · {set.year}</span>}
+            {set.year && <span style={{ flexShrink: 0 }}>{` · ${set.year}`}</span>}
           </div>
 
           {/* Chips: status / pieces / price */}
           <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
             {set.status !== "built" && <StatusBadge status={set.status} />}
             {set.parts > 0 && (
-              <span style={{
-                display: "inline-flex", alignItems: "center", gap: 4,
-                fontSize: 12, fontWeight: 600, color: "var(--olive)",
-                fontFamily: "var(--font-mono)",
-                background: "rgba(125,138,90,0.12)",
-                borderRadius: 999, padding: "3px 10px",
-              }}>
-                {set.status === "built" && <Check size={12} strokeWidth={2.5} />}
+              <span className="tag tag--parts">
+                {set.status === "built" && <Check size={11} strokeWidth={2.5} />}
                 {set.parts.toLocaleString("de-DE")} Teile
               </span>
             )}
             {set.retailPrice != null && (
-              <span style={{
-                display: "inline-block",
-                fontSize: 12, fontWeight: 600, color: "var(--amber)",
-                fontFamily: "var(--font-mono)",
-                background: "rgba(192,122,30,0.12)",
-                borderRadius: 999, padding: "3px 10px",
-              }}>
+              <span className="tag tag--price">
                 {set.retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
               </span>
             )}
@@ -200,7 +195,7 @@ export function SetCard({ set, onClick }) {
 
           {/* Location */}
           {loc && (
-            <div style={{ marginTop: 5, fontSize: 11, color: "var(--gray-500)", fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}>
+            <div style={{ marginTop: 6, fontSize: 11, color: "var(--ink-soft)", fontWeight: 500, display: "flex", alignItems: "center", gap: 4 }}>
               <loc.Icon size={11} strokeWidth={1.75} />
               {loc.text}
             </div>
@@ -209,7 +204,7 @@ export function SetCard({ set, onClick }) {
 
         {/* Chevron */}
         <svg width="8" height="14" viewBox="0 0 8 14" fill="none" style={{ flexShrink: 0, opacity: 0.2, marginLeft: 4 }}>
-          <path d="M1 1L7 7L1 13" stroke="var(--slate)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M1 1L7 7L1 13" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
     </div>

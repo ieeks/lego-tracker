@@ -120,42 +120,42 @@ export function AddSetScreen({ onNavigateHome }) {
 function Field({ label, children }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <label style={{ fontSize: 13, fontWeight: 600, color: "#374151" }}>{label}</label>
+      <label style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>{label}</label>
       {children}
     </div>
   );
 }
 
 const styles = {
-  container: { maxWidth: 480, margin: "0 auto", padding: "24px 16px", fontFamily: "sans-serif" },
+  container: { maxWidth: 480, margin: "0 auto", padding: "24px 16px", fontFamily: "var(--font-body)" },
   header: { display: "flex", alignItems: "center", gap: 16, marginBottom: 28 },
   backButton: {
     background: "none",
     border: "none",
     fontSize: 15,
     cursor: "pointer",
-    color: "#6b7280",
+    color: "var(--ink-soft)",
     padding: 0,
   },
-  title: { margin: 0, fontSize: 24, fontWeight: 800, color: "#111827" },
+  title: { margin: 0, fontSize: 24, fontFamily: "var(--font-display)", fontWeight: 900, color: "var(--ink)" },
   form: { display: "flex", flexDirection: "column", gap: 18 },
   input: {
     width: "100%",
     boxSizing: "border-box",
     padding: "10px 14px",
-    border: "1px solid #e5e7eb",
-    borderRadius: 10,
+    border: "1px solid var(--line)",
+    borderRadius: "var(--r-field)",
     fontSize: 14,
     outline: "none",
   },
   checkboxRow: { display: "flex", flexDirection: "column", gap: 10 },
-  checkboxLabel: { display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "#374151", cursor: "pointer" },
-  error: { color: "#ef4444", fontSize: 13, margin: 0 },
+  checkboxLabel: { display: "flex", alignItems: "center", gap: 8, fontSize: 14, color: "var(--ink)", cursor: "pointer" },
+  error: { color: "var(--danger)", fontSize: 13, margin: 0 },
   submitButton: {
-    background: "#dc2626",
-    color: "#fff",
+    background: "var(--brick)",
+    color: "var(--on-accent)",
     border: "none",
-    borderRadius: 10,
+    borderRadius: "var(--r-field)",
     padding: "12px 0",
     fontWeight: 700,
     fontSize: 15,
