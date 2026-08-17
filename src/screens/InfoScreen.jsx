@@ -27,36 +27,36 @@ export function InfoScreen({ sets }) {
 
   return (
     <div style={{ padding: "0 20px" }}>
-      <div style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 20, color: "var(--slate)", marginBottom: 18 }}>
+      <div className="display" style={{ fontSize: 20, marginBottom: 18 }}>
         Info
       </div>
 
-      <div style={{ background: "var(--white)", borderRadius: "var(--r-md)", overflow: "hidden", boxShadow: "var(--shadow-sm)", marginBottom: 12 }}>
+      <div style={{ background: "var(--card)", borderRadius: "var(--r-card)", overflow: "hidden", boxShadow: "var(--shadow-sm)", marginBottom: 12 }}>
         {INFO_ROWS.map((item, i) => (
           <div key={item.label} style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
+            display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12,
             padding: "14px 18px",
-            borderBottom: i < INFO_ROWS.length - 1 ? "1px solid var(--gray-100)" : "none",
+            borderBottom: i < INFO_ROWS.length - 1 ? "1px solid var(--line)" : "none",
           }}>
-            <span style={{ fontWeight: 500, fontSize: 14, color: "var(--slate)", fontFamily: "var(--font-body)" }}>{item.label}</span>
-            <span style={{ fontSize: 13, color: "var(--gray-500)", fontFamily: "var(--font-mono)" }}>{item.value}</span>
+            <span style={{ fontWeight: 500, fontSize: 14, color: "var(--ink)", fontFamily: "var(--font-body)" }}>{item.label}</span>
+            <span className="mono" style={{ color: "var(--ink-soft)", textAlign: "right" }}>{item.value}</span>
           </div>
         ))}
       </div>
 
-      <div style={{ background: "var(--white)", borderRadius: "var(--r-md)", overflow: "hidden", boxShadow: "var(--shadow-sm)" }}>
+      <div style={{ background: "var(--card)", borderRadius: "var(--r-card)", overflow: "hidden", boxShadow: "var(--shadow-sm)" }}>
         <button onClick={handleExport} style={{
-          display: "flex", width: "100%", alignItems: "center", justifyContent: "space-between",
+          display: "flex", width: "100%", alignItems: "center", justifyContent: "space-between", gap: 12,
           padding: "14px 18px", border: "none", background: "none", cursor: "pointer",
-          borderBottom: "1px solid var(--gray-100)",
+          borderBottom: "1px solid var(--line)",
           WebkitTapHighlightColor: "transparent",
         }}>
-          <span style={{ fontWeight: 600, fontSize: 14, color: "var(--clay)", fontFamily: "var(--font-body)", display: "flex", alignItems: "center", gap: 6 }}>
-            <Download size={14} strokeWidth={1.75} color="var(--clay)" />
+          <span style={{ fontWeight: 600, fontSize: 14, color: "var(--brick)", fontFamily: "var(--font-body)", display: "flex", alignItems: "center", gap: 6, textAlign: "left" }}>
+            <Download size={14} strokeWidth={1.75} color="var(--brick)" />
             Sammlung exportieren ({sets.length} Sets)
           </span>
-          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" style={{ opacity: 0.25 }}>
-            <path d="M1 1L7 7L1 13" stroke="var(--slate)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="8" height="14" viewBox="0 0 8 14" fill="none" style={{ opacity: 0.25, flexShrink: 0 }}>
+            <path d="M1 1L7 7L1 13" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
         <button onClick={handleReset} style={{
@@ -70,7 +70,7 @@ export function InfoScreen({ sets }) {
         </button>
       </div>
 
-      <p style={{ fontSize: 11, color: "var(--gray-500)", textAlign: "center", marginTop: 20, lineHeight: 1.6, fontFamily: "var(--font-mono)" }}>
+      <p className="mono" style={{ color: "var(--ink-soft)", textAlign: "center", marginTop: 20, lineHeight: 1.8 }}>
         Set-Daten werden über die Rebrickable API geladen.{"\n"}
         rebrickable.com
       </p>

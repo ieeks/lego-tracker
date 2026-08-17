@@ -1,62 +1,3 @@
-:root {
-  /* Core Palette — Warm Premium */
-  --clay:   #d93a2b;   /* primary accent = LEGO red */
-  --slate:  #2e2620;   /* ink — headings & primary text */
-  --ivory:  #FFFFFF;   /* card surface */
-  --oat:    #f4efe4;   /* page background — warm cream */
-
-  /* Named warm accents */
-  --lego-red:   #d93a2b;
-  --orange:     #e8913a;
-  --terracotta: #d95d39;
-  --olive:      #7d8a5a;   /* piece-count chips */
-  --amber:      #c07a1e;   /* price pills */
-  --taupe:      #a08b72;   /* secondary text */
-  --nav-inactive: #a89a86;
-  --card:   #FFFFFF;
-  --blush:  #fbe6e2;       /* soft red pill background */
-
-  /* Neutral Scale (warm) */
-  --white:    #FFFFFF;
-  --gray-100: #efe8db;   /* hairlines / faint fills */
-  --gray-300: #d9cdba;   /* borders */
-  --gray-500: #a08b72;   /* secondary text = taupe */
-  --gray-700: #8a7860;   /* meta text — darker taupe */
-
-  /* Semantic */
-  --success: #7d8a5a;   /* olive */
-  --warning: #c07a1e;   /* amber */
-  --danger:  #c0463a;   /* warm delete red */
-  --info:    #5C7CA3;
-
-  /* Typography */
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body:    'Outfit', system-ui, sans-serif;
-  --font-mono:    'Space Grotesk', ui-monospace, monospace;
-  --font-stat:    'Space Grotesk', 'Outfit', sans-serif;
-
-  /* Spacing */
-  --sp-1: 4px;
-  --sp-2: 8px;
-  --sp-3: 12px;
-  --sp-4: 16px;
-  --sp-5: 24px;
-  --sp-6: 32px;
-  --sp-7: 48px;
-  --sp-8: 64px;
-
-  /* Radius */
-  --r-xs: 6px;
-  --r-sm: 10px;
-  --r-md: 14px;
-  --r-lg: 20px;
-
-  /* Shadows — warm, layered */
-  --shadow-sm: 0 2px 8px rgba(90,70,45,0.06);
-  --shadow-md: 0 8px 20px rgba(90,70,45,0.08);
-  --shadow-lg: 0 16px 36px rgba(90,70,45,0.10);
-}
-
 :root { color-scheme: light; }
 
 * {
@@ -66,9 +7,8 @@
 }
 
 body {
-  background: radial-gradient(130% 100% at 50% 0%, #efe3d0 0%, #e6d8c2 100%);
-  background-attachment: fixed;
-  color: var(--slate);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.55;
@@ -80,4 +20,160 @@ body {
 #root {
   min-height: 100svh;
   touch-action: pan-y;
+}
+
+/* ============================================================
+   TYPOGRAFIE-UTILITIES
+   ============================================================ */
+
+/* Display: Headlines, Sektionstitel, Set-Titel.
+   Nie für Datenwerte — die Wonk-Achse verzerrt Ziffernformen. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.display-xl {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-variation-settings: "SOFT" 40, "WONK" 1;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* Mikrolabels: Begrüßung, "SORTIERUNG", "THEME", Set-Meta-Zeile. */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Alle Statistikwerte, Teilezahlen, Preise, Prozentwerte.
+   tabular-nums ist Pflicht: ohne das springt die Layoutbreite,
+   sobald sich ein Zählerstand ändert.
+   clamp() statt fixer 38px, damit sechsstellige Teilezahlen
+   in der zweispaltigen Kachel bei 390px nicht überlaufen. */
+.stat-value {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(24px, 7vw, 38px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums lining-nums;
+  color: var(--ink);
+}
+
+/* Kleinere Zahlen (Chips, Badges, Listenwerte): gleiche Regel,
+   nur kleiner — DM Sans 700 mit tabular-nums, nicht Mono. */
+.num {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ============================================================
+   TAG-CHIPS  (Teile / Preis / Sonstige)
+   ============================================================ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--r-chip);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+  background: var(--neutral-soft);
+  color: var(--ink-soft);
+}
+
+.tag--parts { background: var(--leaf-soft); color: var(--leaf); }
+.tag--price { background: var(--stud-soft); color: var(--stud-ink); }
+
+/* ============================================================
+   STATUS-DOTS  (Filter-Pills — gleiche Kodierung wie die Rails)
+   ============================================================ */
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-pill);
+  flex-shrink: 0;
+  background: var(--ink-soft);
+}
+
+.dot[data-status="gebaut"] { background: var(--leaf); }
+.dot[data-status="ovp"]    { background: var(--stud); }
+.dot[data-status="wunsch"] { background: var(--brick); }
+
+/* ============================================================
+   SET-KARTE MIT STATUS-RAIL
+   Beim Scrollen soll der Zustand ohne Lesen erkennbar sein.
+   ============================================================ */
+
+.set {
+  position: relative;
+  overflow: hidden;
+  padding-left: 21px;
+}
+
+.set::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--ink-soft);
+}
+
+.set[data-status="gebaut"]::before { background: var(--leaf); }
+.set[data-status="ovp"]::before    { background: var(--stud); }
+.set[data-status="wunsch"]::before { background: var(--brick); }
+
+/* ============================================================
+   FORMULARFELDER
+   ============================================================ */
+
+.field {
+  width: 100%;
+  border-radius: var(--r-field);
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field::placeholder { color: var(--ink-soft); }
+
+.field:focus {
+  border-color: var(--brick);
+  box-shadow: 0 0 0 3px var(--brick-soft);
+}
+
+/* ============================================================
+   BEWEGUNG
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

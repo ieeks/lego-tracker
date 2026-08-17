@@ -5,6 +5,7 @@ import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from ".
 import { fetchRetailPrice } from "./services/bricksetService";
 import { BottomNav } from "./components/BottomNav";
 import { StatusBadge } from "./components/StatusBadge";
+import StudDivider from "./components/StudDivider";
 import { CollectionScreen } from "./screens/CollectionScreen";
 import { AddScreen } from "./screens/AddScreen";
 import { WishlistScreen } from "./screens/WishlistScreen";
@@ -99,7 +100,7 @@ function DetailModal({ set, onClose }) {
       onClick={onClose}
       style={{
         position: "fixed", inset: 0, zIndex: 100,
-        background: "rgba(20,20,19,0.5)", backdropFilter: "blur(6px)",
+        background: "var(--scrim)", backdropFilter: "blur(6px)",
         display: "flex", alignItems: "flex-end",
       }}
     >
@@ -111,14 +112,15 @@ function DetailModal({ set, onClose }) {
         onTouchEnd={handleTouchEnd}
         style={{
           width: "100%", maxWidth: 680, margin: "0 auto",
-          background: "var(--white)", borderRadius: "28px 28px 0 0",
-          boxShadow: "0 -8px 40px rgba(20,20,19,0.15)",
+          background: "var(--card)",
+          borderRadius: "var(--r-card) var(--r-card) 0 0",
+          boxShadow: "var(--shadow-sheet)",
           paddingBottom: "max(32px, env(safe-area-inset-bottom, 32px))",
           transition: "transform 0.25s ease",
         }}
       >
         {/* Handle */}
-        <div style={{ width: 40, height: 4, borderRadius: 2, background: "var(--gray-300)", margin: "14px auto 20px" }} />
+        <div style={{ width: 40, height: 4, borderRadius: "var(--r-pill)", background: "var(--ink-soft)", opacity: 0.3, margin: "14px auto 20px" }} />
 
         <div style={{ padding: "0 20px" }}>
 
@@ -129,38 +131,33 @@ function DetailModal({ set, onClose }) {
               alt={set.name}
               style={{
                 width: "100%", height: 190, objectFit: "contain",
-                borderRadius: "var(--r-md)", background: "var(--gray-100)",
+                borderRadius: "var(--r-thumb)", background: "var(--neutral-soft)",
                 padding: 12, marginBottom: 20, boxSizing: "border-box",
               }}
             />
           )}
 
           {/* Title */}
-          <div style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 700, fontSize: 22, color: "var(--slate)",
-            marginBottom: 4, lineHeight: 1.2,
-          }}>
+          <div className="display" style={{ fontSize: 22, marginBottom: 6, lineHeight: 1.2 }}>
             {set.name}
           </div>
 
           {/* Meta */}
-          <div style={{ fontSize: 13, color: "var(--gray-700)", marginBottom: 16, fontFamily: "var(--font-mono)" }}>
-            #{set.setNumber}
-            {set.parts > 0 && ` · ${set.parts.toLocaleString("de-DE")} Teile`}
+          <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 16, lineHeight: 1.7 }}>
+            {set.setNumber}
             {set.themeName && ` · ${set.parentThemeName ? `${set.parentThemeName} › ${set.themeName}` : set.themeName}`}
             {set.year && ` · ${set.year}`}
           </div>
 
-          {/* Retail price */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+          {/* Parts + retail price */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+            {set.parts > 0 && (
+              <span className="tag tag--parts">
+                {set.parts.toLocaleString("de-DE")} Teile
+              </span>
+            )}
             {retailPrice != null && (
-              <span style={{
-                fontSize: 13, fontWeight: 500, color: "var(--warning)",
-                fontFamily: "var(--font-mono)",
-                background: "rgba(192,122,30,0.12)",
-                borderRadius: "var(--r-xs)", padding: "4px 10px",
-              }}>
+              <span className="tag tag--price">
                 UVP {retailPrice.toLocaleString("de-DE", { style: "currency", currency: "EUR" })}
               </span>
             )}
@@ -169,7 +166,9 @@ function DetailModal({ set, onClose }) {
               disabled={priceLoading}
               style={{
                 background: "none", border: "none", cursor: priceLoading ? "default" : "pointer",
-                fontSize: 16, padding: "2px 4px", opacity: priceLoading ? 0.5 : 1,
+                color: "var(--ink-soft)",
+                display: "flex", alignItems: "center",
+                padding: "2px 4px", opacity: priceLoading ? 0.5 : 1,
                 WebkitTapHighlightColor: "transparent",
               }}
               title="Preis aktualisieren"
@@ -185,7 +184,7 @@ function DetailModal({ set, onClose }) {
 
           {/* Location */}
           <div style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "var(--gray-500)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: "var(--font-mono)" }}>
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 8 }}>
               Standort
             </div>
             <div style={{ display: "flex", gap: 8 }}>
@@ -196,10 +195,10 @@ function DetailModal({ set, onClose }) {
                     key={id}
                     onClick={() => handleLocation(id)}
                     style={{
-                      flex: 1, padding: "12px 8px", borderRadius: "var(--r-md)",
-                      border: active ? "2px solid var(--clay)" : "2px solid var(--gray-300)",
-                      background: active ? "var(--blush)" : "var(--ivory)",
-                      color: active ? "var(--clay)" : "var(--gray-700)",
+                      flex: 1, padding: "12px 8px", borderRadius: "var(--r-field)",
+                      border: active ? "2px solid var(--brick)" : "2px solid var(--line)",
+                      background: active ? "var(--brick-soft)" : "var(--card)",
+                      color: active ? "var(--brick)" : "var(--ink-soft)",
                       fontWeight: 600, fontSize: 14, cursor: "pointer",
                       fontFamily: "var(--font-body)",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
@@ -215,14 +214,14 @@ function DetailModal({ set, onClose }) {
           </div>
 
           {/* Divider */}
-          <div style={{ height: 1, background: "var(--gray-100)", marginBottom: 20 }} />
+          <div style={{ height: 1, background: "var(--line)", marginBottom: 20 }} />
 
           {/* Action Buttons */}
           <div style={{ display: "flex", gap: 10 }}>
             <button onClick={handleCycle} style={{
-              flex: 1, padding: "14px 0", borderRadius: "var(--r-md)",
-              background: "var(--oat)", border: "none",
-              fontWeight: 600, fontSize: 14, color: "var(--slate)",
+              flex: 1, padding: "14px 0", borderRadius: "var(--r-field)",
+              background: "var(--neutral-soft)", border: "none",
+              fontWeight: 600, fontSize: 14, color: "var(--ink)",
               fontFamily: "var(--font-body)",
               cursor: "pointer",
               WebkitTapHighlightColor: "transparent",
@@ -230,8 +229,8 @@ function DetailModal({ set, onClose }) {
               Status {STATUS_CYCLE_LABEL[currentStatus]}
             </button>
             <button onClick={handleDelete} style={{
-              padding: "14px 20px", borderRadius: "var(--r-md)",
-              background: "rgba(176,74,74,0.1)", border: "none",
+              padding: "14px 20px", borderRadius: "var(--r-field)",
+              background: "var(--danger-soft)", border: "none",
               fontWeight: 600, fontSize: 14, color: "var(--danger)",
               fontFamily: "var(--font-body)",
               cursor: "pointer",
@@ -247,36 +246,45 @@ function DetailModal({ set, onClose }) {
   );
 }
 
-function StatCardTop({ label, value, icon, accentColor, progress }) {
+/**
+ * `accent` / `accentSoft` sind Token-Namen und tragen jeweils eine
+ * Bedeutung: --petrol steht für Statistik, --leaf für "gebaut".
+ * Der Fortschrittsbalken zeigt den Gebaut-Anteil und läuft deshalb
+ * in derselben Farbe wie die Gebaut-Rail an den Karten.
+ */
+function StatCardTop({ label, value, icon, accent, accentSoft, progress }) {
   return (
     <div style={{
-      background: "var(--card)", borderRadius: 20, padding: "16px 18px",
+      background: "var(--card)", borderRadius: "var(--r-card)", padding: "16px 18px",
       boxShadow: "var(--shadow-md)", display: "flex", flexDirection: "column", gap: 4,
+      minWidth: 0,
     }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
         <div style={{
-          width: 40, height: 40, borderRadius: 12,
-          background: accentColor + "1f",
+          width: 40, height: 40, borderRadius: "var(--r-thumb)",
+          background: accentSoft,
+          color: accent,
           display: "flex", alignItems: "center", justifyContent: "center",
+          flexShrink: 0,
         }}>
           {icon}
         </div>
         {progress !== undefined && (
-          <span style={{ fontFamily: "var(--font-stat)", fontWeight: 700, fontSize: 15, color: "var(--orange)" }}>
+          <span className="num" style={{ fontSize: 15, color: accent }}>
             {progress} %
           </span>
         )}
       </div>
-      <div style={{ fontFamily: "var(--font-stat)", fontSize: 34, fontWeight: 700, color: "var(--slate)", letterSpacing: "-1px", lineHeight: 1, marginTop: 8 }}>
+      <div className="stat-value" style={{ marginTop: 8 }}>
         {value}
       </div>
-      <div style={{ fontSize: 13, color: "var(--taupe)", fontWeight: 500, fontFamily: "var(--font-body)" }}>{label}</div>
+      <div style={{ fontSize: 13, color: "var(--ink-soft)", fontWeight: 500, fontFamily: "var(--font-body)" }}>{label}</div>
       {progress !== undefined && (
-        <div style={{ marginTop: 10, height: 6, background: "var(--gray-100)", borderRadius: 999, overflow: "hidden" }}>
+        <div style={{ marginTop: 10, height: 6, background: "var(--neutral-soft)", borderRadius: "var(--r-pill)", overflow: "hidden" }}>
           <div style={{
             height: "100%", width: `${Math.max(progress, 0)}%`,
-            background: "linear-gradient(90deg, var(--orange), var(--lego-red))",
-            borderRadius: 999, transition: "width 0.4s ease",
+            background: accent,
+            borderRadius: "var(--r-pill)", transition: "width 0.4s ease",
           }} />
         </div>
       )}
@@ -302,19 +310,13 @@ export default function App() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: `
-        radial-gradient(90% 55% at 100% 0%, rgba(232,145,58,0.13), rgba(232,145,58,0) 55%),
-        radial-gradient(rgba(160,139,114,0.05) 1.2px, transparent 1.4px),
-        linear-gradient(rgba(160,139,114,0.032) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(160,139,114,0.032) 1px, transparent 1px),
-        var(--oat)`,
-      backgroundSize: "auto, 22px 22px, 22px 22px, 22px 22px, auto",
+      background: "var(--paper)",
       fontFamily: "var(--font-body)",
       maxWidth: 680,
       margin: "0 auto",
       position: "relative",
       touchAction: "pan-y",
-      boxShadow: "0 0 60px rgba(90,70,45,0.10)",
+      boxShadow: "var(--shadow-lg)",
     }}>
       <DetailModal key={selectedSet?.id ?? "closed"} set={selectedSet} onClose={() => setSelectedSet(null)} />
 
@@ -326,43 +328,38 @@ export default function App() {
           marginBottom: 8,
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 22 }}>
-            <div>
-              <div style={{
-                fontFamily: "var(--font-body)",
-                fontWeight: 600, fontSize: 12, color: "var(--taupe)",
-                textTransform: "uppercase", letterSpacing: "0.16em", marginBottom: 6,
-              }}>
+            <div style={{ minWidth: 0 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 6 }}>
                 Hallo Manuel
               </div>
-              <div style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 900, fontSize: 30, color: "var(--slate)",
-                lineHeight: 1.05, letterSpacing: "-0.5px",
-              }}>
-                Meine <span style={{ color: "var(--lego-red)" }}>LEGO</span> Sammlung
+              <div className="display-xl">
+                Meine LEGO Sammlung
               </div>
             </div>
             <button
               onClick={() => setTab("hinzufuegen")}
+              aria-label="Set hinzufügen"
               style={{
-                width: 52, height: 52, borderRadius: "50%",
-                background: "linear-gradient(145deg, #e8503f, #d02718)", border: "none", cursor: "pointer",
+                width: 52, height: 52, borderRadius: "var(--r-pill)",
+                background: "var(--brick)", border: "none", cursor: "pointer",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 8px 20px rgba(217,58,43,0.35)",
+                boxShadow: "var(--shadow-md)",
                 WebkitTapHighlightColor: "transparent",
                 flexShrink: 0, marginLeft: 12,
               }}
             >
-              <Plus size={24} strokeWidth={2.8} color="#fff" />
+              <Plus size={24} strokeWidth={2.8} color="var(--on-accent)" />
             </button>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <StudDivider />
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 18 }}>
             <StatCardTop
               label="Sets"
               value={totalSets}
               icon={
-                <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg" style={{ color: "var(--lego-red)" }}>
+                <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg">
                   <rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" />
                   <circle cx="4"  cy="2" fill="currentColor" r="2" />
                   <circle cx="11" cy="2" fill="currentColor" r="2" />
@@ -374,13 +371,15 @@ export default function App() {
                   <circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" />
                 </svg>
               }
-              accentColor="#d93a2b"
+              accent="var(--petrol)"
+              accentSoft="var(--petrol-soft)"
             />
             <StatCardTop
               label="Teile"
               value={totalParts.toLocaleString("de-DE")}
-              icon={<Layers size={20} strokeWidth={2} color="var(--orange)" />}
-              accentColor="#e8913a"
+              icon={<Layers size={20} strokeWidth={2} />}
+              accent="var(--leaf)"
+              accentSoft="var(--leaf-soft)"
               progress={builtPercent}
             />
           </div>

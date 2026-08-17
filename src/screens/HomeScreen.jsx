@@ -59,7 +59,7 @@ export function HomeScreen({ onNavigateAdd }) {
       </div>
 
       {loading && <p style={styles.message}>Lade Sets…</p>}
-      {error && <p style={{ ...styles.message, color: "#ef4444" }}>Fehler: {error}</p>}
+      {error && <p style={{ ...styles.message, color: "var(--danger)" }}>Fehler: {error}</p>}
 
       {!loading && filtered.length === 0 && (
         <p style={styles.message}>Keine Sets gefunden.</p>
@@ -89,14 +89,14 @@ function Stat({ label, value }) {
 }
 
 const styles = {
-  container: { maxWidth: 720, margin: "0 auto", padding: "24px 16px", fontFamily: "sans-serif" },
+  container: { maxWidth: 720, margin: "0 auto", padding: "24px 16px", fontFamily: "var(--font-body)" },
   header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
-  title: { margin: 0, fontSize: 28, fontWeight: 800, color: "#111827" },
+  title: { margin: 0, fontSize: 28, fontFamily: "var(--font-display)", fontWeight: 900, color: "var(--ink)" },
   addButton: {
-    background: "#dc2626",
-    color: "#fff",
+    background: "var(--brick)",
+    color: "var(--on-accent)",
     border: "none",
-    borderRadius: 10,
+    borderRadius: "var(--r-field)",
     padding: "10px 18px",
     fontWeight: 700,
     fontSize: 14,
@@ -105,22 +105,28 @@ const styles = {
   stats: { display: "flex", gap: 12, marginBottom: 20 },
   stat: {
     flex: 1,
-    background: "#f9fafb",
-    border: "1px solid #e5e7eb",
-    borderRadius: 10,
+    background: "var(--card)",
+    border: "1px solid var(--line)",
+    borderRadius: "var(--r-field)",
     padding: 12,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  statValue: { fontSize: 24, fontWeight: 800, color: "#111827" },
-  statLabel: { fontSize: 12, color: "#6b7280", marginTop: 2 },
+  statValue: {
+    fontSize: 24,
+    fontFamily: "var(--font-body)",
+    fontWeight: 700,
+    fontVariantNumeric: "tabular-nums lining-nums",
+    color: "var(--ink)",
+  },
+  statLabel: { fontSize: 12, color: "var(--ink-soft)", marginTop: 2 },
   search: {
     width: "100%",
     boxSizing: "border-box",
     padding: "10px 14px",
-    border: "1px solid #e5e7eb",
-    borderRadius: 10,
+    border: "1px solid var(--line)",
+    borderRadius: "var(--r-field)",
     fontSize: 14,
     marginBottom: 12,
     outline: "none",
@@ -128,14 +134,14 @@ const styles = {
   filters: { display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" },
   filterBtn: {
     padding: "6px 14px",
-    border: "1px solid #e5e7eb",
-    borderRadius: 99,
-    background: "#fff",
+    border: "1px solid var(--line)",
+    borderRadius: "var(--r-pill)",
+    background: "var(--card)",
     fontSize: 13,
     cursor: "pointer",
-    color: "#374151",
+    color: "var(--ink-soft)",
   },
-  filterActive: { background: "#dc2626", color: "#fff", border: "1px solid #dc2626" },
+  filterActive: { background: "var(--ink)", color: "var(--on-accent)", border: "1px solid var(--ink)" },
   grid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 },
-  message: { textAlign: "center", color: "#6b7280", padding: 32 },
+  message: { textAlign: "center", color: "var(--ink-soft)", padding: 32 },
 };
