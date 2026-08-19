@@ -1,5 +1,6 @@
 {
  "source": "Daten von Rebrickable.com",
+ "price_source": "UVP von Brickset.com",
  "generated_at": "2026-08-19",
  "year": 2027,
  "sets": [
@@ -10,7 +11,9 @@
    "parts": 27,
    "theme": "Promotional",
    "subtheme": null,
-   "img": "https://cdn.rebrickable.com/media/sets/6675226-1.jpg"
+   "theme_id": 598,
+   "img": "https://cdn.rebrickable.com/media/sets/6675226-1.jpg",
+   "uvp_eur": null
   },
   {
    "set_num": "6675304-1",
@@ -19,7 +22,9 @@
    "parts": null,
    "theme": "Promotional",
    "subtheme": null,
-   "img": "https://cdn.rebrickable.com/media/sets/6675304-1.jpg"
+   "theme_id": 598,
+   "img": "https://cdn.rebrickable.com/media/sets/6675304-1.jpg",
+   "uvp_eur": null
   },
   {
    "set_num": "6675305-1",
@@ -28,7 +33,9 @@
    "parts": null,
    "theme": "Promotional",
    "subtheme": null,
-   "img": "https://cdn.rebrickable.com/media/sets/6675305-1.jpg"
+   "theme_id": 598,
+   "img": "https://cdn.rebrickable.com/media/sets/6675305-1.jpg",
+   "uvp_eur": null
   },
   {
    "set_num": "6675310-1",
@@ -37,7 +44,9 @@
    "parts": null,
    "theme": "Promotional",
    "subtheme": null,
-   "img": "https://cdn.rebrickable.com/media/sets/6675310-1.jpg"
+   "theme_id": 598,
+   "img": "https://cdn.rebrickable.com/media/sets/6675310-1.jpg",
+   "uvp_eur": null
   },
   {
    "set_num": "6676794-1",
@@ -46,7 +55,9 @@
    "parts": null,
    "theme": "Promotional",
    "subtheme": null,
-   "img": "https://cdn.rebrickable.com/media/sets/6676794-1.jpg"
+   "theme_id": 598,
+   "img": "https://cdn.rebrickable.com/media/sets/6676794-1.jpg",
+   "uvp_eur": null
   }
  ]
 }
