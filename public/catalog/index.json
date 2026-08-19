@@ -13,14 +13,11 @@
   "Chinese Traditional Festivals",
   "City",
   "Classic",
-  "Collectible Minifigures",
   "Creator",
   "Disney",
   "Dreamzzz",
   "Duplo",
   "Editions",
-  "Educational and Dacta",
-  "FIRST LEGO League",
   "Fortnite",
   "Friends",
   "Gabby's Dollhouse",
@@ -29,10 +26,7 @@
   "Jurassic World",
   "KPop Demon Hunters",
   "LEGO Art",
-  "LEGO Brand Store",
-  "LEGO Exclusive",
   "LEGO Ideas and CUUSOO",
-  "Legoland Parks",
   "Minecraft",
   "Modular Buildings",
   "Nike",
@@ -40,8 +34,6 @@
   "One Piece",
   "Other",
   "Pokémon",
-  "Power Functions",
-  "Promotional",
   "Seasonal",
   "Shrek",
   "Sonic The Hedgehog",
@@ -58,12 +50,12 @@
  "years": [
   {
    "year": 2027,
-   "count": 5,
+   "count": 0,
    "file": "2027.json"
   },
   {
    "year": 2026,
-   "count": 771,
+   "count": 580,
    "file": "2026.json"
   }
  ]

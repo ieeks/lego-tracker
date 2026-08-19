@@ -31,7 +31,27 @@ const MIN_YEAR  = 2026;
  * Teilezahl. In einem Tool, in dem man Sets auf die Wunschliste setzt,
  * haben sie nichts verloren.
  */
-const EXCLUDED_THEMES = new Set(["Gear", "Books"]);
+const EXCLUDED_THEMES = new Set([
+  "Gear",                    // Crocs-Jibbitz, Schluesselanhaenger, Textilien
+  "Books",                   // DK-Lesebuecher
+  "Collectible Minifigures", // Blindtueten und Einzelfiguren, kein Bausatz
+  "LEGO Brand Store",        // Store-Deko und Events, nicht reguleaer kaufbar
+  "Promotional",             // Beigaben und Aktionsware
+  "Educational and Dacta",   // Schulmaterial ueber Sonderkanaele
+  "Power Functions",         // Motoren und Netzteile, keine Sets
+  "FIRST LEGO League",       // Wettbewerbskits
+  "LEGO Exclusive",          // Mitarbeiter- und Anlassware
+  "Legoland Parks",          // Parkexklusives
+]);
+
+/**
+ * Setnummern ohne fuehrende Ziffer sind keine reguleaeren Sets.
+ * Rebrickable vergibt sie fuer Polybags und Zeitschriftenbeilagen
+ * ("L0002220-1 Police on Snowmobile") sowie fuer Katalog-Artefakte
+ * ("DATABASE-2026 Unused Parts Database Set", "Pick-a-Brick-2026").
+ * Alle 69 Eintraege dieser Art haben keinen Preis und meist unter 100 Teile.
+ */
+const REGULAR_SET_NUM = /^\d/;
 const ATTRIBUTION = "Daten von Rebrickable.com";
 const PRICE_SOURCE = "UVP von Brickset.com";
 
@@ -100,7 +120,8 @@ function themePath(id) {
 const sets = parseCsv(setsCsv)
   .filter((s) => Number(s.year) >= MIN_YEAR)
   .map((s) => ({ raw: s, path: themePath(s.theme_id) }))
-  .filter(({ path }) => !EXCLUDED_THEMES.has(path[0]))
+  .filter(({ raw, path }) =>
+    !EXCLUDED_THEMES.has(path[0]) && REGULAR_SET_NUM.test(raw.set_num))
   .map(({ raw: s, path }) => {
     return {
       set_num: s.set_num,
