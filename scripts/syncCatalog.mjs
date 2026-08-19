@@ -141,5 +141,21 @@ writeFileSync(
 
 const unknownParts = sets.filter((s) => s.parts === null).length;
 console.log(`✓ ${sets.length} Sets ab ${MIN_YEAR}, ${years.length} Jahrgang/Jahrgaenge, ${themes.length} Themes`);
-console.log(`  davon ohne Teilezahl (angekuendigt): ${unknownParts}`);
+console.log(`  davon ohne Teilezahl: ${unknownParts}`);
+
+// Verteilung mitloggen: der Dump enthaelt neben Bausets auch Gear, Buecher
+// und nicht inventarisierte Polybags. Ohne die Aufschluesselung laesst sich
+// nicht entscheiden, was in den Katalog gehoert.
+const byTheme = new Map();
+for (const s of sets) {
+  const k = s.theme ?? "(ohne Theme)";
+  const e = byTheme.get(k) ?? { total: 0, ohneTeile: 0 };
+  e.total++;
+  if (s.parts === null) e.ohneTeile++;
+  byTheme.set(k, e);
+}
+console.log("\n  Themes nach Groesse:");
+for (const [name, e] of [...byTheme].sort((a, b) => b[1].total - a[1].total)) {
+  console.log(`    ${String(e.total).padStart(5)}  ${String(e.ohneTeile).padStart(5)} ohne Teile  ${name}`);
+}
 for (const y of years) console.log(`  ${y}: ${byYear.get(y).length}`);
