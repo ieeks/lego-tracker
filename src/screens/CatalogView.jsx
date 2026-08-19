@@ -16,6 +16,27 @@ const fold = (v) => v.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCas
 const CHUNK = 40;
 
 /**
+ * Preisstufen als halboffene Intervalle [min, max). Wichtig gegen die
+ * naheliegende Einteilung "150–299" und "ab 300": dazwischen faellt alles
+ * von 299,01 bis 299,99 durch kein Raster.
+ */
+const PRICE_BUCKETS = [
+  { id: "0-50",    label: "bis 50 €",   min: 0,   max: 50 },
+  { id: "50-150",  label: "50–150 €",   min: 50,  max: 150 },
+  { id: "150-300", label: "150–300 €",  min: 150, max: 300 },
+  { id: "300+",    label: "ab 300 €",   min: 300, max: Infinity },
+];
+
+const SORTS = [
+  { id: "teile",     label: "Teile" },
+  { id: "preis-auf", label: "Preis ↑" },
+  { id: "preis-ab",  label: "Preis ↓" },
+];
+
+/** Unbekanntes ans Ende, egal wie sortiert wird. */
+const nullsLast = (v, dir) => (v == null ? (dir === "asc" ? Infinity : -Infinity) : v);
+
+/**
  * Ein Katalog-Datensatz sieht anders aus als ein kuratierter. Statt eine
  * zweite Karte zu bauen, wird er auf die Props der ReleaseCard abgebildet:
  * Name, Teile und Bild stehen im Dump, also kommen sie als "live" rein.
@@ -45,11 +66,19 @@ export function CatalogView({ wishlist }) {
   const [themeSel, setThemeSel] = useState(() => readList(readParams(), "kat"));
   const [yearSel, setYearSel]   = useState(() => readList(readParams(), "jahr"));
   const [onlyNew, setOnlyNew]   = useState(() => readParams().get("neu") === "1");
+  const [priceSel, setPriceSel] = useState(() => readList(readParams(), "preis"));
+  const [sort, setSort]         = useState(() => {
+    const v = readParams().get("sort");
+    return SORTS.some((x) => x.id === v) ? v : "teile";
+  });
   const [limit, setLimit]       = useState(CHUNK);
 
   useEffect(() => {
-    writeParams({ q: search, kat: themeSel, jahr: yearSel, neu: onlyNew ? "1" : null });
-  }, [search, themeSel, yearSel, onlyNew]);
+    writeParams({
+      q: search, kat: themeSel, jahr: yearSel, neu: onlyNew ? "1" : null,
+      preis: priceSel, sort: sort === "teile" ? null : sort,
+    });
+  }, [search, themeSel, yearSel, onlyNew, priceSel, sort]);
 
   const filtered = useMemo(() => {
     if (!data) return [];
@@ -57,6 +86,16 @@ export function CatalogView({ wishlist }) {
     return data.sets.filter((row) => {
       if (themeSel.length && !themeSel.includes(row.theme)) return false;
       if (yearSel.length && !yearSel.includes(String(row.year))) return false;
+      // Ein aktiver Preisfilter schliesst Sets ohne Preis aus — sie lassen
+      // sich keiner Stufe zuordnen. Betrifft rund ein Viertel des Katalogs.
+      if (priceSel.length) {
+        const eur = row.uvp_eur;
+        if (eur == null) return false;
+        const inRange = PRICE_BUCKETS.some(
+          (b) => priceSel.includes(b.id) && eur >= b.min && eur < b.max
+        );
+        if (!inRange) return false;
+      }
       if (onlyNew) {
         const num = normalizeSetNum(row.set_num);
         if (ownedNums.has(num) || wishedNums.has(num)) return false;
@@ -71,12 +110,21 @@ export function CatalogView({ wishlist }) {
       }
       return true;
     })
-    // Groesste zuerst, Unbekanntes ans Ende. Der Dump hat kein
-    // Erscheinungsdatum, nur das Jahr — chronologisch geht also nicht, und
-    // nach Theme sortiert stuenden Promotional-Polybags mit 27 Teilen ganz
-    // oben. Beim Stoebern will man die dicken Sets zuerst sehen.
-    .sort((a, b) => (b.parts ?? -1) - (a.parts ?? -1) || a.name.localeCompare(b.name, "de"));
-  }, [data, search, themeSel, yearSel, onlyNew, ownedNums, wishedNums]);
+    // Der Dump hat kein Erscheinungsdatum, nur das Jahr — chronologisch
+    // geht also nicht. Voreinstellung ist die Teilezahl absteigend: nach
+    // Theme sortiert stuenden sonst die kleinsten Sets ganz oben.
+    .sort((a, b) => {
+      if (sort === "preis-auf") {
+        return nullsLast(a.uvp_eur, "asc") - nullsLast(b.uvp_eur, "asc")
+          || a.name.localeCompare(b.name, "de");
+      }
+      if (sort === "preis-ab") {
+        return nullsLast(b.uvp_eur, "desc") - nullsLast(a.uvp_eur, "desc")
+          || a.name.localeCompare(b.name, "de");
+      }
+      return (b.parts ?? -1) - (a.parts ?? -1) || a.name.localeCompare(b.name, "de");
+    });
+  }, [data, search, themeSel, yearSel, onlyNew, priceSel, sort, ownedNums, wishedNums]);
 
   // Nachladen, sobald der Fussmarker in Sichtweite kommt — ohne Bibliothek.
   const sentinel = useRef(null);
@@ -99,11 +147,14 @@ export function CatalogView({ wishlist }) {
     setList(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
     setLimit(CHUNK);
   };
+  const changeSort = (id) => { setSort(id); setLimit(CHUNK); };
   const resetAll = () => {
-    setSearch(""); setThemeSel([]); setYearSel([]); setOnlyNew(false); setLimit(CHUNK);
+    setSearch(""); setThemeSel([]); setYearSel([]); setOnlyNew(false);
+    setPriceSel([]); setSort("teile"); setLimit(CHUNK);
   };
 
-  const activeCount = themeSel.length + yearSel.length + (onlyNew ? 1 : 0) + (search ? 1 : 0);
+  const activeCount = themeSel.length + yearSel.length + priceSel.length
+    + (onlyNew ? 1 : 0) + (search ? 1 : 0) + (sort !== "teile" ? 1 : 0);
 
   if (loading) return <Info>Lade Katalog…</Info>;
   if (error)   return <Info tone="danger">Katalog konnte nicht geladen werden: {error}</Info>;
@@ -141,18 +192,45 @@ export function CatalogView({ wishlist }) {
         )}
       </div>
 
-      {/* Jahr + Status */}
+      {/* Jahr nur, wenn es mehr als einen gibt — ein Filter mit einer Option
+          filtert nichts, dieselbe Regel wie in der Wellen-Ansicht. */}
+      {data.years.length > 1 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+          <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Jahr</span>
+          {data.years.map((y) => (
+            <Chip key={y} active={yearSel.includes(String(y))} onClick={() => toggle(yearSel, setYearSel)(String(y))}>
+              {y}
+            </Chip>
+          ))}
+        </div>
+      )}
+
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Jahr</span>
-        {data.years.map((y) => (
-          <Chip key={y} active={yearSel.includes(String(y))} onClick={() => toggle(yearSel, setYearSel)(String(y))}>
-            {y}
-          </Chip>
-        ))}
+        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Status</span>
         <Chip active={onlyNew} onClick={toggleNew}>Noch nicht erfasst</Chip>
       </div>
 
-      {/* Themes — 50 Stück, deshalb scrollbare Reihe statt Blockwüste */}
+      {/* Preis */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Preis</span>
+        {PRICE_BUCKETS.map((b) => (
+          <Chip key={b.id} active={priceSel.includes(b.id)} onClick={() => toggle(priceSel, setPriceSel)(b.id)}>
+            {b.label}
+          </Chip>
+        ))}
+      </div>
+
+      {/* Sortierung — einfachauswahl, anders als die Filter darueber */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Sortierung</span>
+        {SORTS.map((o) => (
+          <Chip key={o.id} active={sort === o.id} onClick={() => changeSort(o.id)}>
+            {o.label}
+          </Chip>
+        ))}
+      </div>
+
+      {/* Themes — viele, deshalb scrollbare Reihe statt Blockwüste */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
         <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Theme</span>
         <div style={{
