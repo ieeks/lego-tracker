@@ -47,6 +47,7 @@ export function useWishlistImport(sets) {
         themeName: payload.themeName ?? null,
         parentThemeName: payload.parentThemeName ?? null,
         year: payload.year ?? null,
+        retailPrice: payload.retailPrice ?? null,
         status: "wishlist",
       });
     } catch (err) {

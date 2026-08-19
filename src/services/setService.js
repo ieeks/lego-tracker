@@ -10,7 +10,7 @@ import { db, authReady } from "./firebase";
 
 const COL = "sets";
 
-export async function addSet({ setNumber, name, image, parts, theme, themeName, parentThemeName, year, status, location }) {
+export async function addSet({ setNumber, name, image, parts, theme, themeName, parentThemeName, year, status, location, retailPrice }) {
   await authReady;
   const ref = await addDoc(collection(db, COL), {
     setNumber,
@@ -22,6 +22,9 @@ export async function addSet({ setNumber, name, image, parts, theme, themeName, 
     ...(parentThemeName ? { parentThemeName } : {}),
     ...(year            ? { year }            : {}),
     ...(location        ? { location }        : {}),
+    // UVP direkt mitschreiben, wenn sie beim Anlegen schon bekannt ist —
+    // erspart den nachtraeglichen Abruf ueber "Preise laden".
+    ...(retailPrice != null ? { retailPrice } : {}),
     status,
     createdAt: serverTimestamp(),
   });

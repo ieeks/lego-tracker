@@ -22,7 +22,8 @@ function toCardProps(row) {
       theme: row.theme,
       subtheme: row.subtheme,
       pieces: row.parts,
-      uvp_eur: null, age: null, minifigs: null,
+      uvp_eur: row.uvp_eur ?? null,
+      age: null, minifigs: null,
       eol_forecast: null, note: null, region_note: null,
     },
     live: { name: row.name, parts: row.parts, image: row.img },
@@ -199,6 +200,8 @@ export function CatalogView({ wishlist }) {
                 label: row.name,
                 image: row.img,
                 parts: row.parts ?? 0,
+                retailPrice: row.uvp_eur ?? null,
+                themeId: row.theme_id ?? null,
                 // Der Dump fuehrt den Theme-Pfad als Namen, keine theme_id —
                 // die Sammlung zeigt daraus "City › Trains".
                 themeName: row.subtheme ?? row.theme,

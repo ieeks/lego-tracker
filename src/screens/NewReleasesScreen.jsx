@@ -121,6 +121,7 @@ export function NewReleasesScreen({ sets, loading }) {
       image: live?.image ?? null,
       parts: knownParts(live?.parts, entry.pieces) ?? 0,
       themeId: live?.themeId ?? null,
+      retailPrice: entry.uvp_eur ?? null,
       // theme/subtheme auf das bestehende Schema: "City › Trains".
       themeName: entry.subtheme ?? entry.theme,
       parentThemeName: entry.subtheme ? entry.theme : null,
