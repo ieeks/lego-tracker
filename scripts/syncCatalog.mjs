@@ -18,11 +18,22 @@
 import { gunzipSync } from "node:zlib";
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fetchPrices } from "./fetchPrices.mjs";
 
 const BASE      = "https://cdn.rebrickable.com/media/downloads";
 const OUT_DIR   = "public/catalog";
 const MIN_YEAR  = 2026;
+
+/**
+ * Der Dump enthaelt nicht nur Bausets. "Gear" sind Crocs-Jibbitz,
+ * Schluesselanhaenger und Textilien, "Books" sind DK-Lesebuecher.
+ * Zusammen 528 der 1304 Eintraege ab 2026 — und 504 der 609 ohne
+ * Teilezahl. In einem Tool, in dem man Sets auf die Wunschliste setzt,
+ * haben sie nichts verloren.
+ */
+const EXCLUDED_THEMES = new Set(["Gear", "Books"]);
 const ATTRIBUTION = "Daten von Rebrickable.com";
+const PRICE_SOURCE = "UVP von Brickset.com";
 
 /** CSV-Zeilenparser mit Anfuehrungszeichen — Set-Namen enthalten Kommas. */
 function parseCsv(text) {
@@ -88,8 +99,9 @@ function themePath(id) {
 
 const sets = parseCsv(setsCsv)
   .filter((s) => Number(s.year) >= MIN_YEAR)
-  .map((s) => {
-    const path = themePath(s.theme_id);
+  .map((s) => ({ raw: s, path: themePath(s.theme_id) }))
+  .filter(({ path }) => !EXCLUDED_THEMES.has(path[0]))
+  .map(({ raw: s, path }) => {
     return {
       set_num: s.set_num,
       name: s.name,
@@ -99,6 +111,7 @@ const sets = parseCsv(setsCsv)
       parts: num(s.num_parts),
       theme: path[0] ?? null,
       subtheme: path.length > 1 ? path[path.length - 1] : null,
+      theme_id: Number(s.theme_id) || null,
       img: s.img_url || null,
     };
   })
@@ -107,6 +120,30 @@ const sets = parseCsv(setsCsv)
     (a.theme ?? "").localeCompare(b.theme ?? "", "de") ||
     a.set_num.localeCompare(b.set_num)
   );
+
+// UVP dazuholen. Ohne Key laeuft der Sync trotzdem durch — der Katalog ist
+// auch ohne Preise brauchbar, und ein fehlendes Secret soll nicht den
+// ganzen Lauf kippen.
+const apiKey = process.env.BRICKSET_API_KEY;
+const catalogYears = [...new Set(sets.map((s) => s.year))].sort();
+let prices = new Map();
+let priceError = null;
+
+if (!apiKey) {
+  console.log("  BRICKSET_API_KEY nicht gesetzt — Katalog wird ohne Preise gebaut.");
+} else {
+  try {
+    prices = await fetchPrices(apiKey, catalogYears);
+  } catch (err) {
+    // Ein Ausfall bei BrickSet darf die Rebrickable-Daten nicht verhindern.
+    priceError = err.message;
+    console.log(`  BrickSet nicht erreichbar (${err.message}) — Katalog ohne Preise.`);
+  }
+}
+
+for (const s of sets) {
+  s.uvp_eur = prices.get(s.set_num) ?? null;
+}
 
 mkdirSync(OUT_DIR, { recursive: true });
 
@@ -123,7 +160,11 @@ for (const year of years) {
   const list = byYear.get(year);
   writeFileSync(
     join(OUT_DIR, `${year}.json`),
-    JSON.stringify({ source: ATTRIBUTION, generated_at, year, sets: list }, null, 1) + "\n"
+    JSON.stringify({
+      source: ATTRIBUTION,
+      price_source: prices.size ? PRICE_SOURCE : null,
+      generated_at, year, sets: list,
+    }, null, 1) + "\n"
   );
 }
 
@@ -132,6 +173,7 @@ writeFileSync(
   join(OUT_DIR, "index.json"),
   JSON.stringify({
     source: ATTRIBUTION,
+    price_source: prices.size ? PRICE_SOURCE : null,
     generated_at,
     min_year: MIN_YEAR,
     themes,
@@ -142,6 +184,8 @@ writeFileSync(
 const unknownParts = sets.filter((s) => s.parts === null).length;
 console.log(`✓ ${sets.length} Sets ab ${MIN_YEAR}, ${years.length} Jahrgang/Jahrgaenge, ${themes.length} Themes`);
 console.log(`  davon ohne Teilezahl: ${unknownParts}`);
+const withPrice = sets.filter((s) => s.uvp_eur != null).length;
+console.log(`  mit UVP: ${withPrice}${priceError ? " (BrickSet-Abruf fehlgeschlagen)" : ""}`);
 
 // Verteilung mitloggen: der Dump enthaelt neben Bausets auch Gear, Buecher
 // und nicht inventarisierte Polybags. Ohne die Aufschluesselung laesst sich

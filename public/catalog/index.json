@@ -6,7 +6,6 @@
   "Animal Crossing",
   "Architecture",
   "Bluey",
-  "Books",
   "Botanicals",
   "Brickheadz",
   "BrickLink Designer Program",
@@ -24,7 +23,6 @@
   "Fortnite",
   "Friends",
   "Gabby's Dollhouse",
-  "Gear",
   "Harry Potter",
   "Icons",
   "Jurassic World",
@@ -59,12 +57,12 @@
  "years": [
   {
    "year": 2027,
-   "count": 12,
+   "count": 5,
    "file": "2027.json"
   },
   {
    "year": 2026,
-   "count": 1292,
+   "count": 771,
    "file": "2026.json"
   }
  ]
