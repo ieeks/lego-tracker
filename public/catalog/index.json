@@ -4,33 +4,22 @@
  "generated_at": "2026-08-19",
  "min_year": 2026,
  "themes": [
-  "Animal Crossing",
   "Architecture",
   "Bluey",
   "Botanicals",
-  "Brickheadz",
   "BrickLink Designer Program",
   "Chinese Traditional Festivals",
   "City",
   "Classic",
   "Creator",
   "Disney",
-  "Dreamzzz",
-  "Duplo",
   "Editions",
   "Fortnite",
-  "Friends",
-  "Gabby's Dollhouse",
-  "Harry Potter",
   "Icons",
-  "Jurassic World",
-  "KPop Demon Hunters",
   "LEGO Art",
   "LEGO Ideas and CUUSOO",
-  "Minecraft",
   "Modular Buildings",
   "Nike",
-  "Ninjago",
   "One Piece",
   "Other",
   "Pokémon",
@@ -44,18 +33,12 @@
   "Super Mario",
   "Technic",
   "The Hobbit and Lord of the Rings",
-  "The Legend of Zelda",
-  "Wednesday"
+  "The Legend of Zelda"
  ],
  "years": [
   {
-   "year": 2027,
-   "count": 0,
-   "file": "2027.json"
-  },
-  {
    "year": 2026,
-   "count": 580,
+   "count": 412,
    "file": "2026.json"
   }
  ]

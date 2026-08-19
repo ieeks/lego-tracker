@@ -5,7 +5,14 @@ import { useCatalog } from "../hooks/useCatalog";
 import { normalizeSetNum } from "../lib/newReleases";
 import { readParams, readList, writeParams } from "../lib/urlState";
 
-/** Wie viele Karten pro Nachladeschritt. 776 Sets auf einmal killt Mobile-Safari. */
+/**
+ * Diakritika wegnormalisieren, damit "pokemon" auch "Pokémon" findet.
+ * Auf einer deutschen Tastatur tippt niemand das é mit, und ohne das
+ * lieferte die naheliegende Eingabe null Treffer.
+ */
+const fold = (v) => v.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+/** Wie viele Karten pro Nachladeschritt. Alle auf einmal killt Mobile-Safari. */
 const CHUNK = 40;
 
 /**
@@ -46,7 +53,7 @@ export function CatalogView({ wishlist }) {
 
   const filtered = useMemo(() => {
     if (!data) return [];
-    const q = search.trim().toLowerCase();
+    const q = fold(search.trim());
     return data.sets.filter((row) => {
       if (themeSel.length && !themeSel.includes(row.theme)) return false;
       if (yearSel.length && !yearSel.includes(String(row.year))) return false;
@@ -58,8 +65,8 @@ export function CatalogView({ wishlist }) {
       // das Theme, nicht ein Set mit "Technic" im Namen. Ohne das liefert
       // eine naheliegende Eingabe null Treffer.
       if (q) {
-        const haystack = [row.name, row.set_num, row.theme, row.subtheme]
-          .filter(Boolean).join(" ").toLowerCase();
+        const haystack = fold([row.name, row.set_num, row.theme, row.subtheme]
+          .filter(Boolean).join(" "));
         if (!haystack.includes(q)) return false;
       }
       return true;

@@ -42,6 +42,20 @@ const EXCLUDED_THEMES = new Set([
   "FIRST LEGO League",       // Wettbewerbskits
   "LEGO Exclusive",          // Mitarbeiter- und Anlassware
   "Legoland Parks",          // Parkexklusives
+
+  // Ab hier: nicht "keine Sets", sondern schlicht nicht gesammelt.
+  "Friends",
+  "Ninjago",
+  "Harry Potter",
+  "Duplo",
+  "Minecraft",
+  "Brickheadz",
+  "Jurassic World",
+  "Dreamzzz",
+  "Gabby's Dollhouse",
+  "Animal Crossing",
+  "Wednesday",
+  "KPop Demon Hunters",
 ]);
 
 /**
@@ -175,7 +189,7 @@ for (const s of sets) {
 }
 
 const generated_at = new Date().toISOString().slice(0, 10);
-const years = [...byYear.keys()].sort((a, b) => b - a);
+const years = [...byYear.keys()].filter((y) => byYear.get(y).length > 0).sort((a, b) => b - a);
 
 for (const year of years) {
   const list = byYear.get(year);
