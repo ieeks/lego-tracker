@@ -16,7 +16,7 @@
  *   node scripts/syncCatalog.mjs --from <dir>    # nutzt lokale CSVs (Test)
  */
 import { gunzipSync } from "node:zlib";
-import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { fetchPrices } from "./fetchPrices.mjs";
 
@@ -165,19 +165,54 @@ let prices = new Map();
 let priceError = null;
 
 if (!apiKey) {
-  console.log("  BRICKSET_API_KEY nicht gesetzt — Katalog wird ohne Preise gebaut.");
+  console.log("  BRICKSET_API_KEY nicht gesetzt — kein Preisabruf.");
 } else {
   try {
     prices = await fetchPrices(apiKey, catalogYears);
   } catch (err) {
     // Ein Ausfall bei BrickSet darf die Rebrickable-Daten nicht verhindern.
     priceError = err.message;
-    console.log(`  BrickSet nicht erreichbar (${err.message}) — Katalog ohne Preise.`);
+    console.log(`  BrickSet nicht erreichbar (${err.message}) — kein Preisabruf.`);
   }
 }
 
+/**
+ * Preise aus dem letzten Lauf einlesen.
+ *
+ * Ohne das waere ein Ausfall bei BrickSet stille Datenloeschung: die
+ * Preis-Map bliebe leer, jeder Satz bekaeme uvp_eur null, und der Lauf
+ * wuerde das als Erfolg committen. Also gilt — nur wenn wir frische Daten
+ * haben, ersetzen wir; sonst behalten wir die alten.
+ */
+function previousPrices() {
+  const map = new Map();
+  for (const year of new Set(sets.map((s) => s.year))) {
+    const file = join(OUT_DIR, `${year}.json`);
+    if (!existsSync(file)) continue;
+    try {
+      for (const s of JSON.parse(readFileSync(file, "utf8")).sets ?? []) {
+        if (s.uvp_eur != null) map.set(s.set_num, s.uvp_eur);
+      }
+    } catch {
+      // Kaputte Datei aus einem frueheren Lauf: dann eben ohne Altbestand.
+    }
+  }
+  return map;
+}
+
+const pricesUsable = apiKey && !priceError;
+const fallback = pricesUsable ? null : previousPrices();
+
+if (!pricesUsable) {
+  console.log(fallback.size
+    ? `  ${fallback.size} Preise aus dem letzten Lauf uebernommen.`
+    : "  Kein Altbestand vorhanden — Katalog ohne Preise.");
+}
+
 for (const s of sets) {
-  s.uvp_eur = prices.get(s.set_num) ?? null;
+  s.uvp_eur = pricesUsable
+    ? (prices.get(s.set_num) ?? null)
+    : (fallback.get(s.set_num) ?? null);
 }
 
 mkdirSync(OUT_DIR, { recursive: true });
@@ -197,7 +232,7 @@ for (const year of years) {
     join(OUT_DIR, `${year}.json`),
     JSON.stringify({
       source: ATTRIBUTION,
-      price_source: prices.size ? PRICE_SOURCE : null,
+      price_source: sets.some((x) => x.uvp_eur != null) ? PRICE_SOURCE : null,
       generated_at, year, sets: list,
     }, null, 1) + "\n"
   );
@@ -208,7 +243,7 @@ writeFileSync(
   join(OUT_DIR, "index.json"),
   JSON.stringify({
     source: ATTRIBUTION,
-    price_source: prices.size ? PRICE_SOURCE : null,
+    price_source: sets.some((x) => x.uvp_eur != null) ? PRICE_SOURCE : null,
     generated_at,
     min_year: MIN_YEAR,
     themes,

@@ -108,9 +108,12 @@ export function NewReleasesScreen({ sets, loading }) {
   }).length;
   const trackedPercent = shown > 0 ? Math.round(((shown - missing) / shown) * 100) : 0;
 
-  // Genau eine Welle gefiltert? Dann benennt die Kachel sie statt "Neuheiten".
+  // Eine Welle gefiltert oder ueberhaupt nur eine vorhanden? Dann benennt die
+  // Kachel sie — und traegt die Kuratierungsquote, die sonst in der
+  // Gruppenueberschrift stand.
   const singleWave = waveFilter.length === 1
-    ? WAVES.find((w) => w.id === waveFilter[0]) : null;
+    ? WAVES.find((w) => w.id === waveFilter[0])
+    : WAVES.length === 1 ? WAVES[0] : null;
 
   const handleWish = (entry) => {
     const live = entries[entry.set_num];
@@ -169,6 +172,7 @@ export function NewReleasesScreen({ sets, loading }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 22 }}>
         <StatCardTop
           label={singleWave ? `Sets · ${waveShortLabel(singleWave)}` : "Neuheiten"}
+          sublabel={singleWave ? `von ${singleWave.total} kuratiert` : null}
           value={shown}
           icon={<Sparkles size={20} strokeWidth={2} />}
           accent="var(--petrol)"
@@ -185,17 +189,18 @@ export function NewReleasesScreen({ sets, loading }) {
         />
       </div>
 
-      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
-        <div className="display" style={{ fontSize: 20 }}>Neuheiten</div>
-        {pending > 0 && (
-          <span className="mono" style={{ color: "var(--ink-soft)" }}>
-            Lade {pending} Sets…
-          </span>
-        )}
-      </div>
+      {pending > 0 && (
+        <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 12 }}>
+          Lade {pending} Sets…
+        </div>
+      )}
 
       {/* Filter */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+        {/* Filtergruppen mit einer einzigen Option koennen nichts filtern —
+            dieselbe Regel wie bei den leeren Wellen. Kommt eine zweite Welle
+            oder ein zweites Theme dazu, tauchen sie von selbst wieder auf. */}
+        {WAVES.length > 1 && (
         <FilterGroup label="Welle">
           {WAVES.map((w) => (
             <FilterChip key={w.id} active={waveFilter.includes(w.id)} onClick={() => toggle(waveFilter, setWaveFilter)(w.id)}>
@@ -203,7 +208,9 @@ export function NewReleasesScreen({ sets, loading }) {
             </FilterChip>
           ))}
         </FilterGroup>
+        )}
 
+        {THEMES.length > 1 && (
         <FilterGroup label="Theme">
           {THEMES.map((t) => (
             <FilterChip key={t} active={themeFilter.includes(t)} onClick={() => toggle(themeFilter, setThemeFilter)(t)}>
@@ -211,6 +218,7 @@ export function NewReleasesScreen({ sets, loading }) {
             </FilterChip>
           ))}
         </FilterGroup>
+        )}
 
         <FilterGroup label="Status">
           {STATUS_FILTERS.map((s) => (
@@ -262,16 +270,19 @@ export function NewReleasesScreen({ sets, loading }) {
 
       {groups.map(({ wave, items }) => (
         <section key={wave.id} style={{ marginBottom: 28 }}>
-          <div style={{ marginBottom: 12 }}>
-            <h2 className="display" style={{ fontSize: 17, margin: 0 }}>{wave.label}</h2>
-            {/* Ungefiltert zaehlt die Welle, gefiltert der Auszug daraus —
-                sonst liest sich die Filtertrefferzahl wie die Kuratierung. */}
-            <div className="mono" style={{ color: "var(--ink-soft)", marginTop: 3 }}>
-              {items.length === wave.curated
-                ? `${wave.curated} von ${wave.total} Sets kuratiert`
-                : `${items.length} von ${wave.curated} kuratierten Sets`}
+          {/* Ueberschrift nur, wenn es mehr als eine Gruppe zu unterscheiden
+              gibt. Bei einer einzigen Welle gruppiert sie nichts und
+              wiederholt nur, was die Kachel oben schon sagt. */}
+          {groups.length > 1 && (
+            <div style={{ marginBottom: 12 }}>
+              <h2 className="display" style={{ fontSize: 17, margin: 0 }}>{wave.label}</h2>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginTop: 3 }}>
+                {items.length === wave.curated
+                  ? `${wave.curated} von ${wave.total} Sets kuratiert`
+                  : `${items.length} von ${wave.curated} kuratierten Sets`}
+              </div>
             </div>
-          </div>
+          )}
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",

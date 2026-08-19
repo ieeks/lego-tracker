@@ -4,7 +4,7 @@
  * Der Fortschrittsbalken zeigt den Gebaut-Anteil und läuft deshalb
  * in derselben Farbe wie die Gebaut-Rail an den Karten.
  */
-export function StatCardTop({ label, value, icon, accent, accentSoft, progress, progressLabel }) {
+export function StatCardTop({ label, value, icon, accent, accentSoft, progress, progressLabel, sublabel }) {
   return (
     <div style={{
       background: "var(--card)", borderRadius: "var(--r-card)", padding: "16px 18px",
@@ -33,6 +33,9 @@ export function StatCardTop({ label, value, icon, accent, accentSoft, progress, 
         {value}
       </div>
       <div style={{ fontSize: 13, color: "var(--ink-soft)", fontWeight: 500, fontFamily: "var(--font-body)" }}>{label}</div>
+      {sublabel && (
+        <div className="mono" style={{ color: "var(--ink-soft)", marginTop: 2 }}>{sublabel}</div>
+      )}
       {progress !== undefined && (
         <div style={{ marginTop: 10, height: 6, background: "var(--neutral-soft)", borderRadius: "var(--r-pill)", overflow: "hidden" }}>
           <div style={{
