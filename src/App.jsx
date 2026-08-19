@@ -1,12 +1,15 @@
 import { useState, useEffect, useRef } from "react";
-import { Home, Users, RotateCw, Layers, Plus } from "lucide-react";
+import { Home, Users, RotateCw, Layers, Plus, Sparkles, PackageOpen } from "lucide-react";
 import { useCollection } from "./hooks/useCollection";
 import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
 import { fetchRetailPrice } from "./services/bricksetService";
 import { BottomNav } from "./components/BottomNav";
 import { StatusBadge } from "./components/StatusBadge";
 import StudDivider from "./components/StudDivider";
+import { NEW_RELEASES, normalizeSetNum } from "./lib/newReleases";
+import { readParams, writeParams } from "./lib/urlState";
 import { CollectionScreen } from "./screens/CollectionScreen";
+import { NewReleasesScreen } from "./screens/NewReleasesScreen";
 import { AddScreen } from "./screens/AddScreen";
 import { WishlistScreen } from "./screens/WishlistScreen";
 import { StatsScreen } from "./screens/StatsScreen";
@@ -293,9 +296,13 @@ function StatCardTop({ label, value, icon, accent, accentSoft, progress }) {
 }
 
 export default function App() {
-  const [tab, setTab] = useState("sammlung");
+  // Der Tab gehoert mit in die URL: sonst landet ein geteilter Filter-Link
+  // auf der Sammlung und die Filter-Params haengen verwaist daneben.
+  const [tab, setTab] = useState(() => readParams().get("tab") ?? "sammlung");
   const [selectedSet, setSelectedSet] = useState(null);
   const { sets, loading } = useCollection();
+
+  useEffect(() => { writeParams({ tab: tab === "sammlung" ? null : tab }); }, [tab]);
 
   const owned        = sets.filter((s) => s.status !== "wishlist");
   const wishlistSets = sets.filter((s) => s.status === "wishlist");
@@ -306,6 +313,22 @@ export default function App() {
   const wishlistCount = wishlistSets.length;
   const builtCount  = builtSets.length;
   const builtPercent = owned.length > 0 ? Math.round((builtCount / owned.length) * 100) : 0;
+
+  // Neuheiten-Kennzahlen: wie viele der kuratierten Sets schon erfasst sind.
+  const trackedNums   = new Set(sets.map((s) => normalizeSetNum(s.setNumber)));
+  const releaseTotal  = NEW_RELEASES.length;
+  const releaseOpen   = NEW_RELEASES.filter((r) => !trackedNums.has(normalizeSetNum(r.set_num))).length;
+  const releasePercent = releaseTotal > 0
+    ? Math.round(((releaseTotal - releaseOpen) / releaseTotal) * 100) : 0;
+
+  // Nur die beiden Bloettertabs bekommen Headline und Kacheln — die uebrigen
+  // Screens bringen ihre eigene Ueberschrift mit, ein zweiter Titel darueber
+  // waere eine Dopplung.
+  const HEADERS = {
+    sammlung:  { eyebrow: "Hallo Manuel",      title: "Meine LEGO Sammlung" },
+    neuheiten: { eyebrow: "Frisch erschienen", title: "Neue LEGO Sets" },
+  };
+  const header = HEADERS[tab];
 
   return (
     <div style={{
@@ -327,14 +350,19 @@ export default function App() {
           paddingLeft: 20, paddingRight: 20, paddingBottom: 20,
           marginBottom: 8,
         }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 22 }}>
+          <div style={{
+            display: "flex", justifyContent: "space-between",
+            alignItems: "flex-start", marginBottom: header ? 22 : 0,
+          }}>
             <div style={{ minWidth: 0 }}>
-              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 6 }}>
-                Hallo Manuel
-              </div>
-              <div className="display-xl">
-                Meine LEGO Sammlung
-              </div>
+              {header && (
+                <>
+                  <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 6 }}>
+                    {header.eyebrow}
+                  </div>
+                  <div className="display-xl">{header.title}</div>
+                </>
+              )}
             </div>
             <button
               onClick={() => setTab("hinzufuegen")}
@@ -352,40 +380,63 @@ export default function App() {
             </button>
           </div>
 
-          <StudDivider />
+          {header && <StudDivider />}
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 18 }}>
-            <StatCardTop
-              label="Sets"
-              value={totalSets}
-              icon={
-                <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg">
-                  <rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" />
-                  <circle cx="4"  cy="2" fill="currentColor" r="2" />
-                  <circle cx="11" cy="2" fill="currentColor" r="2" />
-                  <circle cx="18" cy="2" fill="currentColor" r="2" />
-                  <circle cx="25" cy="2" fill="currentColor" r="2" />
-                  <circle cx="4"  cy="7" fill="currentColor" opacity="0.3" r="2" />
-                  <circle cx="11" cy="7" fill="currentColor" opacity="0.3" r="2" />
-                  <circle cx="18" cy="7" fill="currentColor" opacity="0.3" r="2" />
-                  <circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" />
-                </svg>
-              }
-              accent="var(--petrol)"
-              accentSoft="var(--petrol-soft)"
-            />
-            <StatCardTop
-              label="Teile"
-              value={totalParts.toLocaleString("de-DE")}
-              icon={<Layers size={20} strokeWidth={2} />}
-              accent="var(--leaf)"
-              accentSoft="var(--leaf-soft)"
-              progress={builtPercent}
-            />
-          </div>
+          {tab === "sammlung" && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 18 }}>
+              <StatCardTop
+                label="Sets"
+                value={totalSets}
+                icon={
+                  <svg fill="none" height="16" viewBox="0 0 28 16" width="28" xmlns="http://www.w3.org/2000/svg">
+                    <rect fill="currentColor" height="14" rx="1" width="28" x="0" y="2" />
+                    <circle cx="4"  cy="2" fill="currentColor" r="2" />
+                    <circle cx="11" cy="2" fill="currentColor" r="2" />
+                    <circle cx="18" cy="2" fill="currentColor" r="2" />
+                    <circle cx="25" cy="2" fill="currentColor" r="2" />
+                    <circle cx="4"  cy="7" fill="currentColor" opacity="0.3" r="2" />
+                    <circle cx="11" cy="7" fill="currentColor" opacity="0.3" r="2" />
+                    <circle cx="18" cy="7" fill="currentColor" opacity="0.3" r="2" />
+                    <circle cx="25" cy="7" fill="currentColor" opacity="0.3" r="2" />
+                  </svg>
+                }
+                accent="var(--petrol)"
+                accentSoft="var(--petrol-soft)"
+              />
+              <StatCardTop
+                label="Teile"
+                value={totalParts.toLocaleString("de-DE")}
+                icon={<Layers size={20} strokeWidth={2} />}
+                accent="var(--leaf)"
+                accentSoft="var(--leaf-soft)"
+                progress={builtPercent}
+              />
+            </div>
+          )}
+
+          {tab === "neuheiten" && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 18 }}>
+              <StatCardTop
+                label="Kuratiert"
+                value={releaseTotal}
+                icon={<Sparkles size={20} strokeWidth={2} />}
+                accent="var(--petrol)"
+                accentSoft="var(--petrol-soft)"
+              />
+              <StatCardTop
+                label="Noch offen"
+                value={releaseOpen}
+                icon={<PackageOpen size={20} strokeWidth={2} />}
+                accent="var(--leaf)"
+                accentSoft="var(--leaf-soft)"
+                progress={releasePercent}
+              />
+            </div>
+          )}
         </div>
 
         {tab === "sammlung"    && <CollectionScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
+        {tab === "neuheiten"   && <NewReleasesScreen sets={sets} loading={loading} />}
         {tab === "hinzufuegen" && <AddScreen onSuccess={() => setTab("sammlung")} />}
         {tab === "wishlist"    && <WishlistScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
         {tab === "statistik"   && <StatsScreen sets={sets} />}

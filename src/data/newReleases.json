@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-19",
+  "description": "Kuratierte Neuheiten-Metadaten. Enthält nur Felder, die Rebrickable nicht liefert (Release-Datum, UVP, EOL, Notiz). Name, Teilezahl und Bild kommen zur Laufzeit über set_num aus der bestehenden Rebrickable-Integration.",
+  "waves": [
+    {
+      "id": "2026-06",
+      "label": "Sommerwelle Juni 2026",
+      "release_date": "2026-06-01",
+      "total_sets_all_themes": 115
+    },
+    {
+      "id": "2026-07",
+      "label": "Juli 2026",
+      "release_date": "2026-07-01",
+      "total_sets_all_themes": 6
+    },
+    {
+      "id": "2026-08",
+      "label": "August 2026",
+      "release_date": "2026-08-01",
+      "total_sets_all_themes": 67
+    }
+  ],
+  "sets": [
+    {
+      "set_num": "60509-1",
+      "theme": "City",
+      "subtheme": "Trains",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 99.99,
+      "age": "7+",
+      "pieces": 803,
+      "minifigs": 4,
+      "eol_date": "2027-12-31",
+      "note": "Hafengüterzug mit Kran und LKW. Umschlag Schiene/Straße, Portalkran.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60511-1",
+      "theme": "City",
+      "subtheme": "Trains",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 89.99,
+      "age": "7+",
+      "pieces": 575,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Klassischer Dampfzug. Erste City-Dampflok seit Jahren.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60506-1",
+      "theme": "City",
+      "subtheme": "Trains",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 69.99,
+      "age": "7+",
+      "pieces": 693,
+      "minifigs": 5,
+      "eol_date": "2027-07-31",
+      "note": "Klassische Strandstraßenbahn. Vintage-Tram in Blau mit Strandszene.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60494-1",
+      "theme": "City",
+      "subtheme": "Construction",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 119.99,
+      "age": "8+",
+      "pieces": 1132,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Kipplaster und Schaufellader. Knicklenkung, Federung, Baustellenbüro.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60480-1",
+      "theme": "City",
+      "subtheme": "Construction",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 29.99,
+      "age": null,
+      "pieces": null,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Gelber Baggerlader. Kleiner Einstieg in die Baustellenreihe.",
+      "region_note": null
+    },
+    {
+      "set_num": "60501-1",
+      "theme": "City",
+      "subtheme": "Leisure",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 99.99,
+      "age": "8+",
+      "pieces": 1165,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Lava-Land-Achterbahnpark. Power-Miners-Hommage, Recolor der bekannten Achterbahn.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60497-1",
+      "theme": "City",
+      "subtheme": "Town",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": null,
+      "age": null,
+      "pieces": null,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Drive-Through Waschstraße. Erste 2x3-Kostümfigur in Medium Azure.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60496-1",
+      "theme": "City",
+      "subtheme": "Town",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 49.99,
+      "age": "6+",
+      "pieces": null,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Pizza-Liefererlebnis mit Fahrzeugen. Ofen mit Flammenelement, Sportwagen, Roller, Drohne.",
+      "region_note": "US-Release erst 2026-08-01"
+    },
+    {
+      "set_num": "60512-1",
+      "theme": "City",
+      "subtheme": "Town",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 19.99,
+      "age": "7+",
+      "pieces": 260,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Mountainbike-Abenteuervan. Nachzügler der Welle, spät enthüllt.",
+      "region_note": null
+    },
+    {
+      "set_num": "60492-1",
+      "theme": "City",
+      "subtheme": "Town",
+      "wave": "2026-06",
+      "release_date": "2026-06-01",
+      "uvp_eur": 29.99,
+      "age": "4+",
+      "pieces": 118,
+      "minifigs": null,
+      "eol_date": null,
+      "note": "Passagierjet. 4+-Set mit Starterrahmen.",
+      "region_note": "US-Release erst 2026-08-01"
+    }
+  ]
+}

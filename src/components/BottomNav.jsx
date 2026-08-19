@@ -1,7 +1,8 @@
-import { Home, Heart, BarChart2, Info } from "lucide-react";
+import { Home, Sparkles, Heart, BarChart2, Info } from "lucide-react";
 
 const TABS = [
   { id: "sammlung",  label: "Sammlung",    Icon: Home,     fillActive: true },
+  { id: "neuheiten", label: "Neuheiten",   Icon: Sparkles, fillActive: false },
   { id: "wishlist",  label: "Wunschliste", Icon: Heart,    fillActive: true },
   { id: "statistik", label: "Statistik",   Icon: BarChart2, fillActive: false },
   { id: "info",      label: "Info",        Icon: Info,     fillActive: false },
@@ -32,7 +33,7 @@ export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
             onClick={() => onNavigate(tab.id)}
             style={{
               flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
-              gap: 4, padding: "10px 4px 6px",
+              gap: 4, padding: "10px 2px 6px", minWidth: 0,
               background: "none", border: "none", cursor: "pointer",
               WebkitTapHighlightColor: "transparent",
               position: "relative",
@@ -41,7 +42,7 @@ export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
             <div style={{
               position: "relative",
               display: "flex", alignItems: "center", justifyContent: "center",
-              width: 52, height: 30, borderRadius: "var(--r-pill)",
+              width: "100%", maxWidth: 52, height: 30, borderRadius: "var(--r-pill)",
               background: isActive ? "var(--brick-soft)" : "transparent",
               transition: "background 0.18s ease",
             }}>
@@ -66,7 +67,8 @@ export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
               )}
             </div>
             <span style={{
-              fontSize: 10,
+              fontSize: 10, maxWidth: "100%", overflow: "hidden",
+              textOverflow: "ellipsis", whiteSpace: "nowrap",
               fontFamily: "var(--font-body)",
               fontWeight: isActive ? 700 : 500,
               color: isActive ? "var(--brick)" : "var(--ink-soft)",
