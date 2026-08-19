@@ -164,6 +164,22 @@ body {
 }
 
 /* ============================================================
+   TASTATUR-FOKUS
+   Sichtbar, aber nur bei Tastaturbedienung — :focus-visible statt
+   :focus, damit Maus- und Touchklicks keinen Ring hinterlassen.
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid var(--brick);
+  outline-offset: 2px;
+  border-radius: var(--r-chip);
+}
+
+.field:focus-visible {
+  outline: none;   /* das Feld zeigt den Fokus ueber border + ring */
+}
+
+/* ============================================================
    BEWEGUNG
    ============================================================ */
 
