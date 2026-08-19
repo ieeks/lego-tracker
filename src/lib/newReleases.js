@@ -33,6 +33,17 @@ export const WAVES = data.waves
 export const THEMES = [...new Set(data.sets.map((s) => s.theme))]
   .sort((a, b) => a.localeCompare(b, "de"));
 
+/**
+ * "Sommerwelle Juni 2026" -> "Juni 2026".
+ * Aus release_date abgeleitet statt aus dem Label geschnitten: das Label
+ * ist freier Text, das Datum nicht.
+ */
+export function waveShortLabel(wave) {
+  const d = new Date(`${wave.release_date}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return wave.label;
+  return d.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+}
+
 /** "2027-12-31" -> "EOL 12/2027" */
 export function formatEol(eolDate) {
   if (!eolDate) return null;

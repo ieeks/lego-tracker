@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { Home, Users, RotateCw, Layers, Plus, Sparkles, PackageOpen } from "lucide-react";
+import { Home, Users, RotateCw, Layers, Plus } from "lucide-react";
 import { useCollection } from "./hooks/useCollection";
 import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
 import { fetchRetailPrice } from "./services/bricksetService";
 import { BottomNav } from "./components/BottomNav";
 import { StatusBadge } from "./components/StatusBadge";
 import StudDivider from "./components/StudDivider";
-import { NEW_RELEASES, normalizeSetNum } from "./lib/newReleases";
+import { StatCardTop } from "./components/StatCardTop";
 import { readParams, writeParams } from "./lib/urlState";
 import { CollectionScreen } from "./screens/CollectionScreen";
 import { NewReleasesScreen } from "./screens/NewReleasesScreen";
@@ -249,52 +249,6 @@ function DetailModal({ set, onClose }) {
   );
 }
 
-/**
- * `accent` / `accentSoft` sind Token-Namen und tragen jeweils eine
- * Bedeutung: --petrol steht für Statistik, --leaf für "gebaut".
- * Der Fortschrittsbalken zeigt den Gebaut-Anteil und läuft deshalb
- * in derselben Farbe wie die Gebaut-Rail an den Karten.
- */
-function StatCardTop({ label, value, icon, accent, accentSoft, progress }) {
-  return (
-    <div style={{
-      background: "var(--card)", borderRadius: "var(--r-card)", padding: "16px 18px",
-      boxShadow: "var(--shadow-md)", display: "flex", flexDirection: "column", gap: 4,
-      minWidth: 0,
-    }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
-        <div style={{
-          width: 40, height: 40, borderRadius: "var(--r-thumb)",
-          background: accentSoft,
-          color: accent,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
-        }}>
-          {icon}
-        </div>
-        {progress !== undefined && (
-          <span className="num" style={{ fontSize: 15, color: accent }}>
-            {progress} %
-          </span>
-        )}
-      </div>
-      <div className="stat-value" style={{ marginTop: 8 }}>
-        {value}
-      </div>
-      <div style={{ fontSize: 13, color: "var(--ink-soft)", fontWeight: 500, fontFamily: "var(--font-body)" }}>{label}</div>
-      {progress !== undefined && (
-        <div style={{ marginTop: 10, height: 6, background: "var(--neutral-soft)", borderRadius: "var(--r-pill)", overflow: "hidden" }}>
-          <div style={{
-            height: "100%", width: `${Math.max(progress, 0)}%`,
-            background: accent,
-            borderRadius: "var(--r-pill)", transition: "width 0.4s ease",
-          }} />
-        </div>
-      )}
-    </div>
-  );
-}
-
 export default function App() {
   // Der Tab gehoert mit in die URL: sonst landet ein geteilter Filter-Link
   // auf der Sammlung und die Filter-Params haengen verwaist daneben.
@@ -313,13 +267,6 @@ export default function App() {
   const wishlistCount = wishlistSets.length;
   const builtCount  = builtSets.length;
   const builtPercent = owned.length > 0 ? Math.round((builtCount / owned.length) * 100) : 0;
-
-  // Neuheiten-Kennzahlen: wie viele der kuratierten Sets schon erfasst sind.
-  const trackedNums   = new Set(sets.map((s) => normalizeSetNum(s.setNumber)));
-  const releaseTotal  = NEW_RELEASES.length;
-  const releaseOpen   = NEW_RELEASES.filter((r) => !trackedNums.has(normalizeSetNum(r.set_num))).length;
-  const releasePercent = releaseTotal > 0
-    ? Math.round(((releaseTotal - releaseOpen) / releaseTotal) * 100) : 0;
 
   // Nur die beiden Bloettertabs bekommen Headline und Kacheln — die uebrigen
   // Screens bringen ihre eigene Ueberschrift mit, ein zweiter Titel darueber
@@ -414,25 +361,6 @@ export default function App() {
             </div>
           )}
 
-          {tab === "neuheiten" && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 18 }}>
-              <StatCardTop
-                label="Kuratiert"
-                value={releaseTotal}
-                icon={<Sparkles size={20} strokeWidth={2} />}
-                accent="var(--petrol)"
-                accentSoft="var(--petrol-soft)"
-              />
-              <StatCardTop
-                label="Noch offen"
-                value={releaseOpen}
-                icon={<PackageOpen size={20} strokeWidth={2} />}
-                accent="var(--leaf)"
-                accentSoft="var(--leaf-soft)"
-                progress={releasePercent}
-              />
-            </div>
-          )}
         </div>
 
         {tab === "sammlung"    && <CollectionScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
