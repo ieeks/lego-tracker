@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:releases": "node scripts/checkReleases.mjs",
+    "sync:catalog": "node scripts/syncCatalog.mjs"
   },
   "dependencies": {
     "firebase": "^12.11.0",

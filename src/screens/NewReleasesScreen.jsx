@@ -1,10 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { X } from "lucide-react";
+import { X, Sparkles, PackageOpen } from "lucide-react";
 import { ReleaseCard } from "../components/ReleaseCard";
+import { StatCardTop } from "../components/StatCardTop";
 import { useRebrickableSets } from "../hooks/useRebrickableSets";
 import { addSet } from "../services/setService";
 import {
-  NEW_RELEASES, RELEASE_SET_NUMS, WAVES, THEMES, normalizeSetNum,
+  NEW_RELEASES, RELEASE_SET_NUMS, WAVES, THEMES, normalizeSetNum, waveShortLabel,
+  knownParts,
 } from "../lib/newReleases";
 import { readParams, readList, writeParams } from "../lib/urlState";
 
@@ -121,7 +123,7 @@ export function NewReleasesScreen({ sets, loading }) {
         setNumber: entry.set_num,
         name: live?.name ?? `Set ${entry.set_num}`,
         image: live?.image ?? null,
-        parts: live?.parts ?? entry.pieces ?? 0,
+        parts: knownParts(live?.parts, entry.pieces) ?? 0,
         theme: live?.themeId ?? null,
         // theme/subtheme aus der JSON auf das bestehende Schema abgebildet:
         // die Sammlung zeigt "Parent › Theme", hier also "City › Trains".
@@ -141,8 +143,40 @@ export function NewReleasesScreen({ sets, loading }) {
     }
   }, [busy, ownedNums, wishedNums, entries]);
 
+  // Kennzahlen laufen auf der gefilterten Menge, damit beide Kacheln von
+  // derselben Auswahl reden wie die Liste darunter.
+  const shown   = filtered.length;
+  const missing = filtered.filter((e) => {
+    const num = normalizeSetNum(e.set_num);
+    return !ownedNums.has(num) && !wishedNums.has(num);
+  }).length;
+  const trackedPercent = shown > 0 ? Math.round(((shown - missing) / shown) * 100) : 0;
+
+  // Genau eine Welle gefiltert? Dann benennt die Kachel sie statt "Neuheiten".
+  const singleWave = waveFilter.length === 1
+    ? WAVES.find((w) => w.id === waveFilter[0]) : null;
+
   return (
     <div style={{ padding: "0 20px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 22 }}>
+        <StatCardTop
+          label={singleWave ? `Sets · ${waveShortLabel(singleWave)}` : "Neuheiten"}
+          value={shown}
+          icon={<Sparkles size={20} strokeWidth={2} />}
+          accent="var(--petrol)"
+          accentSoft="var(--petrol-soft)"
+        />
+        <StatCardTop
+          label="fehlen dir"
+          value={missing}
+          icon={<PackageOpen size={20} strokeWidth={2} />}
+          accent="var(--leaf)"
+          accentSoft="var(--leaf-soft)"
+          progress={trackedPercent}
+          progressLabel={`${missing} von ${shown}`}
+        />
+      </div>
+
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
         <div className="display" style={{ fontSize: 20 }}>Neuheiten</div>
         {pending > 0 && (
