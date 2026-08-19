@@ -1,9 +1,10 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { X, Sparkles, PackageOpen } from "lucide-react";
+import { CatalogView } from "./CatalogView";
+import { useWishlistImport } from "../hooks/useWishlistImport";
 import { ReleaseCard } from "../components/ReleaseCard";
 import { StatCardTop } from "../components/StatCardTop";
 import { useRebrickableSets } from "../hooks/useRebrickableSets";
-import { addSet } from "../services/setService";
 import {
   NEW_RELEASES, RELEASE_SET_NUMS, WAVES, THEMES, normalizeSetNum, waveShortLabel,
   knownParts,
@@ -52,30 +53,20 @@ export function NewReleasesScreen({ sets, loading }) {
   const [waveFilter,   setWaveFilter]   = useState(() => readList(readParams(), "welle"));
   const [themeFilter,  setThemeFilter]  = useState(() => readList(readParams(), "theme"));
   const [statusFilter, setStatusFilter] = useState(() => readList(readParams(), "status"));
+  const [view, setView] = useState(() => readParams().get("ansicht") === "katalog" ? "katalog" : "wellen");
 
-  const [busy,      setBusy]      = useState(null);   // set_num im Flug
-  const [optimistic, setOptimistic] = useState([]);   // lokal schon als Wunsch markiert
-  const [error,     setError]     = useState(null);
+  // Ein Schreibweg fuer beide Ansichten.
+  const wishlist = useWishlistImport(sets);
+  const { ownedNums, wishedNums, busy, error, wish } = wishlist;
 
   useEffect(() => {
-    writeParams({ welle: waveFilter, theme: themeFilter, status: statusFilter });
-  }, [waveFilter, themeFilter, statusFilter]);
+    writeParams({
+      welle: waveFilter, theme: themeFilter, status: statusFilter,
+      ansicht: view === "katalog" ? "katalog" : null,
+    });
+  }, [waveFilter, themeFilter, statusFilter, view]);
 
   const { entries, pending } = useRebrickableSets(RELEASE_SET_NUMS);
-
-  // Abgleich gegen den Firestore-Live-State. Die Sammlung speichert
-  // Setnummern mal mit, mal ohne Variantensuffix — deshalb normalisiert.
-  const ownedNums = useMemo(
-    () => new Set(sets.filter((s) => s.status !== "wishlist").map((s) => normalizeSetNum(s.setNumber))),
-    [sets]
-  );
-  const wishedNums = useMemo(
-    () => new Set([
-      ...sets.filter((s) => s.status === "wishlist").map((s) => normalizeSetNum(s.setNumber)),
-      ...optimistic.map(normalizeSetNum),
-    ]),
-    [sets, optimistic]
-  );
 
   const toggle = (list, setList) => (id) =>
     setList(list.includes(id) ? list.filter((v) => v !== id) : [...list, id]);
@@ -108,41 +99,6 @@ export function NewReleasesScreen({ sets, loading }) {
     }))
     .filter((g) => g.items.length > 0);
 
-  const handleWish = useCallback(async (entry) => {
-    const num = normalizeSetNum(entry.set_num);
-    // Idempotent: doppelter Klick und bereits vorhandene Sets laufen ins Leere.
-    if (busy || ownedNums.has(num) || wishedNums.has(num)) return;
-
-    setBusy(entry.set_num);
-    setError(null);
-    setOptimistic((prev) => [...prev, entry.set_num]);   // optimistisch
-
-    const live = entries[entry.set_num];
-    try {
-      await addSet({
-        setNumber: entry.set_num,
-        name: live?.name ?? `Set ${entry.set_num}`,
-        image: live?.image ?? null,
-        parts: knownParts(live?.parts, entry.pieces) ?? 0,
-        theme: live?.themeId ?? null,
-        // theme/subtheme aus der JSON auf das bestehende Schema abgebildet:
-        // die Sammlung zeigt "Parent › Theme", hier also "City › Trains".
-        themeName: entry.subtheme ?? entry.theme,
-        parentThemeName: entry.subtheme ? entry.theme : null,
-        year: live?.year ?? (Number(entry.release_date.slice(0, 4)) || null),
-        status: "wishlist",
-      });
-    } catch (err) {
-      setOptimistic((prev) => prev.filter((n) => n !== entry.set_num));   // Rollback
-      setError(
-        `„${live?.name ?? entry.set_num}" konnte nicht gespeichert werden: ${err.message} ` +
-        `Prüfe die Verbindung und versuche es erneut — es wurde nichts geschrieben.`
-      );
-    } finally {
-      setBusy(null);
-    }
-  }, [busy, ownedNums, wishedNums, entries]);
-
   // Kennzahlen laufen auf der gefilterten Menge, damit beide Kacheln von
   // derselben Auswahl reden wie die Liste darunter.
   const shown   = filtered.length;
@@ -156,8 +112,59 @@ export function NewReleasesScreen({ sets, loading }) {
   const singleWave = waveFilter.length === 1
     ? WAVES.find((w) => w.id === waveFilter[0]) : null;
 
+  const handleWish = (entry) => {
+    const live = entries[entry.set_num];
+    wish({
+      setNumber: entry.set_num,
+      name: live?.name ?? `Set ${entry.set_num}`,
+      label: live?.name ?? entry.set_num,
+      image: live?.image ?? null,
+      parts: knownParts(live?.parts, entry.pieces) ?? 0,
+      themeId: live?.themeId ?? null,
+      // theme/subtheme auf das bestehende Schema: "City › Trains".
+      themeName: entry.subtheme ?? entry.theme,
+      parentThemeName: entry.subtheme ? entry.theme : null,
+      year: live?.year ?? (Number(entry.release_date.slice(0, 4)) || null),
+    });
+  };
+
+  const wellen = view === "wellen";
+
   return (
     <div style={{ padding: "0 20px" }}>
+      {/* Zwei Ansichten auf verschiedenen Datenbasen: die kuratierten Wellen
+          als Einstieg, der volle Katalog zum Stoebern. Ein chronologischer
+          Feed ueber 776 Sets waere unlesbar. */}
+      <div role="tablist" style={{
+        display: "flex", gap: 4, marginBottom: 18, padding: 4,
+        background: "var(--neutral-soft)", borderRadius: "var(--r-pill)",
+      }}>
+        {[["wellen", "Wellen"], ["katalog", "Katalog"]].map(([id, label]) => (
+          <button
+            key={id}
+            role="tab"
+            aria-selected={view === id}
+            onClick={() => setView(id)}
+            style={{
+              flex: 1, padding: "8px 12px", borderRadius: "var(--r-pill)",
+              border: "none",
+              background: view === id ? "var(--card)" : "transparent",
+              boxShadow: view === id ? "var(--shadow-sm)" : "none",
+              color: view === id ? "var(--ink)" : "var(--ink-soft)",
+              fontFamily: "var(--font-body)", fontSize: 14,
+              fontWeight: view === id ? 700 : 500,
+              cursor: "pointer", WebkitTapHighlightColor: "transparent",
+              transition: "background 0.15s ease, color 0.15s ease",
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {!wellen && <CatalogView wishlist={wishlist} />}
+
+      {wellen && (<>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 22 }}>
         <StatCardTop
           label={singleWave ? `Sets · ${waveShortLabel(singleWave)}` : "Neuheiten"}
@@ -286,6 +293,7 @@ export function NewReleasesScreen({ sets, loading }) {
           </div>
         </section>
       ))}
+      </>)}
     </div>
   );
 }

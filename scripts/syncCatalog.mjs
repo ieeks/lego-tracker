@@ -22,6 +22,15 @@ import { join } from "node:path";
 const BASE      = "https://cdn.rebrickable.com/media/downloads";
 const OUT_DIR   = "public/catalog";
 const MIN_YEAR  = 2026;
+
+/**
+ * Der Dump enthaelt nicht nur Bausets. "Gear" sind Crocs-Jibbitz,
+ * Schluesselanhaenger und Textilien, "Books" sind DK-Lesebuecher.
+ * Zusammen 528 der 1304 Eintraege ab 2026 — und 504 der 609 ohne
+ * Teilezahl. In einem Tool, in dem man Sets auf die Wunschliste setzt,
+ * haben sie nichts verloren.
+ */
+const EXCLUDED_THEMES = new Set(["Gear", "Books"]);
 const ATTRIBUTION = "Daten von Rebrickable.com";
 
 /** CSV-Zeilenparser mit Anfuehrungszeichen — Set-Namen enthalten Kommas. */
@@ -88,8 +97,9 @@ function themePath(id) {
 
 const sets = parseCsv(setsCsv)
   .filter((s) => Number(s.year) >= MIN_YEAR)
-  .map((s) => {
-    const path = themePath(s.theme_id);
+  .map((s) => ({ raw: s, path: themePath(s.theme_id) }))
+  .filter(({ path }) => !EXCLUDED_THEMES.has(path[0]))
+  .map(({ raw: s, path }) => {
     return {
       set_num: s.set_num,
       name: s.name,
