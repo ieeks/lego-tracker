@@ -32,20 +32,34 @@ export function ReleaseCard({ entry, live, owned, wished, busy, onWish }) {
     }}>
       {/* Bild — bei fehlendem oder kaputtem Bild ein Platzhalter mit
           Setnummer statt eines Broken-Image-Icons. */}
+      {/* Kein Flex-Container: als Flex-Item zieht Safari bei einem Bild die
+          intrinsische Breite (Rebrickable liefert ~1500px) als Mindestbreite
+          heran, das Bild sprengt die Karte und schiebt den EOL-Badge mit
+          hinaus. Als Block mit max-width kann das nicht passieren; overflow
+          hidden ist der Gurt zum Hosentraeger. */}
       <div style={{
         aspectRatio: "4 / 3", background: "var(--neutral-soft)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: 10, position: "relative",
+        padding: 10, position: "relative", overflow: "hidden",
       }}>
         {showImg ? (
           <img
             src={image} alt={name ?? entry.set_num}
             loading="lazy"
             onError={() => setImageFailed(true)}
-            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            style={{
+              display: "block",
+              width: "100%", height: "100%",
+              minWidth: 0, maxWidth: "100%", maxHeight: "100%",
+              objectFit: "contain",
+            }}
           />
         ) : (
-          <div className="mono" style={{ color: "var(--ink-soft)", textAlign: "center" }}>
+          <div className="mono" style={{
+            position: "absolute", inset: 10,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            color: "var(--ink-soft)", textAlign: "center",
+          }}>
             {entry.set_num}
             <div style={{ marginTop: 4, opacity: 0.7, letterSpacing: "0.06em" }}>
               Kein Bild
@@ -55,9 +69,10 @@ export function ReleaseCard({ entry, live, owned, wished, busy, onWish }) {
         {eol && (
           <span className="tag" style={{
             position: "absolute", top: 8, right: 8,
+            maxWidth: "calc(100% - 16px)",
             background: "var(--stud-soft)", color: "var(--stud-ink)",
           }}>
-            <Clock size={11} strokeWidth={2} />
+            <Clock size={11} strokeWidth={2} style={{ flexShrink: 0 }} />
             {eol}
           </span>
         )}
