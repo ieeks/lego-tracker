@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Heart, Check, Clock, Globe } from "lucide-react";
-import { formatEol } from "../lib/newReleases";
+import { formatEol, knownParts } from "../lib/newReleases";
 
 const EUR = { style: "currency", currency: "EUR" };
 
@@ -16,9 +16,9 @@ export function ReleaseCard({ entry, live, owned, wished, busy, onWish }) {
   const [imageFailed, setImageFailed] = useState(false);
 
   const name    = live?.name ?? null;
-  const parts   = live?.parts ?? entry.pieces;
+  const parts   = knownParts(live?.parts, entry.pieces);
   const image   = live?.image ?? null;
-  const eol     = formatEol(entry.eol_date);
+  const eol     = formatEol(entry.eol_forecast);
   const showImg = image && !imageFailed;
 
   const buttonLabel = owned ? "In Sammlung" : wished ? "Auf Wunschliste" : "Auf die Wunschliste";
@@ -93,8 +93,12 @@ export function ReleaseCard({ entry, live, owned, wished, busy, onWish }) {
 
         {/* Zahlen laufen alle über .tag bzw. .num — DM Sans 700, tabular-nums. */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {parts != null && (
+          {parts != null ? (
             <span className="tag tag--parts">{parts.toLocaleString("de-DE")} Teile</span>
+          ) : (
+            /* Unbekannt statt "0 Teile" — angekuendigte Sets stehen bei
+               Rebrickable mit 0, das ist keine Teilezahl. */
+            <span className="tag">Teile unbekannt</span>
           )}
           {entry.uvp_eur != null && (
             <span className="tag tag--price">{entry.uvp_eur.toLocaleString("de-DE", EUR)}</span>

@@ -4,7 +4,7 @@ import data from "../data/newReleases.json";
  * Kuratierte Neuheiten-Metadaten.
  *
  * Datenhoheit: diese Datei liefert nur, was Rebrickable nicht hat —
- * uvp_eur, eol_date, release_date, note, wave, region_note.
+ * uvp_eur, eol_forecast, release_date, note, wave, region_note.
  * Name, Bild und Teilezahl kommen zur Laufzeit über set_num aus der
  * bestehenden Rebrickable-Integration; `pieces` hier ist nur Fallback,
  * falls Rebrickable ein brandneues Set noch nicht kennt.
@@ -44,11 +44,31 @@ export function waveShortLabel(wave) {
   return d.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
 }
 
-/** "2027-12-31" -> "EOL 12/2027" */
-export function formatEol(eolDate) {
-  if (!eolDate) return null;
-  const [year, month] = eolDate.split("-");
-  return `EOL ${month}/${year}`;
+/**
+ * "2027-12-31" -> "vsl. EOL 12/2027".
+ * Das "vsl." ist nicht Kosmetik: LEGO gibt Auslaufdaten nie offiziell
+ * bekannt, die Werte sind aus Verfuegbarkeitsmustern geschaetzt. Ohne den
+ * Zusatz liest der Badge wie ein gesichertes Datum.
+ */
+export function formatEol(eolForecast) {
+  if (!eolForecast) return null;
+  const [year, month] = eolForecast.split("-");
+  return `vsl. EOL ${month}/${year}`;
+}
+
+/**
+ * Teilezahl oder null, wenn unbekannt.
+ *
+ * 0 heisst "noch unbekannt", nicht "null Teile": Rebrickable fuehrt
+ * angekuendigte, noch nicht ausgelieferte Sets mit 0 Teilen. Wichtig ist
+ * auch die Reihenfolge — mit ?? wuerde eine 0 von Rebrickable eine echte
+ * Teilezahl aus der JSON verdecken, weil 0 nicht nullish ist.
+ */
+export function knownParts(...candidates) {
+  for (const value of candidates) {
+    if (typeof value === "number" && value > 0) return value;
+  }
+  return null;
 }
 
 /**

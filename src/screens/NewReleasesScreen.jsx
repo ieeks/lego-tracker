@@ -6,6 +6,7 @@ import { useRebrickableSets } from "../hooks/useRebrickableSets";
 import { addSet } from "../services/setService";
 import {
   NEW_RELEASES, RELEASE_SET_NUMS, WAVES, THEMES, normalizeSetNum, waveShortLabel,
+  knownParts,
 } from "../lib/newReleases";
 import { readParams, readList, writeParams } from "../lib/urlState";
 
@@ -122,7 +123,7 @@ export function NewReleasesScreen({ sets, loading }) {
         setNumber: entry.set_num,
         name: live?.name ?? `Set ${entry.set_num}`,
         image: live?.image ?? null,
-        parts: live?.parts ?? entry.pieces ?? 0,
+        parts: knownParts(live?.parts, entry.pieces) ?? 0,
         theme: live?.themeId ?? null,
         // theme/subtheme aus der JSON auf das bestehende Schema abgebildet:
         // die Sammlung zeigt "Parent › Theme", hier also "City › Trains".
