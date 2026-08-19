@@ -1,0 +1,39 @@
+name: Katalog-Sync
+
+# Rebrickable erlaubt automatisiertes Laden der CSV-Dumps hoechstens einmal
+# taeglich. Woechentlich reicht: neue Sets erscheinen in Wellen, nicht stuendlich.
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Katalog aus dem Rebrickable-Dump bauen
+        run: node scripts/syncCatalog.mjs
+
+      - name: Commit, falls sich etwas geaendert hat
+        run: |
+          if git diff --quiet -- public/catalog; then
+            echo "Keine Aenderungen im Katalog."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/catalog
+          git commit -m "Katalog-Sync $(date -u +%Y-%m-%d)
+
+          Automatisch erzeugt aus dem Rebrickable-CSV-Dump.
+          Daten von Rebrickable.com"
+          git push
