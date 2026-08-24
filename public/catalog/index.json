@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-08-19",
+ "generated_at": "2026-08-24",
  "min_year": 2026,
  "themes": [
   "Architecture",
@@ -38,7 +38,7 @@
  "years": [
   {
    "year": 2026,
-   "count": 412,
+   "count": 414,
    "file": "2026.json"
   }
  ]

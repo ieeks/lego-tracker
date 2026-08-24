@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-08-19",
+ "generated_at": "2026-08-24",
  "year": 2026,
  "sets": [
   {
@@ -874,6 +874,17 @@
    "uvp_eur": 19.99
   },
   {
+   "set_num": "6557640-13",
+   "name": "Race Car",
+   "year": 2026,
+   "parts": 29,
+   "theme": "City",
+   "subtheme": null,
+   "theme_id": 52,
+   "img": "https://cdn.rebrickable.com/media/sets/6557640-13.jpg",
+   "uvp_eur": null
+  },
+  {
    "set_num": "6614213-1",
    "name": "Bike Burger Cart",
    "year": 2026,
@@ -893,6 +904,17 @@
    "subtheme": null,
    "theme_id": 52,
    "img": "https://cdn.rebrickable.com/media/sets/6626057-1.jpg",
+   "uvp_eur": null
+  },
+  {
+   "set_num": "6663742-1",
+   "name": "Fire Truck",
+   "year": 2026,
+   "parts": null,
+   "theme": "City",
+   "subtheme": "Fire",
+   "theme_id": 58,
+   "img": "https://cdn.rebrickable.com/media/sets/6663742-1.jpg",
    "uvp_eur": null
   },
   {
