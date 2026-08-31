@@ -1,0 +1,96 @@
+{
+ "source": "Daten von Rebrickable.com",
+ "price_source": "UVP von Brickset.com",
+ "generated_at": "2026-08-31",
+ "year": 2027,
+ "sets": [
+  {
+   "set_num": "72052-1",
+   "name": "Mario's Pipe Jump",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72052-1.jpg",
+   "uvp_eur": 9.99
+  },
+  {
+   "set_num": "72054-1",
+   "name": "Mario Kart – Racing with Mario",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72054-1.jpg",
+   "uvp_eur": 14.99
+  },
+  {
+   "set_num": "72055-1",
+   "name": "Mario's Beach Adventures",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72055-1.jpg",
+   "uvp_eur": 19.99
+  },
+  {
+   "set_num": "72056-1",
+   "name": "Mario Kart – Luigi & Bowser Jr.'s Race",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72056-1.jpg",
+   "uvp_eur": 29.99
+  },
+  {
+   "set_num": "72057-1",
+   "name": "Yoshi at Mario's House",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72057-1.jpg",
+   "uvp_eur": 39.99
+  },
+  {
+   "set_num": "72058-1",
+   "name": "Mario Kart – Bowser's Rumbling Race",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72058-1.jpg",
+   "uvp_eur": 59.99
+  },
+  {
+   "set_num": "72060-1",
+   "name": "Fire Mario & Bowser's Castle",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72060-1.jpg",
+   "uvp_eur": 99.99
+  },
+  {
+   "set_num": "72061-1",
+   "name": "Fire Luigi vs. Koopa Troopa Battle",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Mario",
+   "subtheme": null,
+   "theme_id": 690,
+   "img": "https://cdn.rebrickable.com/media/sets/72061-1.jpg",
+   "uvp_eur": 29.99
+  }
+ ]
+}

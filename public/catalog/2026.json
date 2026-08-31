@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-08-24",
+ "generated_at": "2026-08-31",
  "year": 2026,
  "sets": [
   {
@@ -2252,7 +2252,7 @@
    "set_num": "11371-1",
    "name": "Shopping Street",
    "year": 2026,
-   "parts": 3458,
+   "parts": 3457,
    "theme": "Modular Buildings",
    "subtheme": null,
    "theme_id": 155,
@@ -2290,6 +2290,28 @@
    "subtheme": null,
    "theme_id": 775,
    "img": "https://cdn.rebrickable.com/media/sets/6644882-1.jpg",
+   "uvp_eur": null
+  },
+  {
+   "set_num": "6680480-1",
+   "name": "Jolly Roger Mosaic",
+   "year": 2026,
+   "parts": null,
+   "theme": "One Piece",
+   "subtheme": null,
+   "theme_id": 775,
+   "img": "https://cdn.rebrickable.com/media/sets/6680480-1.jpg",
+   "uvp_eur": null
+  },
+  {
+   "set_num": "6680481-1",
+   "name": "Baroque Works Mosaic",
+   "year": 2026,
+   "parts": null,
+   "theme": "One Piece",
+   "subtheme": null,
+   "theme_id": 775,
+   "img": "https://cdn.rebrickable.com/media/sets/6680481-1.jpg",
    "uvp_eur": null
   },
   {
@@ -2609,6 +2631,17 @@
    "subtheme": null,
    "theme_id": 776,
    "img": "https://cdn.rebrickable.com/media/sets/6644864-1.jpg",
+   "uvp_eur": null
+  },
+  {
+   "set_num": "6668941-1",
+   "name": "Trophy",
+   "year": 2026,
+   "parts": null,
+   "theme": "Pokémon",
+   "subtheme": null,
+   "theme_id": 776,
+   "img": "https://cdn.rebrickable.com/media/sets/6668941-1.jpg",
    "uvp_eur": null
   },
   {
@@ -3327,6 +3360,17 @@
    "uvp_eur": null
   },
   {
+   "set_num": "40897-1",
+   "name": "Darth Vader's LIGHTSABER",
+   "year": 2026,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/40897-1.jpg",
+   "uvp_eur": null
+  },
+  {
    "set_num": "40917-1",
    "name": "The Darksaber",
    "year": 2026,
@@ -3341,7 +3385,7 @@
    "set_num": "5010305-1",
    "name": "The Mandalorian and Grogu",
    "year": 2026,
-   "parts": null,
+   "parts": 140,
    "theme": "Star Wars",
    "subtheme": null,
    "theme_id": 158,
@@ -3723,6 +3767,17 @@
    "uvp_eur": 169.99
   },
   {
+   "set_num": "75457-1",
+   "name": "Executor Super Star Destroyer",
+   "year": 2026,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75457-1.jpg",
+   "uvp_eur": 749.99
+  },
+  {
    "set_num": "75458-1",
    "name": "Imperial Remnant AT-RT Driver Helmet",
    "year": 2026,
@@ -3786,6 +3841,17 @@
    "subtheme": "Batman",
    "theme_id": 697,
    "img": "https://cdn.rebrickable.com/media/sets/30762-1.jpg",
+   "uvp_eur": null
+  },
+  {
+   "set_num": "6644878-1",
+   "name": "Batman Mini Bust",
+   "year": 2026,
+   "parts": 26,
+   "theme": "Super Heroes DC",
+   "subtheme": "Batman",
+   "theme_id": 697,
+   "img": "https://cdn.rebrickable.com/media/sets/6644878-1.jpg",
    "uvp_eur": null
   },
   {
