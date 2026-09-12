@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { X, Search } from "lucide-react";
 import { ReleaseCard } from "../components/ReleaseCard";
 import { useCatalog } from "../hooks/useCatalog";
-import { normalizeSetNum } from "../lib/newReleases";
+import { canonicalSetNum } from "../lib/newReleases";
 import { readParams, readList, writeParams } from "../lib/urlState";
 
 /**
@@ -97,7 +97,7 @@ export function CatalogView({ wishlist }) {
         if (!inRange) return false;
       }
       if (onlyNew) {
-        const num = normalizeSetNum(row.set_num);
+        const num = canonicalSetNum(row.set_num);
         if (ownedNums.has(num) || wishedNums.has(num)) return false;
       }
       // Theme und Subtheme gehoeren in die Suche: wer "technic" tippt, meint
@@ -269,7 +269,7 @@ export function CatalogView({ wishlist }) {
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
         {visible.map((row) => {
-          const num = normalizeSetNum(row.set_num);
+          const num = canonicalSetNum(row.set_num);
           const { entry, live } = toCardProps(row);
           return (
             <ReleaseCard

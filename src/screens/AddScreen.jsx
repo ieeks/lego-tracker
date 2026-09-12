@@ -136,349 +136,319 @@ function QrScannerModal({ onDetect, onClose }) {
             <div style={{
               position: "relative", zIndex: 1,
               width: 240, height: 240,
-              boxShadow…3477 tokens truncated…useMemo, useRef } from "react";
-import { X, Search } from "lucide-react";
-import { ReleaseCard } from "../components/ReleaseCard";
-import { useCatalog } from "../hooks/useCatalog";
-import { canonicalSetNum } from "../lib/newReleases";
-import { readParams, readList, writeParams } from "../lib/urlState";
+              boxShadow: "0 0 0 9999px var(--camera-mask)",
+              borderRadius: 20,
+            }}>
+              {[
+                { top: 0, left: 0,     borderTop: "3px solid var(--camera-fg)",    borderLeft:  "3px solid var(--camera-fg)",  borderRadius: "12px 0 0 0" },
+                { top: 0, right: 0,    borderTop: "3px solid var(--camera-fg)",    borderRight: "3px solid var(--camera-fg)",  borderRadius: "0 12px 0 0" },
+                { bottom: 0, left: 0,  borderBottom: "3px solid var(--camera-fg)", borderLeft:  "3px solid var(--camera-fg)",  borderRadius: "0 0 0 12px" },
+                { bottom: 0, right: 0, borderBottom: "3px solid var(--camera-fg)", borderRight: "3px solid var(--camera-fg)",  borderRadius: "0 0 12px 0" },
+              ].map((s, i) => (
+                <div key={i} style={{ position: "absolute", width: 28, height: 28, ...s }} />
+              ))}
+              {ready && (
+                <div style={{
+                  position: "absolute", left: 0, right: 0, height: 2,
+                  background: "linear-gradient(90deg, transparent, var(--brick), transparent)",
+                  animation: "scanline 1.8s ease-in-out infinite",
+                }} />
+              )}
+            </div>
+          </div>
+        )}
 
-/**
- * Diakritika wegnormalisieren, damit "pokemon" auch "Pokémon" findet.
- * Auf einer deutschen Tastatur tippt niemand das é mit, und ohne das
- * lieferte die naheliegende Eingabe null Treffer.
- */
-const fold = (v) => v.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+        {error && (
+          <div style={{
+            position: "absolute", inset: 0,
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+            padding: 32, textAlign: "center",
+          }}>
+            <div style={{ marginBottom: 16, color: "var(--camera-fg)" }}><Camera size={48} strokeWidth={1.75} /></div>
+            <div style={{ color: "var(--camera-fg)", fontWeight: 600, fontSize: 15, lineHeight: 1.5, whiteSpace: "pre-line" }}>{error}</div>
+          </div>
+        )}
+      </div>
 
-/** Wie viele Karten pro Nachladeschritt. Alle auf einmal killt Mobile-Safari. */
-const CHUNK = 40;
+      {/* Hint */}
+      <div style={{
+        padding: "16px 20px",
+        paddingBottom: "max(env(safe-area-inset-bottom, 20px), 20px)",
+        background: "var(--camera-chrome)", backdropFilter: "blur(10px)",
+        textAlign: "center",
+      }}>
+        <div style={{ color: "var(--camera-fg-soft)", fontSize: 13 }}>
+          Halte die Kamera auf den QR-Code in der LEGO® Anleitung
+        </div>
+      </div>
 
-/**
- * Preisstufen als halboffene Intervalle [min, max). Wichtig gegen die
- * naheliegende Einteilung "150–299" und "ab 300": dazwischen faellt alles
- * von 299,01 bis 299,99 durch kein Raster.
- */
-const PRICE_BUCKETS = [
-  { id: "0-50",    label: "bis 50 €",   min: 0,   max: 50 },
-  { id: "50-150",  label: "50–150 €",   min: 50,  max: 150 },
-  { id: "150-300", label: "150–300 €",  min: 150, max: 300 },
-  { id: "300+",    label: "ab 300 €",   min: 300, max: Infinity },
-];
-
-const SORTS = [
-  { id: "teile",     label: "Teile" },
-  { id: "preis-auf", label: "Preis ↑" },
-  { id: "preis-ab",  label: "Preis ↓" },
-];
-
-/** Unbekanntes ans Ende, egal wie sortiert wird. */
-const nullsLast = (v, dir) => (v == null ? (dir === "asc" ? Infinity : -Infinity) : v);
-
-/**
- * Ein Katalog-Datensatz sieht anders aus als ein kuratierter. Statt eine
- * zweite Karte zu bauen, wird er auf die Props der ReleaseCard abgebildet:
- * Name, Teile und Bild stehen im Dump, also kommen sie als "live" rein.
- * UVP, Notiz und EOL hat der Dump nicht — die Karte rendert die Felder
- * ohnehin nur, wenn sie gesetzt sind.
- */
-function toCardProps(row) {
-  return {
-    entry: {
-      set_num: row.set_num,
-      theme: row.theme,
-      subtheme: row.subtheme,
-      pieces: row.parts,
-      uvp_eur: row.uvp_eur ?? null,
-      age: null, minifigs: null,
-      eol_forecast: null, note: null, region_note: null,
-    },
-    live: { name: row.name, parts: row.parts, image: row.img },
-  };
+      <style>{`
+        @keyframes scanline {
+          0%   { top: 0; }
+          50%  { top: calc(100% - 2px); }
+          100% { top: 0; }
+        }
+      `}</style>
+    </div>
+  );
 }
 
-export function CatalogView({ wishlist }) {
-  const { data, loading, error } = useCatalog();
-  const { ownedNums, wishedNums, busy, wish } = wishlist;
+export function AddScreen({ sets, collectionLoading, collectionError, onSuccess }) {
+  const [input, setInput]         = useState("");
+  const [preview, setPreview]     = useState(null);
+  const [status, setStatus]       = useState("built");
+  const [searching, setSearching] = useState(false);
+  const [saving, setSaving]       = useState(false);
+  const [error, setError]         = useState(null);
+  const [done, setDone]           = useState(false);
+  const [scanning, setScanning]   = useState(false);
+  const saveInFlight = useRef(false);
 
-  const [search, setSearch]     = useState(() => readParams().get("q") ?? "");
-  const [themeSel, setThemeSel] = useState(() => readList(readParams(), "kat"));
-  const [yearSel, setYearSel]   = useState(() => readList(readParams(), "jahr"));
-  const [onlyNew, setOnlyNew]   = useState(() => readParams().get("neu") === "1");
-  const [priceSel, setPriceSel] = useState(() => readList(readParams(), "preis"));
-  const [sort, setSort]         = useState(() => {
-    const v = readParams().get("sort");
-    return SORTS.some((x) => x.id === v) ? v : "teile";
-  });
-  const [limit, setLimit]       = useState(CHUNK);
+  const triggerSearch = async (setNumber) => {
+    if (!setNumber?.trim()) return;
+    setInput(setNumber);
+    setSearching(true);
+    setError(null);
+    setPreview(null);
+    setDone(false);
+    try {
+      const data = await fetchSet(setNumber.trim());
+      const { themeName, parentThemeName } = await fetchThemeNames(data.theme_id).catch(() => ({ themeName: null, parentThemeName: null }));
+      setPreview({ ...data, themeName, parentThemeName });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSearching(false);
+    }
+  };
 
-  useEffect(() => {
-    writeParams({
-      q: search, kat: themeSel, jahr: yearSel, neu: onlyNew ? "1" : null,
-      preis: priceSel, sort: sort === "teile" ? null : sort,
-    });
-  }, [search, themeSel, yearSel, onlyNew, priceSel, sort]);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    triggerSearch(input);
+  };
 
-  const filtered = useMemo(() => {
-    if (!data) return [];
-    const q = fold(search.trim());
-    return data.sets.filter((row) => {
-      if (themeSel.length && !themeSel.includes(row.theme)) return false;
-      if (yearSel.length && !yearSel.includes(String(row.year))) return false;
-      // Ein aktiver Preisfilter schliesst Sets ohne Preis aus — sie lassen
-      // sich keiner Stufe zuordnen. Betrifft rund ein Viertel des Katalogs.
-      if (priceSel.length) {
-        const eur = row.uvp_eur;
-        if (eur == null) return false;
-        const inRange = PRICE_BUCKETS.some(
-          (b) => priceSel.includes(b.id) && eur >= b.min && eur < b.max
-        );
-        if (!inRange) return false;
-      }
-      if (onlyNew) {
-        const num = canonicalSetNum(row.set_num);
-        if (ownedNums.has(num) || wishedNums.has(num)) return false;
-      }
-      // Theme und Subtheme gehoeren in die Suche: wer "technic" tippt, meint
-      // das Theme, nicht ein Set mit "Technic" im Namen. Ohne das liefert
-      // eine naheliegende Eingabe null Treffer.
-      if (q) {
-        const haystack = fold([row.name, row.set_num, row.theme, row.subtheme]
-          .filter(Boolean).join(" "));
-        if (!haystack.includes(q)) return false;
-      }
-      return true;
-    })
-    // Der Dump hat kein Erscheinungsdatum, nur das Jahr — chronologisch
-    // geht also nicht. Voreinstellung ist die Teilezahl absteigend: nach
-    // Theme sortiert stuenden sonst die kleinsten Sets ganz oben.
-    .sort((a, b) => {
-      if (sort === "preis-auf") {
-        return nullsLast(a.uvp_eur, "asc") - nullsLast(b.uvp_eur, "asc")
-          || a.name.localeCompare(b.name, "de");
-      }
-      if (sort === "preis-ab") {
-        return nullsLast(b.uvp_eur, "desc") - nullsLast(a.uvp_eur, "desc")
-          || a.name.localeCompare(b.name, "de");
-      }
-      return (b.parts ?? -1) - (a.parts ?? -1) || a.name.localeCompare(b.name, "de");
-    });
-  }, [data, search, themeSel, yearSel, onlyNew, priceSel, sort, ownedNums, wishedNums]);
+  const handleQrDetect = (setNum, rawUrl) => {
+    setScanning(false);
+    if (setNum) {
+      triggerSearch(setNum);
+    } else {
+      setError(`QR-Code erkannt, aber keine Set-Nummer gefunden.\nURL: ${rawUrl}`);
+    }
+  };
 
-  // Nachladen, sobald der Fussmarker in Sichtweite kommt — ohne Bibliothek.
-  const sentinel = useRef(null);
-  useEffect(() => {
-    const el = sentinel.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) setLimit((l) => l + CHUNK); },
-      { rootMargin: "600px" }
+  const handleAdd = async () => {
+    if (!preview || saveInFlight.current) return;
+    setError(null);
+    if (collectionLoading || collectionError) {
+      setError(collectionError
+        ? "Sammlung konnte nicht geladen werden. Bitte lade die App erneut, bevor du ein Set hinzufügst."
+        : "Die Sammlung wird noch geladen. Bitte kurz warten.");
+      return;
+    }
+    const existing = sets.filter((set) =>
+      canonicalSetNum(set.setNumber) === canonicalSetNum(preview.set_num)
     );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [filtered.length]);
+    if (existing.length > 0 && !window.confirm(
+      `„${preview.name}“ ist bereits ${existing.length}× in deiner Sammlung oder Wunschliste vorhanden.\n\nWeiteres Exemplar hinzufügen?`
+    )) return;
 
-  // Jede Filteraenderung setzt das Nachladen zurueck — sonst bliebe nach
-  // einem Wechsel die alte, lange Liste stehen.
-  const changeSearch = (v) => { setSearch(v); setLimit(CHUNK); };
-  const toggleNew    = ()  => { setOnlyNew((x) => !x); setLimit(CHUNK); };
-  const toggle = (list, setList) => (v) => {
-    setList(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
-    setLimit(CHUNK);
+    saveInFlight.current = true;
+    setSaving(true);
+    try {
+      await addSet({
+        setNumber: preview.set_num,
+        name: preview.name,
+        image: preview.set_img_url,
+        parts: preview.num_parts,
+        theme: preview.theme_id,
+        themeName: preview.themeName ?? null,
+        parentThemeName: preview.parentThemeName ?? null,
+        year: preview.year ?? null,
+        status,
+      });
+      setDone(true);
+      setInput("");
+      setPreview(null);
+      setStatus("built");
+      onSuccess?.();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      saveInFlight.current = false;
+      setSaving(false);
+    }
   };
-  const changeSort = (id) => { setSort(id); setLimit(CHUNK); };
-  const resetAll = () => {
-    setSearch(""); setThemeSel([]); setYearSel([]); setOnlyNew(false);
-    setPriceSel([]); setSort("teile"); setLimit(CHUNK);
-  };
 
-  const activeCount = themeSel.length + yearSel.length + priceSel.length
-    + (onlyNew ? 1 : 0) + (search ? 1 : 0) + (sort !== "teile" ? 1 : 0);
-
-  if (loading) return <Info>Lade Katalog…</Info>;
-  if (error)   return <Info tone="danger">Katalog konnte nicht geladen werden: {error}</Info>;
-
-  const visible = filtered.slice(0, limit);
+  const addDisabled = saving || collectionLoading || !!collectionError;
 
   return (
     <>
-      {/* Suche */}
-      <div style={{ position: "relative", marginBottom: 12 }}>
-        <Search
-          size={16} strokeWidth={2} color="var(--ink-soft)"
-          style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", pointerEvents: "none" }}
+      {scanning && (
+        <QrScannerModal
+          onDetect={handleQrDetect}
+          onClose={() => setScanning(false)}
         />
-        <input
-          className="field"
-          value={search}
-          onChange={(e) => changeSearch(e.target.value)}
-          placeholder="Set-Name oder Nummer suchen…"
-          style={{ padding: "11px 14px 11px 40px", paddingRight: search ? 40 : 14, fontSize: 14 }}
-        />
-        {search && (
-          <button
-            onClick={() => changeSearch("")}
-            aria-label="Suche löschen"
-            style={{
-              position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)",
-              background: "var(--ink-soft)", border: "none", borderRadius: "var(--r-pill)",
-              width: 18, height: 18, display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", padding: 0, WebkitTapHighlightColor: "transparent",
-            }}
-          >
-            <X size={10} strokeWidth={2.5} color="var(--on-accent)" />
-          </button>
-        )}
-      </div>
-
-      {/* Jahr nur, wenn es mehr als einen gibt — ein Filter mit einer Option
-          filtert nichts, dieselbe Regel wie in der Wellen-Ansicht. */}
-      {data.years.length > 1 && (
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-          <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Jahr</span>
-          {data.years.map((y) => (
-            <Chip key={y} active={yearSel.includes(String(y))} onClick={() => toggle(yearSel, setYearSel)(String(y))}>
-              {y}
-            </Chip>
-          ))}
-        </div>
       )}
 
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Status</span>
-        <Chip active={onlyNew} onClick={toggleNew}>Noch nicht erfasst</Chip>
-      </div>
-
-      {/* Preis */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Preis</span>
-        {PRICE_BUCKETS.map((b) => (
-          <Chip key={b.id} active={priceSel.includes(b.id)} onClick={() => toggle(priceSel, setPriceSel)(b.id)}>
-            {b.label}
-          </Chip>
-        ))}
-      </div>
-
-      {/* Sortierung — einfachauswahl, anders als die Filter darueber */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
-        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Sortierung</span>
-        {SORTS.map((o) => (
-          <Chip key={o.id} active={sort === o.id} onClick={() => changeSort(o.id)}>
-            {o.label}
-          </Chip>
-        ))}
-      </div>
-
-      {/* Themes — viele, deshalb scrollbare Reihe statt Blockwüste */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-        <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Theme</span>
-        <div style={{
-          display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4,
-          scrollbarWidth: "thin", WebkitOverflowScrolling: "touch",
-        }}>
-          {data.themes.map((t) => (
-            <Chip key={t} active={themeSel.includes(t)} onClick={() => toggle(themeSel, setThemeSel)(t)}>
-              {t}
-            </Chip>
-          ))}
+      <div style={{ padding: "0 20px" }}>
+        <div className="display" style={{ fontSize: 20, marginBottom: 18 }}>
+          Set hinzufügen
         </div>
-      </div>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
-        <span className="mono" style={{ color: "var(--ink-soft)" }}>
-          {filtered.length} von {data.sets.length} Sets
-        </span>
-        {activeCount > 0 && (
-          <button
-            onClick={resetAll}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 5,
-              background: "none", border: "none", cursor: "pointer", padding: "2px 0",
-              color: "var(--brick)", fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 600,
-              WebkitTapHighlightColor: "transparent", whiteSpace: "nowrap",
-            }}
-          >
-            <X size={13} strokeWidth={2.5} />
-            Filter zurücksetzen
-          </button>
+        {done && (
+          <div style={{ background: "var(--leaf-soft)", color: "var(--leaf)", borderRadius: "var(--r-field)", padding: "12px 16px", marginBottom: 16, fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", gap: 6 }}>
+            <Check size={14} strokeWidth={2} color="var(--leaf)" />
+            Set wurde zur Sammlung hinzugefügt!
+          </div>
         )}
-      </div>
 
-      {filtered.length === 0 && <Info>Keine Sets für diese Filter</Info>}
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12 }}>
-        {visible.map((row) => {
-          const num = canonicalSetNum(row.set_num);
-          const { entry, live } = toCardProps(row);
-          return (
-            <ReleaseCard
-              key={row.set_num}
-              entry={entry}
-              live={live}
-              owned={ownedNums.has(num)}
-              wished={wishedNums.has(num)}
-              busy={busy === row.set_num}
-              onWish={() => wish({
-                setNumber: row.set_num,
-                name: row.name,
-                label: row.name,
-                image: row.img,
-                parts: row.parts ?? 0,
-                retailPrice: row.uvp_eur ?? null,
-                themeId: row.theme_id ?? null,
-                // Der Dump fuehrt den Theme-Pfad als Namen, keine theme_id —
-                // die Sammlung zeigt daraus "City › Trains".
-                themeName: row.subtheme ?? row.theme,
-                parentThemeName: row.subtheme ? row.theme : null,
-                year: row.year,
-              })}
+        <div style={{ background: "var(--card)", borderRadius: "var(--r-card)", padding: 20, boxShadow: "var(--shadow-sm)" }}>
+          <form onSubmit={handleSearch}>
+            <input
+              className="field"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Set-Nummer eingeben (z.B. 42115)"
+              inputMode="numeric"
+              style={{ padding: "13px 16px", fontSize: 15 }}
             />
-          );
-        })}
-      </div>
 
-      {visible.length < filtered.length && (
-        <div ref={sentinel} style={{ padding: "24px 0", textAlign: "center" }}>
-          <span className="mono" style={{ color: "var(--ink-soft)" }}>
-            {visible.length} von {filtered.length} geladen…
-          </span>
+            {/* QR Button */}
+            <button
+              type="button"
+              onClick={() => setScanning(true)}
+              style={{
+                width: "100%", marginTop: 12, padding: 14,
+                borderRadius: "var(--r-field)",
+                background: "var(--neutral-soft)", border: "none",
+                fontWeight: 600, fontSize: 15, color: "var(--ink)",
+                fontFamily: "var(--font-body)",
+                cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                WebkitTapHighlightColor: "transparent",
+                transition: "background 0.15s",
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="7" rx="1"/>
+                <rect x="14" y="3" width="7" height="7" rx="1"/>
+                <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/>
+                <rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/>
+                <rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/>
+                <line x1="14" y1="14" x2="14" y2="14"/>
+                <rect x="14" y="14" width="3" height="3" rx="0.5"/>
+                <rect x="18" y="14" width="3" height="3" rx="0.5"/>
+                <rect x="14" y="18" width="3" height="3" rx="0.5"/>
+                <rect x="18" y="18" width="3" height="3" rx="0.5"/>
+              </svg>
+              QR-Code aus Anleitung scannen
+            </button>
+
+            <button type="submit" disabled={searching} style={{
+              width: "100%", marginTop: 10, padding: 15,
+              borderRadius: "var(--r-field)",
+              background: searching ? "var(--neutral-soft)" : "var(--brick)",
+              border: "none", color: searching ? "var(--ink-soft)" : "var(--on-accent)",
+              fontWeight: 600, fontSize: 15,
+              fontFamily: "var(--font-body)",
+              cursor: searching ? "not-allowed" : "pointer",
+              transition: "background 0.15s",
+            }}>
+              {searching ? "Suche läuft…" : "Suchen"}
+            </button>
+          </form>
+
+          {error && (
+            <p style={{ color: "var(--danger)", fontSize: 13, marginTop: 12, fontWeight: 500, whiteSpace: "pre-line" }}>{error}</p>
+          )}
         </div>
-      )}
 
-      <p className="mono" style={{ color: "var(--ink-soft)", textAlign: "center", margin: "28px 0 0", lineHeight: 1.8 }}>
-        {data.source} · Stand {data.generated_at}
-      </p>
+        {/* Preview */}
+        {preview && (
+          <div style={{ background: "var(--card)", borderRadius: "var(--r-card)", padding: 20, marginTop: 16, boxShadow: "var(--shadow-sm)" }}>
+            {preview.set_img_url && (
+              <img
+                src={preview.set_img_url}
+                alt={preview.name}
+                style={{ width: "100%", height: 200, objectFit: "contain", borderRadius: "var(--r-thumb)", background: "var(--neutral-soft)", padding: 8, marginBottom: 14 }}
+              />
+            )}
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 6 }}>
+              {preview.set_num}
+              {preview.themeName && ` · ${preview.themeName}`}
+              {preview.year && ` · ${preview.year}`}
+            </div>
+            <div className="display" style={{ fontSize: 20, marginBottom: 10 }}>
+              {preview.name}
+            </div>
+            <div style={{ marginBottom: 18 }}>
+              {preview.num_parts > 0 && (
+                <span className="tag tag--parts">
+                  {preview.num_parts.toLocaleString("de-DE")} Teile
+                </span>
+              )}
+            </div>
+
+            {(collectionLoading || collectionError) && (
+              <p role="status" style={{ color: collectionError ? "var(--danger)" : "var(--ink-soft)", fontSize: 13 }}>
+                {collectionError
+                  ? "Sammlung konnte nicht geladen werden. Bitte lade die App erneut, bevor du ein Set hinzufügst."
+                  : "Sammlung wird für die Prüfung auf vorhandene Sets geladen…"}
+              </p>
+            )}
+
+            <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 10 }}>Status wählen</div>
+            <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+              {STATUS_OPTIONS.map((opt) => {
+                const active = status === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    onClick={() => setStatus(opt.id)}
+                    style={{
+                      flex: 1, minWidth: 0,
+                      display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+                      padding: "10px 4px",
+                      border: active ? `2px solid ${opt.accent}` : "2px solid var(--line)",
+                      borderRadius: "var(--r-field)",
+                      background: active ? opt.soft : "var(--card)",
+                      cursor: "pointer",
+                      fontFamily: "var(--font-body)",
+                      fontSize: 12, fontWeight: 600,
+                      color: active ? opt.accent : "var(--ink-soft)",
+                      WebkitTapHighlightColor: "transparent",
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    <opt.Icon size={20} strokeWidth={1.75} />
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <StatusBadge status={status} />
+              <button
+                onClick={handleAdd}
+                disabled={addDisabled}
+                style={{
+                  padding: "13px 24px", borderRadius: "var(--r-field)",
+                  background: addDisabled ? "var(--neutral-soft)" : "var(--brick)",
+                  border: "none", color: addDisabled ? "var(--ink-soft)" : "var(--on-accent)",
+                  fontWeight: 600, fontSize: 14,
+                  fontFamily: "var(--font-body)",
+                  cursor: addDisabled ? "not-allowed" : "pointer",
+                  transition: "background 0.15s",
+                }}
+              >
+                {saving ? "Speichern…" : "Hinzufügen"}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </>
-  );
-}
-
-function Chip({ active, onClick, children }) {
-  return (
-    <button
-      onClick={onClick}
-      aria-pressed={active}
-      style={{
-        display: "inline-flex", alignItems: "center",
-        padding: "6px 12px", borderRadius: "var(--r-pill)",
-        border: active ? "1.5px solid var(--ink)" : "1.5px solid var(--line)",
-        background: active ? "var(--ink)" : "transparent",
-        color: active ? "var(--on-accent)" : "var(--ink-soft)",
-        fontFamily: "var(--font-body)", fontSize: 13, fontWeight: 500,
-        cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0,
-        WebkitTapHighlightColor: "transparent", transition: "all 0.15s ease",
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function Info({ children, tone }) {
-  return (
-    <div style={{
-      textAlign: "center", padding: "48px 20px", fontSize: 14, fontWeight: 500,
-      color: tone === "danger" ? "var(--danger)" : "var(--ink-soft)",
-    }}>
-      {children}
-    </div>
   );
 }
