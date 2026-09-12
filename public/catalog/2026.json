@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-09-07",
+ "generated_at": "2026-09-12",
  "year": 2026,
  "sets": [
   {
@@ -2238,6 +2238,17 @@
    "uvp_eur": 119.99
   },
   {
+   "set_num": "21373-1",
+   "name": "Downton Abbey",
+   "year": 2026,
+   "parts": null,
+   "theme": "LEGO Ideas and CUUSOO",
+   "subtheme": null,
+   "theme_id": 576,
+   "img": "https://cdn.rebrickable.com/media/sets/21373-1.jpg",
+   "uvp_eur": 299.99
+  },
+  {
    "set_num": "21376-1",
    "name": "Orange Cat",
    "year": 2026,
@@ -3187,7 +3198,7 @@
    "set_num": "75456-1",
    "name": "Star Wars Advent Calendar 2026",
    "year": 2026,
-   "parts": 290,
+   "parts": 292,
    "theme": "Seasonal",
    "subtheme": "Star Wars",
    "theme_id": 209,
