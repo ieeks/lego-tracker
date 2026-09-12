@@ -28,6 +28,7 @@ function DetailModal({ set, onClose }) {
   const [location, setLocationState] = useState(set?.location ?? null);
   const [retailPrice, setRetailPrice] = useState(set?.retailPrice ?? null);
   const [priceLoading, setPriceLoading] = useState(false);
+  const [priceError, setPriceError] = useState(null);
   const sheetRef = useRef(null);
   const dragStartY = useRef(null);
 
@@ -81,12 +82,19 @@ function DetailModal({ set, onClose }) {
 
   const handleRefreshPrice = async () => {
     setPriceLoading(true);
+    setPriceError(null);
     try {
       const price = await fetchRetailPrice(set.setNumber);
+      if (price == null) {
+        setPriceError(retailPrice != null
+          ? "Kein Preis abrufbar. Der vorhandene Preis bleibt erhalten."
+          : "Kein Preis abrufbar. Bitte später erneut versuchen.");
+        return;
+      }
       await updateSetPrice(set.id, price);
       setRetailPrice(price);
     } catch {
-      // ignore
+      setPriceError("Preis konnte nicht gespeichert werden. Bitte erneut versuchen.");
     } finally {
       setPriceLoading(false);
     }
@@ -180,6 +188,12 @@ function DetailModal({ set, onClose }) {
             </button>
           </div>
 
+          {priceError && (
+            <p role="alert" style={{ color: "var(--danger)", fontSize: 13, marginBottom: 16 }}>
+              {priceError}
+            </p>
+          )}
+
           {/* Status Badge */}
           <div style={{ marginBottom: 20 }}>
             <StatusBadge status={currentStatus} />
@@ -254,7 +268,7 @@ export default function App() {
   // auf der Sammlung und die Filter-Params haengen verwaist daneben.
   const [tab, setTab] = useState(() => readParams().get("tab") ?? "sammlung");
   const [selectedSet, setSelectedSet] = useState(null);
-  const { sets, loading } = useCollection();
+  const { sets, loading, error: collectionError } = useCollection();
 
   useEffect(() => { writeParams({ tab: tab === "sammlung" ? null : tab }); }, [tab]);
 
@@ -365,7 +379,7 @@ export default function App() {
 
         {tab === "sammlung"    && <CollectionScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
         {tab === "neuheiten"   && <NewReleasesScreen sets={sets} loading={loading} />}
-        {tab === "hinzufuegen" && <AddScreen onSuccess={() => setTab("sammlung")} />}
+        {tab === "hinzufuegen" && <AddScreen sets={sets} collectionLoading={loading} collectionError={collectionError} onSuccess={() => setTab("sammlung")} />}
         {tab === "wishlist"    && <WishlistScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
         {tab === "statistik"   && <StatsScreen sets={sets} />}
         {tab === "info"        && <InfoScreen sets={sets} />}

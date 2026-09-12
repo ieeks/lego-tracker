@@ -4,6 +4,7 @@ import { fetchSet, fetchThemeNames } from "../services/rebrickable";
 import { addSet } from "../services/setService";
 import { StatusBadge } from "../components/StatusBadge";
 import { Hammer, Package, Heart, Check, Camera } from "lucide-react";
+import { canonicalSetNum } from "../lib/newReleases";
 
 /* Jede Option färbt sich in ihrer eigenen Statusfarbe —
    dieselbe Kodierung wie die Rails an den Karten. */
@@ -192,7 +193,7 @@ function QrScannerModal({ onDetect, onClose }) {
   );
 }
 
-export function AddScreen({ onSuccess }) {
+export function AddScreen({ sets, collectionLoading, collectionError, onSuccess }) {
   const [input, setInput]         = useState("");
   const [preview, setPreview]     = useState(null);
   const [status, setStatus]       = useState("built");
@@ -201,6 +202,7 @@ export function AddScreen({ onSuccess }) {
   const [error, setError]         = useState(null);
   const [done, setDone]           = useState(false);
   const [scanning, setScanning]   = useState(false);
+  const saveInFlight = useRef(false);
 
   const triggerSearch = async (setNumber) => {
     if (!setNumber?.trim()) return;
@@ -235,9 +237,23 @@ export function AddScreen({ onSuccess }) {
   };
 
   const handleAdd = async () => {
-    if (!preview) return;
-    setSaving(true);
+    if (!preview || saveInFlight.current) return;
     setError(null);
+    if (collectionLoading || collectionError) {
+      setError(collectionError
+        ? "Sammlung konnte nicht geladen werden. Bitte lade die App erneut, bevor du ein Set hinzufügst."
+        : "Die Sammlung wird noch geladen. Bitte kurz warten.");
+      return;
+    }
+    const existing = sets.filter((set) =>
+      canonicalSetNum(set.setNumber) === canonicalSetNum(preview.set_num)
+    );
+    if (existing.length > 0 && !window.confirm(
+      `„${preview.name}“ ist bereits ${existing.length}× in deiner Sammlung oder Wunschliste vorhanden.\n\nWeiteres Exemplar hinzufügen?`
+    )) return;
+
+    saveInFlight.current = true;
+    setSaving(true);
     try {
       await addSet({
         setNumber: preview.set_num,
@@ -257,9 +273,13 @@ export function AddScreen({ onSuccess }) {
       onSuccess?.();
     } catch (err) {
       setError(err.message);
+    } finally {
+      saveInFlight.current = false;
       setSaving(false);
     }
   };
+
+  const addDisabled = saving || collectionLoading || !!collectionError;
 
   return (
     <>
@@ -370,6 +390,14 @@ export function AddScreen({ onSuccess }) {
               )}
             </div>
 
+            {(collectionLoading || collectionError) && (
+              <p role="status" style={{ color: collectionError ? "var(--danger)" : "var(--ink-soft)", fontSize: 13 }}>
+                {collectionError
+                  ? "Sammlung konnte nicht geladen werden. Bitte lade die App erneut, bevor du ein Set hinzufügst."
+                  : "Sammlung wird für die Prüfung auf vorhandene Sets geladen…"}
+              </p>
+            )}
+
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 10 }}>Status wählen</div>
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
               {STATUS_OPTIONS.map((opt) => {
@@ -404,14 +432,14 @@ export function AddScreen({ onSuccess }) {
               <StatusBadge status={status} />
               <button
                 onClick={handleAdd}
-                disabled={saving}
+                disabled={addDisabled}
                 style={{
                   padding: "13px 24px", borderRadius: "var(--r-field)",
-                  background: saving ? "var(--neutral-soft)" : "var(--brick)",
-                  border: "none", color: saving ? "var(--ink-soft)" : "var(--on-accent)",
+                  background: addDisabled ? "var(--neutral-soft)" : "var(--brick)",
+                  border: "none", color: addDisabled ? "var(--ink-soft)" : "var(--on-accent)",
                   fontWeight: 600, fontSize: 14,
                   fontFamily: "var(--font-body)",
-                  cursor: saving ? "not-allowed" : "pointer",
+                  cursor: addDisabled ? "not-allowed" : "pointer",
                   transition: "background 0.15s",
                 }}
               >
