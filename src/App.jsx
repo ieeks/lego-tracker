@@ -86,7 +86,9 @@ function DetailModal({ set, onClose }) {
     try {
       const price = await fetchRetailPrice(set.setNumber);
       if (price == null) {
-        setPriceError("Kein Preis abrufbar. Ein vorhandener Preis bleibt erhalten.");
+        setPriceError(retailPrice != null
+          ? "Kein Preis abrufbar. Der vorhandene Preis bleibt erhalten."
+          : "Kein Preis abrufbar. Bitte später erneut versuchen.");
         return;
       }
       await updateSetPrice(set.id, price);

@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "react";
 import { addSet } from "../services/setService";
-import { normalizeSetNum } from "../lib/newReleases";
+import { canonicalSetNum } from "../lib/newReleases";
 
 /**
  * Der eine Schreibweg auf die Wunschliste, geteilt von Wellen und Katalog.
@@ -16,20 +16,20 @@ export function useWishlistImport(sets) {
 
   // Die Sammlung speichert Setnummern mal mit, mal ohne Variantensuffix.
   const ownedNums = useMemo(
-    () => new Set(sets.filter((s) => s.status !== "wishlist").map((s) => normalizeSetNum(s.setNumber))),
+    () => new Set(sets.filter((s) => s.status !== "wishlist").map((s) => canonicalSetNum(s.setNumber))),
     [sets]
   );
   const wishedNums = useMemo(
     () => new Set([
-      ...sets.filter((s) => s.status === "wishlist").map((s) => normalizeSetNum(s.setNumber)),
-      ...optimistic.map(normalizeSetNum),
+      ...sets.filter((s) => s.status === "wishlist").map((s) => canonicalSetNum(s.setNumber)),
+      ...optimistic.map(canonicalSetNum),
     ]),
     [sets, optimistic]
   );
 
   const wish = useCallback(async (payload) => {
     const { setNumber, label } = payload;
-    const num = normalizeSetNum(setNumber);
+    const num = canonicalSetNum(setNumber);
     // Idempotent: Doppelklick und bereits erfasste Sets laufen ins Leere.
     if (busy || ownedNums.has(num) || wishedNums.has(num)) return;
 

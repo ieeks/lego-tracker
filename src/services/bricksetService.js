@@ -5,8 +5,10 @@ export async function fetchRetailPrice(setNumber) {
     );
     if (!res.ok) return null;
     const data = await res.json();
-    const price = data?.retailPrice;
-    return typeof price === "number" && Number.isFinite(price) && price > 0 ? price : null;
+    const rawPrice = data?.retailPrice;
+    if (rawPrice == null || rawPrice === "") return null;
+    const price = Number(rawPrice);
+    return Number.isFinite(price) && price > 0 ? price : null;
   } catch {
     return null;
   }

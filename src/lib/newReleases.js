@@ -72,10 +72,11 @@ export function knownParts(...candidates) {
 }
 
 /**
- * Rebrickable liefert "60509-1", die Sammlung speichert mal mit und mal
- * ohne Variantensuffix. Für den Abgleich beides auf die nackte Nummer
- * bringen, sonst greift die Dublettenerkennung nicht.
+ * Einheitlicher Join-Key für Sammlung, Wunschliste, Wellen und Katalog.
+ * Alte Einträge ohne Suffix entsprechen der Hauptvariante „-1“; echte
+ * Varianten wie „-2“ bleiben eigenständig.
  */
-export function normalizeSetNum(setNumber) {
-  return String(setNumber ?? "").trim().split("-")[0];
+export function canonicalSetNum(setNumber) {
+  const number = String(setNumber ?? "").trim();
+  return number && !number.includes("-") ? `${number}-1` : number;
 }

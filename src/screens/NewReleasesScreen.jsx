@@ -6,7 +6,7 @@ import { ReleaseCard } from "../components/ReleaseCard";
 import { StatCardTop } from "../components/StatCardTop";
 import { useRebrickableSets } from "../hooks/useRebrickableSets";
 import {
-  NEW_RELEASES, RELEASE_SET_NUMS, WAVES, THEMES, normalizeSetNum, waveShortLabel,
+  NEW_RELEASES, RELEASE_SET_NUMS, WAVES, THEMES, canonicalSetNum, waveShortLabel,
   knownParts,
 } from "../lib/newReleases";
 import { readParams, readList, writeParams } from "../lib/urlState";
@@ -78,7 +78,7 @@ export function NewReleasesScreen({ sets, loading }) {
   const filtered = NEW_RELEASES.filter((entry) => {
     if (waveFilter.length  && !waveFilter.includes(entry.wave))   return false;
     if (themeFilter.length && !themeFilter.includes(entry.theme)) return false;
-    const num = normalizeSetNum(entry.set_num);
+    const num = canonicalSetNum(entry.set_num);
     if (statusFilter.includes("neu")      && ownedNums.has(num))  return false;
     if (statusFilter.includes("unwished") && wishedNums.has(num)) return false;
     return true;
@@ -103,7 +103,7 @@ export function NewReleasesScreen({ sets, loading }) {
   // derselben Auswahl reden wie die Liste darunter.
   const shown   = filtered.length;
   const missing = filtered.filter((e) => {
-    const num = normalizeSetNum(e.set_num);
+    const num = canonicalSetNum(e.set_num);
     return !ownedNums.has(num) && !wishedNums.has(num);
   }).length;
   const trackedPercent = shown > 0 ? Math.round(((shown - missing) / shown) * 100) : 0;
@@ -289,7 +289,7 @@ export function NewReleasesScreen({ sets, loading }) {
             gap: 12,
           }}>
             {items.map((entry) => {
-              const num = normalizeSetNum(entry.set_num);
+              const num = canonicalSetNum(entry.set_num);
               return (
                 <ReleaseCard
                   key={entry.set_num}
