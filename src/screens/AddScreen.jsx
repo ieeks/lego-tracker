@@ -192,7 +192,7 @@ function QrScannerModal({ onDetect, onClose }) {
   );
 }
 
-export function AddScreen({ onSuccess }) {
+export function AddScreen({ sets, collectionLoading, collectionError, onSuccess }) {
   const [input, setInput]         = useState("");
   const [preview, setPreview]     = useState(null);
   const [status, setStatus]       = useState("built");
@@ -201,6 +201,7 @@ export function AddScreen({ onSuccess }) {
   const [error, setError]         = useState(null);
   const [done, setDone]           = useState(false);
   const [scanning, setScanning]   = useState(false);
+  const saveInFlight = useRef(false);
 
   const triggerSearch = async (setNumber) => {
     if (!setNumber?.trim()) return;
@@ -235,9 +236,29 @@ export function AddScreen({ onSuccess }) {
   };
 
   const handleAdd = async () => {
-    if (!preview) return;
-    setSaving(true);
+    if (!preview || saveInFlight.current) return;
     setError(null);
+    if (collectionLoading || collectionError) {
+      setError(collectionError
+        ? "Sammlung konnte nicht geladen werden. Bitte lade die App erneut, bevor du ein Set hinzufügst."
+        : "Die Sammlung wird noch geladen. Bitte kurz warten.");
+      return;
+    }
+    // Die Hauptvariante steht im Altbestand auch ohne „-1“. Andere
+    // Varianten bleiben eigenständige Sets.
+    const canonicalNumber = (value) => {
+      const number = String(value ?? "").trim();
+      return number.includes("-") ? number : `${number}-1`;
+    };
+    const existing = sets.filter((set) =>
+      canonicalNumber(set.setNumber) === canonicalNumber(preview.set_num)
+    );
+    if (existing.length > 0 && !window.confirm(
+      `„${preview.name}“ ist bereits ${existing.length}× in deiner Sammlung oder Wunschliste vorhanden.\n\nWeiteres Exemplar hinzufügen?`
+    )) return;
+
+    saveInFlight.current = true;
+    setSaving(true);
     try {
       await addSet({
         setNumber: preview.set_num,
@@ -257,6 +278,8 @@ export function AddScreen({ onSuccess }) {
       onSuccess?.();
     } catch (err) {
       setError(err.message);
+    } finally {
+      saveInFlight.current = false;
       setSaving(false);
     }
   };
@@ -370,6 +393,14 @@ export function AddScreen({ onSuccess }) {
               )}
             </div>
 
+            {(collectionLoading || collectionError) && (
+              <p role="status" style={{ color: collectionError ? "var(--danger)" : "var(--ink-soft)", fontSize: 13 }}>
+                {collectionError
+                  ? "Sammlung konnte nicht geladen werden. Bitte lade die App erneut, bevor du ein Set hinzufügst."
+                  : "Sammlung wird für die Prüfung auf vorhandene Sets geladen…"}
+              </p>
+            )}
+
             <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 10 }}>Status wählen</div>
             <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
               {STATUS_OPTIONS.map((opt) => {
@@ -404,7 +435,7 @@ export function AddScreen({ onSuccess }) {
               <StatusBadge status={status} />
               <button
                 onClick={handleAdd}
-                disabled={saving}
+                disabled={saving || collectionLoading || !!collectionError}
                 style={{
                   padding: "13px 24px", borderRadius: "var(--r-field)",
                   background: saving ? "var(--neutral-soft)" : "var(--brick)",

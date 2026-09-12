@@ -9,9 +9,11 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   sync:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,3 +45,12 @@ jobs:
           Automatisch erzeugt aus dem Rebrickable-CSV-Dump.
           Daten von Rebrickable.com"
           git push
+
+      # Ein Push mit GITHUB_TOKEN startet keinen weiteren Push-Workflow.
+      # Auch ohne Datenänderung auslösen: so lässt sich ein zuvor
+      # fehlgeschlagenes Deployment durch erneuten Sync nachholen.
+      - name: Aktualisierten Katalog veröffentlichen
+        run: gh workflow run deploy.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
