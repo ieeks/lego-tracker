@@ -16,7 +16,7 @@
  *   node scripts/syncCatalog.mjs --from <dir>    # nutzt lokale CSVs (Test)
  */
 import { gunzipSync } from "node:zlib";
-import { mkdirSync, writeFileSync, readFileSync, existsSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { fetchPrices } from "./fetchPrices.mjs";
 
@@ -177,7 +177,34 @@ if (!apiKey) {
 }
 
 /**
- * Preise aus dem letzten Lauf einlesen.
+ * Den Katalog des letzten Laufs einlesen, Set-Nummer auf Datensatz.
+ *
+ * Zwei Dinge haengen daran: die Preise (siehe unten) und `first_seen`.
+ * Gelesen wird jede vorhandene Jahresdatei, nicht nur die der aktuellen
+ * Jahrgaenge — ein Set kann im Dump das Jahr wechseln und waere sonst
+ * ploetzlich wieder ein Neuzugang.
+ */
+function previousSets() {
+  const map = new Map();
+  const files = existsSync(OUT_DIR)
+    ? readdirSync(OUT_DIR).filter((f) => /^\d{4}\.json$/.test(f))
+    : [];
+  for (const file of files) {
+    try {
+      for (const s of JSON.parse(readFileSync(join(OUT_DIR, file), "utf8")).sets ?? []) {
+        map.set(s.set_num, s);
+      }
+    } catch {
+      // Kaputte Datei aus einem frueheren Lauf: dann eben ohne Altbestand.
+    }
+  }
+  return map;
+}
+
+const previous = previousSets();
+
+/**
+ * Preise aus dem letzten Lauf uebernehmen.
  *
  * Ohne das waere ein Ausfall bei BrickSet stille Datenloeschung: die
  * Preis-Map bliebe leer, jeder Satz bekaeme uvp_eur null, und der Lauf
@@ -186,16 +213,8 @@ if (!apiKey) {
  */
 function previousPrices() {
   const map = new Map();
-  for (const year of new Set(sets.map((s) => s.year))) {
-    const file = join(OUT_DIR, `${year}.json`);
-    if (!existsSync(file)) continue;
-    try {
-      for (const s of JSON.parse(readFileSync(file, "utf8")).sets ?? []) {
-        if (s.uvp_eur != null) map.set(s.set_num, s.uvp_eur);
-      }
-    } catch {
-      // Kaputte Datei aus einem frueheren Lauf: dann eben ohne Altbestand.
-    }
+  for (const [set_num, s] of previous) {
+    if (s.uvp_eur != null) map.set(set_num, s.uvp_eur);
   }
   return map;
 }
@@ -224,6 +243,26 @@ for (const s of sets) {
 }
 
 const generated_at = new Date().toISOString().slice(0, 10);
+
+/**
+ * `first_seen`: mit welchem Lauf ist das Set in den Katalog gekommen?
+ *
+ * Der Dump kennt nur das Erscheinungsjahr, und Rebrickable traegt neue
+ * Sets ueber das ganze Jahr verteilt nach. Ohne diesen Stempel gehen die
+ * paar Neuzugaenge eines Laufs zwischen hunderten Jahrgangs-Sets unter.
+ *
+ * null heisst "war schon da, bevor mitgeschrieben wurde" — beim allerersten
+ * Lauf bekommt niemand ein Datum, sonst stuende der komplette Katalog als
+ * Neuzugang da.
+ */
+for (const s of sets) {
+  s.first_seen = previous.has(s.set_num)
+    ? (previous.get(s.set_num).first_seen ?? null)
+    : (previous.size ? generated_at : null);
+}
+
+const newcomers = sets.filter((s) => s.first_seen === generated_at).length;
+
 const years = [...byYear.keys()].filter((y) => byYear.get(y).length > 0).sort((a, b) => b - a);
 
 for (const year of years) {
@@ -256,6 +295,9 @@ console.log(`✓ ${sets.length} Sets ab ${MIN_YEAR}, ${years.length} Jahrgang/Ja
 console.log(`  davon ohne Teilezahl: ${unknownParts}`);
 const withPrice = sets.filter((s) => s.uvp_eur != null).length;
 console.log(`  mit UVP: ${withPrice}${priceError ? " (BrickSet-Abruf fehlgeschlagen)" : ""}`);
+console.log(previous.size
+  ? `  neu in diesem Lauf: ${newcomers}`
+  : "  Erstlauf ohne Altbestand — kein Set als Neuzugang markiert.");
 
 // Verteilung mitloggen: der Dump enthaelt neben Bausets auch Gear, Buecher
 // und nicht inventarisierte Polybags. Ohne die Aufschluesselung laesst sich

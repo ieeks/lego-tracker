@@ -27,6 +27,16 @@ const PRICE_BUCKETS = [
   { id: "300+",    label: "ab 300 €",   min: 300, max: Infinity },
 ];
 
+/**
+ * "2026-09-12" → "12.09." — im Chip zaehlt Kuerze. Das Jahr kommt nur dazu,
+ * wenn der Lauf nicht aus demselben Jahr stammt wie der neueste: sonst
+ * staenden nach einem Jahreswechsel zwei gleich beschriftete Chips nebeneinander.
+ */
+function runLabel(iso, currentYear) {
+  const [y, m, d] = iso.split("-");
+  return y === currentYear ? `${d}.${m}.` : `${d}.${m}.${y.slice(2)}`;
+}
+
 const SORTS = [
   { id: "teile",     label: "Teile" },
   { id: "preis-auf", label: "Preis ↑" },
@@ -66,6 +76,7 @@ export function CatalogView({ wishlist }) {
   const [themeSel, setThemeSel] = useState(() => readList(readParams(), "kat"));
   const [yearSel, setYearSel]   = useState(() => readList(readParams(), "jahr"));
   const [onlyNew, setOnlyNew]   = useState(() => readParams().get("neu") === "1");
+  const [runSel, setRunSel]     = useState(() => readList(readParams(), "neuam"));
   const [priceSel, setPriceSel] = useState(() => readList(readParams(), "preis"));
   const [sort, setSort]         = useState(() => {
     const v = readParams().get("sort");
@@ -76,9 +87,23 @@ export function CatalogView({ wishlist }) {
   useEffect(() => {
     writeParams({
       q: search, kat: themeSel, jahr: yearSel, neu: onlyNew ? "1" : null,
-      preis: priceSel, sort: sort === "teile" ? null : sort,
+      neuam: runSel, preis: priceSel, sort: sort === "teile" ? null : sort,
     });
-  }, [search, themeSel, yearSel, onlyNew, priceSel, sort]);
+  }, [search, themeSel, yearSel, onlyNew, runSel, priceSel, sort]);
+
+  /**
+   * Die Laufdaten stehen an den Sets selbst, nicht im Index — so bleibt
+   * die Liste automatisch bei dem, was der Katalog wirklich hergibt.
+   * null heisst "war vor dem ersten gestempelten Lauf schon da" und
+   * bekommt bewusst keinen Chip.
+   */
+  const runs = useMemo(() => {
+    if (!data) return [];
+    return [...new Set(data.sets.map((s) => s.first_seen).filter(Boolean))]
+      .sort().reverse();
+  }, [data]);
+
+  const runYear = runs[0]?.slice(0, 4);
 
   const filtered = useMemo(() => {
     if (!data) return [];
@@ -86,6 +111,9 @@ export function CatalogView({ wishlist }) {
     return data.sets.filter((row) => {
       if (themeSel.length && !themeSel.includes(row.theme)) return false;
       if (yearSel.length && !yearSel.includes(String(row.year))) return false;
+      // Sets ohne Laufdatum standen schon im Katalog, bevor er mitgeschrieben
+      // hat — sie gehoeren zu keinem Lauf und fallen bei aktivem Filter raus.
+      if (runSel.length && !runSel.includes(row.first_seen)) return false;
       // Ein aktiver Preisfilter schliesst Sets ohne Preis aus — sie lassen
       // sich keiner Stufe zuordnen. Betrifft rund ein Viertel des Katalogs.
       if (priceSel.length) {
@@ -124,7 +152,7 @@ export function CatalogView({ wishlist }) {
       }
       return (b.parts ?? -1) - (a.parts ?? -1) || a.name.localeCompare(b.name, "de");
     });
-  }, [data, search, themeSel, yearSel, onlyNew, priceSel, sort, ownedNums, wishedNums]);
+  }, [data, search, themeSel, yearSel, onlyNew, runSel, priceSel, sort, ownedNums, wishedNums]);
 
   // Nachladen, sobald der Fussmarker in Sichtweite kommt — ohne Bibliothek.
   const sentinel = useRef(null);
@@ -150,11 +178,11 @@ export function CatalogView({ wishlist }) {
   const changeSort = (id) => { setSort(id); setLimit(CHUNK); };
   const resetAll = () => {
     setSearch(""); setThemeSel([]); setYearSel([]); setOnlyNew(false);
-    setPriceSel([]); setSort("teile"); setLimit(CHUNK);
+    setRunSel([]); setPriceSel([]); setSort("teile"); setLimit(CHUNK);
   };
 
   const activeCount = themeSel.length + yearSel.length + priceSel.length
-    + (onlyNew ? 1 : 0) + (search ? 1 : 0) + (sort !== "teile" ? 1 : 0);
+    + runSel.length + (onlyNew ? 1 : 0) + (search ? 1 : 0) + (sort !== "teile" ? 1 : 0);
 
   if (loading) return <Info>Lade Katalog…</Info>;
   if (error)   return <Info tone="danger">Katalog konnte nicht geladen werden: {error}</Info>;
@@ -202,6 +230,27 @@ export function CatalogView({ wishlist }) {
               {y}
             </Chip>
           ))}
+        </div>
+      )}
+
+      {/* Neu am — mit welchem Sync-Lauf ist das Set dazugekommen? Der Dump
+          kennt nur das Jahr, und Rebrickable traegt neue Sets ueber das
+          Jahr verteilt nach: ohne diese Reihe gehen die paar Neuzugaenge
+          eines Laufs zwischen hunderten Jahrgangs-Sets unter. Scrollbar
+          wie die Themes, denn jede Woche kommt ein Datum dazu. */}
+      {runs.length > 0 && (
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+          <span className="mono" style={{ color: "var(--ink-soft)", flexShrink: 0 }}>Neu am</span>
+          <div style={{
+            display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4,
+            scrollbarWidth: "thin", WebkitOverflowScrolling: "touch",
+          }}>
+            {runs.map((run) => (
+              <Chip key={run} active={runSel.includes(run)} onClick={() => toggle(runSel, setRunSel)(run)}>
+                {runLabel(run, runYear)}
+              </Chip>
+            ))}
+          </div>
         </div>
       )}
 
