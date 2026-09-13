@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Home, Users, RotateCw, Layers, Plus, Package, Check, Heart } from "lucide-react";
 import { useCollection } from "./hooks/useCollection";
-import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
+import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice, updateSetParts } from "./services/setService";
 import { fetchRetailPrice } from "./services/bricksetService";
+import { fetchSet } from "./services/rebrickable";
 import { BottomNav } from "./components/BottomNav";
 import { StatusBadge } from "./components/StatusBadge";
 import StudDivider from "./components/StudDivider";
@@ -42,6 +43,10 @@ function DetailModal({ set, onClose }) {
   const [retailPrice, setRetailPrice] = useState(set?.retailPrice ?? null);
   const [priceLoading, setPriceLoading] = useState(false);
   const [priceError, setPriceError] = useState(null);
+  // 0 ist bei Rebrickable "noch unbekannt", nicht die Teilezahl null.
+  const [parts, setParts] = useState(set?.parts > 0 ? set.parts : null);
+  const [partsLoading, setPartsLoading] = useState(false);
+  const [partsError, setPartsError] = useState(null);
   const sheetRef = useRef(null);
   const dragStartY = useRef(null);
 
@@ -49,7 +54,39 @@ function DetailModal({ set, onClose }) {
     setCurrentStatus(set?.status ?? "boxed");
     setLocationState(set?.location ?? null);
     setRetailPrice(set?.retailPrice ?? null);
+    setParts(set?.parts > 0 ? set.parts : null);
+    setPartsError(null);
   }, [set?.id]);
+
+  const loadParts = useCallback(async () => {
+    if (!set?.id) return;
+    setPartsLoading(true);
+    setPartsError(null);
+    try {
+      const data = await fetchSet(set.setNumber);
+      const n = Number(data.num_parts);
+      // Kein Fehler, sondern der Normalfall bei angekuendigten Sets: die Zahl
+      // steht bei Rebrickable noch nicht. Der Chip sagt das schon, also still.
+      if (!Number.isFinite(n) || n <= 0) return;
+      await updateSetParts(set.id, n);
+      setParts(n);
+    } catch (err) {
+      setPartsError(err.message ?? "Teilezahl konnte nicht geladen werden.");
+    } finally {
+      setPartsLoading(false);
+    }
+  }, [set?.id, set?.setNumber]);
+
+  /**
+   * Angekuendigte Sets stehen bei Rebrickable mit 0 Teilen im Dump. Die Zahl
+   * wandert spaeter nach — die Sammlung erfaehrt davon aber nichts mehr, denn
+   * sie wurde beim Anlegen einmal geschrieben. Also beim Oeffnen nachfragen,
+   * solange sie fehlt. Betrifft nur die wenigen Sets ohne Teilezahl.
+   */
+  useEffect(() => {
+    if (!set?.id || set.parts > 0) return;
+    loadParts();
+  }, [set?.id, set?.parts, loadParts]);
 
   if (!set) return null;
 
@@ -181,10 +218,29 @@ function DetailModal({ set, onClose }) {
 
           {/* Parts + retail price */}
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
-            {set.parts > 0 && (
+            {parts != null ? (
               <span className="tag tag--parts">
-                {set.parts.toLocaleString("de-DE")} Teile
+                {parts.toLocaleString("de-DE")} Teile
               </span>
+            ) : (
+              <>
+                <span className="tag">Teile unbekannt</span>
+                {/* Rueckfall, wenn der Abruf beim Oeffnen nicht durchkam. */}
+                <button
+                  onClick={loadParts}
+                  disabled={partsLoading}
+                  style={{
+                    background: "none", border: "none", cursor: partsLoading ? "default" : "pointer",
+                    color: "var(--ink-soft)",
+                    display: "flex", alignItems: "center",
+                    padding: "2px 4px", opacity: partsLoading ? 0.5 : 1,
+                    WebkitTapHighlightColor: "transparent",
+                  }}
+                  title="Teilezahl aktualisieren"
+                >
+                  {partsLoading ? "…" : <RotateCw size={16} strokeWidth={1.75} />}
+                </button>
+              </>
             )}
             {retailPrice != null && (
               <span className="tag tag--price">
@@ -206,6 +262,12 @@ function DetailModal({ set, onClose }) {
               {priceLoading ? "…" : <RotateCw size={16} strokeWidth={1.75} />}
             </button>
           </div>
+
+          {partsError && (
+            <p role="alert" style={{ color: "var(--danger)", fontSize: 13, marginBottom: 16 }}>
+              Teilezahl: {partsError}
+            </p>
+          )}
 
           {priceError && (
             <p role="alert" style={{ color: "var(--danger)", fontSize: 13, marginBottom: 16 }}>
