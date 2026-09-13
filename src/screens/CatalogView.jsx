@@ -33,7 +33,7 @@ const PRICE_BUCKETS = [
  * Der Sync laeuft woechentlich — eine Reihe mit einem Chip je Lauf waere
  * nach einem Jahr 50 Chips lang. Weiter als ein paar Wochen zurueck ist
  * "neu" ohnehin keine sinnvolle Auskunft mehr; fuer aeltere Zugaenge gibt
- * es die Sortierung "Neuste zuerst".
+ * es die Sortierung "Neueste".
  */
 const RUN_CHIPS = 4;
 
@@ -53,7 +53,7 @@ const SORTS = [
   { id: "teile",     label: "Teile" },
   { id: "preis-auf", label: "Preis ↑" },
   { id: "preis-ab",  label: "Preis ↓" },
-  { id: "neu",       label: "Neuste zuerst" },
+  { id: "neu",       label: "Neueste" },
 ];
 
 /** Unbekanntes ans Ende, egal wie sortiert wird. */
