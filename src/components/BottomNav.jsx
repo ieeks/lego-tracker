@@ -2,7 +2,8 @@ import { Home, Sparkles, Heart, BarChart2, Info } from "lucide-react";
 
 const TABS = [
   { id: "sammlung",  label: "Sammlung",    Icon: Home,     fillActive: true },
-  { id: "neuheiten", label: "Neuheiten",   Icon: Sparkles, fillActive: false },
+  // Die id bleibt "neuheiten": sie steht als ?tab= in geteilten Links.
+  { id: "neuheiten", label: "Katalog",     Icon: Sparkles, fillActive: false },
   { id: "wishlist",  label: "Wunschliste", Icon: Heart,    fillActive: true },
   { id: "statistik", label: "Statistik",   Icon: BarChart2, fillActive: false },
   { id: "info",      label: "Info",        Icon: Info,     fillActive: false },
