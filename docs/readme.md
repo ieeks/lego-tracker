@@ -15,6 +15,9 @@ GitHub: https://github.com/ieeks/lego-tracker
 - Bild, Name, Teileanzahl, Theme und Parent-Theme automatisch befüllt (z.B. „City › Arctic")
 - Hinzufügen zur Sammlung oder Wunschliste
 - Status verwalten: Gebaut / OVP / Wunschliste
+  - Wunsch-Sets per „In OVP" oder „Schon gebaut" in den Besitz übernehmen, und zurück
+- Set-Katalog aus dem Rebrickable-Dump: durchsuchen, filtern (u. a. nach Sync-Lauf
+  und Preis), sortieren und direkt auf die Wunschliste setzen
 - Standort pro Set: Daheim oder Oma/Opa
 - Swipe-to-Delete auf Set-Cards
 - Dashboard mit Stats (Gesamt Sets, Teile)
@@ -23,7 +26,8 @@ GitHub: https://github.com/ieeks/lego-tracker
 - Sortierung nach Datum, Teileanzahl oder Theme
 - UVP-Preise via BrickSet API (Anzeige in Karten, Modal und Statistik)
 - Statistikübersicht mit Gesamtwert Sammlung und Wunschliste
-- Birchline Design System (Fraunces + DM Sans + DM Mono, CSS Custom Properties)
+- Design-Tokens in `src/styles/tokens.css` (Fraunces + DM Sans + IBM Plex Mono);
+  Farbe kodiert Status, nie Dekoration
 - Lucide React Icons (konsistentes Icon-System, keine Emoji)
 - Optimiert für iPhone (Mobile-first, Touch-Gesten)
 
@@ -99,13 +103,23 @@ https://lego-brickset-proxy.gxnpny5jhn.workers.dev/?setNumber=42115-1
 → { "retailPrice": 379.99 }
 ```
 
-Preise werden in Firestore gecacht. Einmaliges Bulk-Backfill für bestehende Sets:
+Preise werden in Firestore gecacht. Nachladen geht über den Refresh-Knopf im
+Detail-Sheet und über „Alle Preise laden" in Wunschliste und Statistik.
+
+---
+
+## Set-Katalog
+
+Statische Dateien unter `public/catalog/`, erzeugt aus dem Rebrickable-CSV-Dump:
 
 ```bash
-node scripts/backfill-prices.mjs
+npm run sync:catalog
 ```
 
-Das Script aktualisiert nur Sets ohne `retailPrice` und überschreibt keine vorhandenen Werte.
+Automatisch montags um 04:00 UTC (`.github/workflows/catalog-sync.yml`), das
+Ergebnis wird nach `main` committet und deployt. Jedes Set trägt `first_seen`,
+das Datum des Laufs, in dem es zuerst auftauchte — daraus speisen sich der Filter
+„Neu am" und die Sortierung „Neueste".
 
 ---
 
@@ -114,6 +128,7 @@ Das Script aktualisiert nur Sets ohne `retailPrice` und überschreibt keine vorh
 | Tab | Inhalt |
 |-----|--------|
 | Sammlung | Alle Sets mit Pill-Filter-Chips + Theme Bottom Sheet + Sortierung |
+| Katalog | Alle Sets ab Jahrgang 2026 aus dem Rebrickable-Dump, mit Suche, Filtern und Wunschlisten-Knopf |
 | Wunschliste | Sets mit Status „wishlist", inkl. „Alle Preise laden" |
 | Statistik | Anzahl, Statusverteilung, Gesamtwert Sammlung + Wunschliste |
 | Info | App-Info, JSON-Export, Sammlung zurücksetzen |
