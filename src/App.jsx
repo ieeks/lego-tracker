@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Home, Users, RotateCw, Layers, Plus } from "lucide-react";
+import { Home, Users, RotateCw, Layers, Plus, Package, Check, Heart } from "lucide-react";
 import { useCollection } from "./hooks/useCollection";
 import { updateSetStatus, updateSetLocation, deleteSet, updateSetPrice } from "./services/setService";
 import { fetchRetailPrice } from "./services/bricksetService";
@@ -15,8 +15,21 @@ import { WishlistScreen } from "./screens/WishlistScreen";
 import { StatsScreen } from "./screens/StatsScreen";
 import { InfoScreen } from "./screens/InfoScreen";
 
-const STATUS_CYCLE       = { built: "boxed", boxed: "built", wishlist: "built" };
-const STATUS_CYCLE_LABEL = { built: "→ OVP", boxed: "→ Gebaut", wishlist: "→ Gebaut" };
+// Aus einem Wunsch-Set fuehren zwei sinnvolle Wege heraus — gekauft und noch
+// verpackt, oder gekauft und schon gebaut. Ein Cycle-Button kann das nicht
+// abbilden, darum bekommt der Wunsch-Zustand eigene Buttons (siehe unten) und
+// steht bewusst nicht in dieser Tabelle.
+const STATUS_CYCLE       = { built: "boxed", boxed: "built" };
+const STATUS_CYCLE_LABEL = { built: "→ OVP", boxed: "→ Gebaut" };
+
+// Gemeinsame Basis der beiden "Gekauft?"-Buttons — Farben kommen je Ziel dazu.
+const BUY_BUTTON = {
+  flex: 1, padding: "14px 0", borderRadius: "var(--r-field)",
+  border: "none", fontWeight: 600, fontSize: 14,
+  fontFamily: "var(--font-body)", cursor: "pointer",
+  display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+  WebkitTapHighlightColor: "transparent",
+};
 
 const LOCATIONS = [
   { id: "home",         label: "Daheim",  Icon: Home },
@@ -40,11 +53,17 @@ function DetailModal({ set, onClose }) {
 
   if (!set) return null;
 
-  const handleCycle = async () => {
-    const next = STATUS_CYCLE[currentStatus];
+  const handleStatus = async (next) => {
+    if (next === currentStatus) return;
     setCurrentStatus(next);
     await updateSetStatus(set.id, next);
   };
+
+  // Fallback fuer Sets, deren gespeicherter Status nicht im Cycle steht
+  // (Altbestand ohne `status`-Feld landet ueber den Default schon auf "boxed").
+  const handleCycle = () => handleStatus(STATUS_CYCLE[currentStatus] ?? "built");
+
+  const isWishlist = currentStatus === "wishlist";
 
   const handleTouchStart = (e) => {
     dragStartY.current = e.touches[0].clientY;
@@ -233,19 +252,46 @@ function DetailModal({ set, onClose }) {
           {/* Divider */}
           <div style={{ height: 1, background: "var(--line)", marginBottom: 20 }} />
 
+          {/* Gekauft: aus der Wunschliste fuehren zwei Wege heraus, darum
+              zwei explizite Buttons statt eines ratenden Cycle-Buttons. */}
+          {isWishlist && (
+            <div style={{ marginBottom: 10 }}>
+              <div className="mono" style={{ color: "var(--ink-soft)", marginBottom: 8 }}>
+                Gekauft?
+              </div>
+              <div style={{ display: "flex", gap: 10 }}>
+                <button
+                  onClick={() => handleStatus("boxed")}
+                  style={{ ...BUY_BUTTON, background: "var(--stud-soft)", color: "var(--stud-ink)" }}
+                >
+                  <Package size={16} strokeWidth={1.75} /> In OVP
+                </button>
+                <button
+                  onClick={() => handleStatus("built")}
+                  style={{ ...BUY_BUTTON, background: "var(--leaf-soft)", color: "var(--leaf)" }}
+                >
+                  <Check size={16} strokeWidth={1.75} /> Schon gebaut
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={handleCycle} style={{
-              flex: 1, padding: "14px 0", borderRadius: "var(--r-field)",
-              background: "var(--neutral-soft)", border: "none",
-              fontWeight: 600, fontSize: 14, color: "var(--ink)",
-              fontFamily: "var(--font-body)",
-              cursor: "pointer",
-              WebkitTapHighlightColor: "transparent",
-            }}>
-              Status {STATUS_CYCLE_LABEL[currentStatus]}
-            </button>
+            {!isWishlist && (
+              <button onClick={handleCycle} style={{
+                flex: 1, padding: "14px 0", borderRadius: "var(--r-field)",
+                background: "var(--neutral-soft)", border: "none",
+                fontWeight: 600, fontSize: 14, color: "var(--ink)",
+                fontFamily: "var(--font-body)",
+                cursor: "pointer",
+                WebkitTapHighlightColor: "transparent",
+              }}>
+                Status {STATUS_CYCLE_LABEL[currentStatus] ?? "→ Gebaut"}
+              </button>
+            )}
             <button onClick={handleDelete} style={{
+              ...(isWishlist ? { flex: 1 } : {}),
               padding: "14px 20px", borderRadius: "var(--r-field)",
               background: "var(--danger-soft)", border: "none",
               fontWeight: 600, fontSize: 14, color: "var(--danger)",
@@ -256,6 +302,23 @@ function DetailModal({ set, onClose }) {
               Löschen
             </button>
           </div>
+
+          {/* Rueckweg: bisher war die Wunschliste eine Einbahnstrasse. */}
+          {!isWishlist && (
+            <button
+              onClick={() => handleStatus("wishlist")}
+              style={{
+                width: "100%", marginTop: 10, padding: "10px 0",
+                background: "none", border: "none",
+                color: "var(--ink-soft)", fontFamily: "var(--font-body)",
+                fontSize: 13, fontWeight: 600, cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                WebkitTapHighlightColor: "transparent",
+              }}
+            >
+              <Heart size={14} strokeWidth={1.75} /> Zurück auf die Wunschliste
+            </button>
+          )}
 
         </div>
       </div>
