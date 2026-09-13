@@ -1,7 +1,7 @@
 name: CI
 
-# Das Repo hatte bisher keine Prüfung auf Pull Requests — ein kaputtes
-# newReleases.json wäre erst beim Deploy nach dem Merge aufgefallen.
+# Prüfung auf Pull Requests, damit ein kaputter Build nicht erst beim Deploy
+# nach dem Merge auffällt.
 on:
   pull_request:
   push:
@@ -19,9 +19,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-
-      - name: Neuheiten-Daten prüfen
-        run: npm run check:releases
 
       - name: Build
         run: npm run build

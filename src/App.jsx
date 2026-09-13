@@ -10,7 +10,7 @@ import StudDivider from "./components/StudDivider";
 import { StatCardTop } from "./components/StatCardTop";
 import { readParams, writeParams } from "./lib/urlState";
 import { CollectionScreen } from "./screens/CollectionScreen";
-import { NewReleasesScreen } from "./screens/NewReleasesScreen";
+import { CatalogScreen } from "./screens/CatalogScreen";
 import { AddScreen } from "./screens/AddScreen";
 import { WishlistScreen } from "./screens/WishlistScreen";
 import { StatsScreen } from "./screens/StatsScreen";
@@ -412,7 +412,7 @@ export default function App() {
   // waere eine Dopplung.
   const HEADERS = {
     sammlung:  { eyebrow: "Hallo Manuel",      title: "Meine LEGO Sammlung" },
-    neuheiten: { eyebrow: "Frisch erschienen", title: "Neue LEGO Sets" },
+    neuheiten: { eyebrow: "Aus dem Rebrickable-Dump", title: "Set-Katalog" },
   };
   const header = HEADERS[tab];
 
@@ -503,7 +503,7 @@ export default function App() {
         </div>
 
         {tab === "sammlung"    && <CollectionScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
-        {tab === "neuheiten"   && <NewReleasesScreen sets={sets} loading={loading} />}
+        {tab === "neuheiten"   && <CatalogScreen sets={sets} />}
         {tab === "hinzufuegen" && <AddScreen sets={sets} collectionLoading={loading} collectionError={collectionError} onSuccess={() => setTab("sammlung")} />}
         {tab === "wishlist"    && <WishlistScreen sets={sets} loading={loading} onSetClick={setSelectedSet} />}
         {tab === "statistik"   && <StatsScreen sets={sets} />}
