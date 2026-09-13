@@ -16,10 +16,17 @@
 | 10 | BrickSet API + UVP-Preise | ✅ Fertig |
 | 11 | Birchline Design System | ✅ Fertig |
 | 12 | Lucide Icon System + Filter Redesign | ✅ Fertig |
-| 13 | Statistik-Screen ausbauen | ⬜ Offen |
-| 14 | Suche nach Set-Name (ohne Nummer) | ⬜ Offen |
+| 13 | Design-System-Refresh (Tokens, Status-Rails) | ✅ Fertig |
+| 14 | Set-Katalog aus dem Rebrickable-Dump + wöchentlicher Sync | ✅ Fertig |
+| 15 | Statistik-Screen ausbauen | ⬜ Offen |
+| 16 | Suche nach Set-Name (ohne Nummer) | ⬜ Offen |
 
 Live: https://ieeks.github.io/lego-tracker/
+
+Dieses Dokument hält den Aufbau bis Phase 12 fest — der Stand danach steht in
+[`CHANGELOG.md`](../CHANGELOG.md) und [`legoapp.md`](legoapp.md). Achtung: die in
+Phase 11 beschriebene Birchline-Palette (`--clay`, `--oat`, `--gray-*`) wurde vom
+Token-Set in `src/styles/tokens.css` abgelöst.
 
 ---
 
@@ -32,7 +39,7 @@ npm install
 npm install firebase jsqr lucide-react
 ```
 
-Ordnerstruktur:
+Ordnerstruktur (Stand Phase 1, inzwischen gewachsen — aktuell siehe Repo):
 ```
 src/
   components/      # SetCard, StatusBadge, BottomNav
@@ -115,10 +122,11 @@ VITE_REBRICKABLE_KEY=dein_api_key_hier
 Hook `useCollection`: onSnapshot auf Collection `sets`, sortiert nach `createdAt desc`.
 
 `setService.js`:
-- `addSet({ setNumber, name, image, parts, theme, themeName, parentThemeName, year, status })`
+- `addSet({ setNumber, name, image, parts, theme, themeName, parentThemeName, year, status, location, retailPrice })`
 - `updateSetStatus(id, status)`
 - `updateSetLocation(id, location)`
-- `updateSetPrice(id, price)`
+- `updateSetParts(id, parts)`
+- `updateSetPrice(id, retailPrice)`
 - `deleteSet(id)`
 
 ---
@@ -197,7 +205,7 @@ GitHub Secrets erforderlich:
 - Preise in Firestore gecacht (`retailPrice` Feld)
 - Refresh-Button im Detail-Modal
 - „Alle Preise laden" in StatsScreen und WishlistScreen
-- Bulk-Backfill via `scripts/backfill-prices.mjs`
+- Bulk-Backfill via `scripts/backfill-prices.mjs` (Einmal-Skript, nicht mehr im Repo)
 
 ---
 
