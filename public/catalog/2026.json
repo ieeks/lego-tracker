@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-09-12",
+ "generated_at": "2026-09-14",
  "year": 2026,
  "sets": [
   {
@@ -99,6 +99,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/30713-1.jpg",
    "uvp_eur": null,
    "first_seen": null
+  },
+  {
+   "set_num": "10371-1",
+   "name": "Cozy Plants",
+   "year": 2026,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/10371-1.jpg",
+   "uvp_eur": 19.99,
+   "first_seen": "2026-09-14"
   },
   {
    "set_num": "11501-1",
