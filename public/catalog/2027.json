@@ -1,9 +1,69 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-09-14",
+ "generated_at": "2026-09-21",
  "year": 2027,
  "sets": [
+  {
+   "set_num": "910069-1",
+   "name": "Fisherman's Village",
+   "year": 2027,
+   "parts": null,
+   "theme": "BrickLink Designer Program",
+   "subtheme": null,
+   "theme_id": 719,
+   "img": "https://cdn.rebrickable.com/media/sets/910069-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "910070-1",
+   "name": "Sleepy Dragon Inn",
+   "year": 2027,
+   "parts": null,
+   "theme": "BrickLink Designer Program",
+   "subtheme": null,
+   "theme_id": 719,
+   "img": "https://cdn.rebrickable.com/media/sets/910070-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "910071-1",
+   "name": "Wild West Blacksmith",
+   "year": 2027,
+   "parts": null,
+   "theme": "BrickLink Designer Program",
+   "subtheme": null,
+   "theme_id": 719,
+   "img": "https://cdn.rebrickable.com/media/sets/910071-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "910072-1",
+   "name": "Woodbrick Freight Depot",
+   "year": 2027,
+   "parts": null,
+   "theme": "BrickLink Designer Program",
+   "subtheme": null,
+   "theme_id": 719,
+   "img": "https://cdn.rebrickable.com/media/sets/910072-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "910073-1",
+   "name": "Pumpkin Patch",
+   "year": 2027,
+   "parts": null,
+   "theme": "BrickLink Designer Program",
+   "subtheme": null,
+   "theme_id": 719,
+   "img": "https://cdn.rebrickable.com/media/sets/910073-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-21"
+  },
   {
    "set_num": "72052-1",
    "name": "Mario's Pipe Jump",

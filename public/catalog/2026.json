@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-09-14",
+ "generated_at": "2026-09-21",
  "year": 2026,
  "sets": [
   {
@@ -2228,7 +2228,7 @@
    "set_num": "11383-1",
    "name": "Mayor Manor",
    "year": 2026,
-   "parts": 1421,
+   "parts": 1420,
    "theme": "Icons",
    "subtheme": null,
    "theme_id": 721,
@@ -3173,6 +3173,18 @@
    "first_seen": null
   },
   {
+   "set_num": "11387-1",
+   "name": "Holiday House",
+   "year": 2026,
+   "parts": null,
+   "theme": "Seasonal",
+   "subtheme": "Christmas",
+   "theme_id": 227,
+   "img": "https://cdn.rebrickable.com/media/sets/11387-1.jpg",
+   "uvp_eur": 109.99,
+   "first_seen": "2026-09-21"
+  },
+  {
    "set_num": "30716-1",
    "name": "Cute Easter Bunny",
    "year": 2026,
@@ -3363,6 +3375,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/40890-1.jpg",
    "uvp_eur": null,
    "first_seen": null
+  },
+  {
+   "set_num": "40900-1",
+   "name": "Scary Haunted Tree",
+   "year": 2026,
+   "parts": null,
+   "theme": "Seasonal",
+   "subtheme": "Halloween",
+   "theme_id": 230,
+   "img": "https://cdn.rebrickable.com/media/sets/40900-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-21"
   },
   {
    "set_num": "40905-1",
