@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-09-21",
+ "generated_at": "2026-09-28",
  "year": 2026,
  "sets": [
   {
@@ -2657,6 +2657,18 @@
    "first_seen": null
   },
   {
+   "set_num": "40899-1",
+   "name": "Astro Bot",
+   "year": 2026,
+   "parts": null,
+   "theme": "Other",
+   "subtheme": null,
+   "theme_id": 301,
+   "img": "https://cdn.rebrickable.com/media/sets/40899-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-09-28"
+  },
+  {
    "set_num": "40902-1",
    "name": "Tribute to Leonardo da Vinci",
    "year": 2026,
@@ -3380,7 +3392,7 @@
    "set_num": "40900-1",
    "name": "Scary Haunted Tree",
    "year": 2026,
-   "parts": null,
+   "parts": 218,
    "theme": "Seasonal",
    "subtheme": "Halloween",
    "theme_id": 230,
@@ -3488,7 +3500,7 @@
    "set_num": "6614219-1",
    "name": "Blooming Heart",
    "year": 2026,
-   "parts": 47,
+   "parts": 48,
    "theme": "Seasonal",
    "subtheme": "Valentine",
    "theme_id": 232,
