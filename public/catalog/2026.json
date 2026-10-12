@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-10-05",
+ "generated_at": "2026-10-12",
  "year": 2026,
  "sets": [
   {
@@ -2741,6 +2741,18 @@
    "first_seen": null
   },
   {
+   "set_num": "40909-1",
+   "name": "Restaurants of the World: Italy",
+   "year": 2026,
+   "parts": null,
+   "theme": "Other",
+   "subtheme": null,
+   "theme_id": 301,
+   "img": "https://cdn.rebrickable.com/media/sets/40909-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-12"
+  },
+  {
    "set_num": "40920-1",
    "name": "Bugs Bunny",
    "year": 2026,
@@ -3932,7 +3944,7 @@
    "set_num": "6650266-1",
    "name": "R2-D2 Level Up Workshop",
    "year": 2026,
-   "parts": null,
+   "parts": 93,
    "theme": "Star Wars",
    "subtheme": null,
    "theme_id": 158,
@@ -4294,8 +4306,8 @@
    "year": 2026,
    "parts": 6130,
    "theme": "Star Wars",
-   "subtheme": null,
-   "theme_id": 158,
+   "subtheme": "Ultimate Collector Series",
+   "theme_id": 171,
    "img": "https://cdn.rebrickable.com/media/sets/75457-1.jpg",
    "uvp_eur": 749.99,
    "first_seen": "2026-08-31"

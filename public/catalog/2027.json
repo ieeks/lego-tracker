@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-10-05",
+ "generated_at": "2026-10-12",
  "year": 2027,
  "sets": [
   {
@@ -13,7 +13,7 @@
    "subtheme": null,
    "theme_id": 719,
    "img": "https://cdn.rebrickable.com/media/sets/910069-1.jpg",
-   "uvp_eur": null,
+   "uvp_eur": 349.99,
    "first_seen": "2026-09-21"
   },
   {
@@ -25,7 +25,7 @@
    "subtheme": null,
    "theme_id": 719,
    "img": "https://cdn.rebrickable.com/media/sets/910070-1.jpg",
-   "uvp_eur": null,
+   "uvp_eur": 269.99,
    "first_seen": "2026-09-21"
   },
   {
@@ -37,7 +37,7 @@
    "subtheme": null,
    "theme_id": 719,
    "img": "https://cdn.rebrickable.com/media/sets/910071-1.jpg",
-   "uvp_eur": null,
+   "uvp_eur": 219.99,
    "first_seen": "2026-09-21"
   },
   {
@@ -49,7 +49,7 @@
    "subtheme": null,
    "theme_id": 719,
    "img": "https://cdn.rebrickable.com/media/sets/910072-1.jpg",
-   "uvp_eur": null,
+   "uvp_eur": 219.99,
    "first_seen": "2026-09-21"
   },
   {
@@ -61,8 +61,56 @@
    "subtheme": null,
    "theme_id": 719,
    "img": "https://cdn.rebrickable.com/media/sets/910073-1.jpg",
-   "uvp_eur": null,
+   "uvp_eur": 49.99,
    "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "67008-1",
+   "name": "Batman Returns Batmobile & Duck",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Heroes DC",
+   "subtheme": "Batman",
+   "theme_id": 697,
+   "img": "https://cdn.rebrickable.com/media/sets/67008-1.jpg",
+   "uvp_eur": 59.99,
+   "first_seen": "2026-10-12"
+  },
+  {
+   "set_num": "67009-1",
+   "name": "Arkham Batman Batmobile",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Heroes DC",
+   "subtheme": "Batman",
+   "theme_id": 697,
+   "img": "https://cdn.rebrickable.com/media/sets/67009-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-10-12"
+  },
+  {
+   "set_num": "67012-1",
+   "name": "The Joker Wall Art Comic Cover",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Heroes DC",
+   "subtheme": "Batman",
+   "theme_id": 697,
+   "img": "https://cdn.rebrickable.com/media/sets/67012-1.jpg",
+   "uvp_eur": 169.99,
+   "first_seen": "2026-10-12"
+  },
+  {
+   "set_num": "67006-1",
+   "name": "The Marvel Skyline",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Heroes Marvel",
+   "subtheme": null,
+   "theme_id": 696,
+   "img": "https://cdn.rebrickable.com/media/sets/67006-1.jpg",
+   "uvp_eur": 99.99,
+   "first_seen": "2026-10-12"
   },
   {
    "set_num": "72052-1",
