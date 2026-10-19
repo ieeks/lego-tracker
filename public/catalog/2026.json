@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-10-12",
+ "generated_at": "2026-10-19",
  "year": 2026,
  "sets": [
   {
@@ -293,6 +293,18 @@
    "first_seen": null
   },
   {
+   "set_num": "5011164-1",
+   "name": "Fig Beetle Garden",
+   "year": 2026,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/5011164-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-19"
+  },
+  {
    "set_num": "6614216-1",
    "name": "Micro Cactus",
    "year": 2026,
@@ -567,6 +579,30 @@
    "img": "https://cdn.rebrickable.com/media/sets/80121-1.jpg",
    "uvp_eur": 109.99,
    "first_seen": null
+  },
+  {
+   "set_num": "2D001164-1",
+   "name": "Police Buggy",
+   "year": 2026,
+   "parts": 37,
+   "theme": "City",
+   "subtheme": "Police",
+   "theme_id": 61,
+   "img": "https://cdn.rebrickable.com/media/sets/2d001164-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-19"
+  },
+  {
+   "set_num": "2D001182-1",
+   "name": "Construction Worker with Wheel Loader",
+   "year": 2026,
+   "parts": 39,
+   "theme": "City",
+   "subtheme": "Construction",
+   "theme_id": 56,
+   "img": "https://cdn.rebrickable.com/media/sets/2d001182-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-19"
   },
   {
    "set_num": "30719-1",
@@ -1025,30 +1061,6 @@
    "first_seen": null
   },
   {
-   "set_num": "951440-1",
-   "name": "Police Buggy",
-   "year": 2026,
-   "parts": 37,
-   "theme": "City",
-   "subtheme": "Police",
-   "theme_id": 61,
-   "img": "https://cdn.rebrickable.com/media/sets/951440-1.jpg",
-   "uvp_eur": null,
-   "first_seen": null
-  },
-  {
-   "set_num": "951441-1",
-   "name": "Construction Worker with Wheel Loader",
-   "year": 2026,
-   "parts": 39,
-   "theme": "City",
-   "subtheme": "Construction",
-   "theme_id": 56,
-   "img": "https://cdn.rebrickable.com/media/sets/951441-1.jpg",
-   "uvp_eur": null,
-   "first_seen": null
-  },
-  {
    "set_num": "11045-1",
    "name": "Creative Colorful Bricks",
    "year": 2026,
@@ -1059,6 +1071,30 @@
    "img": "https://cdn.rebrickable.com/media/sets/11045-1.jpg",
    "uvp_eur": 49.99,
    "first_seen": null
+  },
+  {
+   "set_num": "2D001187-1",
+   "name": "Cockatoo",
+   "year": 2026,
+   "parts": 69,
+   "theme": "Creator",
+   "subtheme": "Creator 3-in-1",
+   "theme_id": 672,
+   "img": "https://cdn.rebrickable.com/media/sets/2d001187-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-19"
+  },
+  {
+   "set_num": "2D001188-1",
+   "name": "Car",
+   "year": 2026,
+   "parts": 76,
+   "theme": "Creator",
+   "subtheme": "Creator 3-in-1",
+   "theme_id": 672,
+   "img": "https://cdn.rebrickable.com/media/sets/2d001188-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-19"
   },
   {
    "set_num": "30714-1",
@@ -1369,30 +1405,6 @@
    "subtheme": "Creator 3-in-1",
    "theme_id": 672,
    "img": "https://cdn.rebrickable.com/media/sets/66832-1.jpg",
-   "uvp_eur": null,
-   "first_seen": null
-  },
-  {
-   "set_num": "951442-1",
-   "name": "Cockatoo",
-   "year": 2026,
-   "parts": 69,
-   "theme": "Creator",
-   "subtheme": "Creator 3-in-1",
-   "theme_id": 672,
-   "img": "https://cdn.rebrickable.com/media/sets/951442-1.jpg",
-   "uvp_eur": null,
-   "first_seen": null
-  },
-  {
-   "set_num": "951443-1",
-   "name": "Car",
-   "year": 2026,
-   "parts": 76,
-   "theme": "Creator",
-   "subtheme": "Creator 3-in-1",
-   "theme_id": 672,
-   "img": "https://cdn.rebrickable.com/media/sets/951443-1.jpg",
    "uvp_eur": null,
    "first_seen": null
   },
@@ -2285,6 +2297,18 @@
    "first_seen": null
   },
   {
+   "set_num": "11388-1",
+   "name": "Venetian Neighborhood",
+   "year": 2026,
+   "parts": null,
+   "theme": "Icons",
+   "subtheme": null,
+   "theme_id": 721,
+   "img": "https://cdn.rebrickable.com/media/sets/11388-1.jpg",
+   "uvp_eur": 499.99,
+   "first_seen": "2026-10-19"
+  },
+  {
    "set_num": "11389-1",
    "name": "Project Hail Mary",
    "year": 2026,
@@ -2331,6 +2355,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/40893-1.jpg",
    "uvp_eur": null,
    "first_seen": null
+  },
+  {
+   "set_num": "40898-1",
+   "name": "Venetian Water Taxi",
+   "year": 2026,
+   "parts": null,
+   "theme": "Icons",
+   "subtheme": null,
+   "theme_id": 721,
+   "img": "https://cdn.rebrickable.com/media/sets/40898-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-19"
   },
   {
    "set_num": "40913-1",
@@ -2744,7 +2780,7 @@
    "set_num": "40909-1",
    "name": "Restaurants of the World: Italy",
    "year": 2026,
-   "parts": null,
+   "parts": 317,
    "theme": "Other",
    "subtheme": null,
    "theme_id": 301,
