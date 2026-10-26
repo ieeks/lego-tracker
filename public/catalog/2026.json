@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-10-19",
+ "generated_at": "2026-10-26",
  "year": 2026,
  "sets": [
   {
@@ -500,7 +500,7 @@
    "set_num": "910064-1",
    "name": "Dustmark Keep",
    "year": 2026,
-   "parts": null,
+   "parts": 3968,
    "theme": "BrickLink Designer Program",
    "subtheme": null,
    "theme_id": 719,
@@ -512,7 +512,7 @@
    "set_num": "910065-1",
    "name": "Coconut Cape",
    "year": 2026,
-   "parts": null,
+   "parts": 2393,
    "theme": "BrickLink Designer Program",
    "subtheme": null,
    "theme_id": 719,
@@ -524,7 +524,7 @@
    "set_num": "910066-1",
    "name": "Brick Railroad Locomotive",
    "year": 2026,
-   "parts": null,
+   "parts": 1347,
    "theme": "BrickLink Designer Program",
    "subtheme": null,
    "theme_id": 719,
@@ -536,7 +536,7 @@
    "set_num": "910067-1",
    "name": "Hot Air Balloon",
    "year": 2026,
-   "parts": null,
+   "parts": 1539,
    "theme": "BrickLink Designer Program",
    "subtheme": null,
    "theme_id": 719,
@@ -548,7 +548,7 @@
    "set_num": "910068-1",
    "name": "University of Science",
    "year": 2026,
-   "parts": null,
+   "parts": 4079,
    "theme": "BrickLink Designer Program",
    "subtheme": null,
    "theme_id": 719,
@@ -2535,6 +2535,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/21376-1.jpg",
    "uvp_eur": 99.99,
    "first_seen": null
+  },
+  {
+   "set_num": "40889-1",
+   "name": "Build, Paint and Play!",
+   "year": 2026,
+   "parts": null,
+   "theme": "LEGO Ideas and CUUSOO",
+   "subtheme": null,
+   "theme_id": 576,
+   "img": "https://cdn.rebrickable.com/media/sets/40889-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-10-26"
   },
   {
    "set_num": "40896-1",
@@ -4878,7 +4890,7 @@
   },
   {
    "set_num": "42220-1",
-   "name": "Monster Jam  Sparkle Smash Pull-Back",
+   "name": "Monster Jam Sparkle Smash Pull-Back",
    "year": 2026,
    "parts": 243,
    "theme": "Technic",
@@ -5142,7 +5154,7 @@
   },
   {
    "set_num": "42233-9",
-   "name": "Mighty Machines Series 1  - Complete - All Sets",
+   "name": "Mighty Machines Series 1 - Complete - All Sets",
    "year": 2026,
    "parts": null,
    "theme": "Technic",
