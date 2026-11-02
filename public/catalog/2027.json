@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-10-26",
+ "generated_at": "2026-11-02",
  "year": 2027,
  "sets": [
   {
@@ -99,6 +99,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/67012-1.jpg",
    "uvp_eur": 169.99,
    "first_seen": "2026-10-12"
+  },
+  {
+   "set_num": "67005-1",
+   "name": "Marvel What if...? Doctor Strange Supreme",
+   "year": 2027,
+   "parts": null,
+   "theme": "Super Heroes Marvel",
+   "subtheme": null,
+   "theme_id": 696,
+   "img": "https://cdn.rebrickable.com/media/sets/67005-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-11-02"
   },
   {
    "set_num": "67006-1",
