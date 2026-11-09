@@ -1,9 +1,129 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-11-02",
+ "generated_at": "2026-11-09",
  "year": 2027,
  "sets": [
+  {
+   "set_num": "11515-1",
+   "name": "Peony Bouquet",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11515-1.jpg",
+   "uvp_eur": 59.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11516-1",
+   "name": "Cherry Blossom Branches",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11516-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11519-1",
+   "name": "Wild Orchid",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11519-1.jpg",
+   "uvp_eur": 59.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11522-1",
+   "name": "Perfectly Pastel Flower Bouquet",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11522-1.jpg",
+   "uvp_eur": 59.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11532-1",
+   "name": "Buttercup Flowers",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11532-1.jpg",
+   "uvp_eur": 4.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11533-1",
+   "name": "Malva Flowers",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11533-1.jpg",
+   "uvp_eur": 4.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11534-1",
+   "name": "Bluebell Flowers",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11534-1.jpg",
+   "uvp_eur": 4.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11535-1",
+   "name": "Sweet Pea Flowers",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11535-1.jpg",
+   "uvp_eur": 4.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11536-1",
+   "name": "Nasturtium Flowers",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11536-1.jpg",
+   "uvp_eur": 4.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "11537-1",
+   "name": "Chicory Flowers",
+   "year": 2027,
+   "parts": null,
+   "theme": "Botanicals",
+   "subtheme": null,
+   "theme_id": 769,
+   "img": "https://cdn.rebrickable.com/media/sets/11537-1.jpg",
+   "uvp_eur": 4.99,
+   "first_seen": "2026-11-09"
+  },
   {
    "set_num": "910069-1",
    "name": "Fisherman's Village",
@@ -109,7 +229,7 @@
    "subtheme": null,
    "theme_id": 696,
    "img": "https://cdn.rebrickable.com/media/sets/67005-1.jpg",
-   "uvp_eur": null,
+   "uvp_eur": 99.99,
    "first_seen": "2026-11-02"
   },
   {
@@ -219,6 +339,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/72061-1.jpg",
    "uvp_eur": 29.99,
    "first_seen": "2026-08-31"
+  },
+  {
+   "set_num": "42254-1",
+   "name": "Solar System Planets in Orbit",
+   "year": 2027,
+   "parts": null,
+   "theme": "Technic",
+   "subtheme": null,
+   "theme_id": 1,
+   "img": "https://cdn.rebrickable.com/media/sets/42254-1.jpg",
+   "uvp_eur": 99.99,
+   "first_seen": "2026-11-09"
   }
  ]
 }

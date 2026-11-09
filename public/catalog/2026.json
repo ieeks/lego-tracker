@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-11-02",
+ "generated_at": "2026-11-09",
  "year": 2026,
  "sets": [
   {
@@ -557,6 +557,18 @@
    "first_seen": null
   },
   {
+   "set_num": "40976-1",
+   "name": "Prosperity Lion",
+   "year": 2026,
+   "parts": null,
+   "theme": "Chinese Traditional Festivals",
+   "subtheme": null,
+   "theme_id": 686,
+   "img": "https://cdn.rebrickable.com/media/sets/40976-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-09"
+  },
+  {
    "set_num": "80120-1",
    "name": "Prosperity Carp Leaping",
    "year": 2026,
@@ -579,6 +591,30 @@
    "img": "https://cdn.rebrickable.com/media/sets/80121-1.jpg",
    "uvp_eur": 109.99,
    "first_seen": null
+  },
+  {
+   "set_num": "80122-1",
+   "name": "Auspicious Pixiu Under Fortune Tree",
+   "year": 2026,
+   "parts": null,
+   "theme": "Chinese Traditional Festivals",
+   "subtheme": null,
+   "theme_id": 686,
+   "img": "https://cdn.rebrickable.com/media/sets/80122-1.jpg",
+   "uvp_eur": 69.99,
+   "first_seen": "2026-11-09"
+  },
+  {
+   "set_num": "80123-1",
+   "name": "Spring Festival Voyage",
+   "year": 2026,
+   "parts": null,
+   "theme": "Chinese Traditional Festivals",
+   "subtheme": null,
+   "theme_id": 686,
+   "img": "https://cdn.rebrickable.com/media/sets/80123-1.jpg",
+   "uvp_eur": 99.99,
+   "first_seen": "2026-11-09"
   },
   {
    "set_num": "2D001164-1",
@@ -2525,6 +2561,18 @@
    "first_seen": "2026-09-12"
   },
   {
+   "set_num": "21375-1",
+   "name": "Godzilla",
+   "year": 2026,
+   "parts": null,
+   "theme": "LEGO Ideas and CUUSOO",
+   "subtheme": null,
+   "theme_id": 576,
+   "img": "https://cdn.rebrickable.com/media/sets/21375-1.jpg",
+   "uvp_eur": 399.99,
+   "first_seen": "2026-11-09"
+  },
+  {
    "set_num": "21376-1",
    "name": "Orange Cat",
    "year": 2026,
@@ -2535,6 +2583,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/21376-1.jpg",
    "uvp_eur": 99.99,
    "first_seen": null
+  },
+  {
+   "set_num": "40888-1",
+   "name": "Godzilla Logo & Footprint",
+   "year": 2026,
+   "parts": null,
+   "theme": "LEGO Ideas and CUUSOO",
+   "subtheme": null,
+   "theme_id": 576,
+   "img": "https://cdn.rebrickable.com/media/sets/40888-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-11-09"
   },
   {
    "set_num": "40889-1",
@@ -3596,7 +3656,7 @@
    "set_num": "6644859-1",
    "name": "Reindeer",
    "year": 2026,
-   "parts": null,
+   "parts": 36,
    "theme": "Seasonal",
    "subtheme": "Christmas",
    "theme_id": 227,
