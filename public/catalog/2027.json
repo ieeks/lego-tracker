@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-11-09",
+ "generated_at": "2026-11-16",
  "year": 2027,
  "sets": [
   {
@@ -183,6 +183,90 @@
    "img": "https://cdn.rebrickable.com/media/sets/910073-1.jpg",
    "uvp_eur": 49.99,
    "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "75466-1",
+   "name": "Darth Vader 2 in 1 Wall Art",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75466-1.jpg",
+   "uvp_eur": 69.99,
+   "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "75467-1",
+   "name": "A New Hope Movie Poster",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75467-1.jpg",
+   "uvp_eur": 299.99,
+   "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "75470-1",
+   "name": "Mustafar Duel",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75470-1.jpg",
+   "uvp_eur": 39.99,
+   "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "75478-1",
+   "name": "Rebel Y-Wing Starfighter",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75478-1.jpg",
+   "uvp_eur": 79.99,
+   "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "75480-1",
+   "name": "Duel on Bespin",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75480-1.jpg",
+   "uvp_eur": 79.99,
+   "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "75482-1",
+   "name": "Up-Scaled Luke Skywalker Minifigure",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75482-1.jpg",
+   "uvp_eur": 99.99,
+   "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "75495-1",
+   "name": "Stormtrooper (Concept Art) Helmet",
+   "year": 2027,
+   "parts": null,
+   "theme": "Star Wars",
+   "subtheme": null,
+   "theme_id": 158,
+   "img": "https://cdn.rebrickable.com/media/sets/75495-1.jpg",
+   "uvp_eur": 79.99,
+   "first_seen": "2026-11-16"
   },
   {
    "set_num": "67008-1",
