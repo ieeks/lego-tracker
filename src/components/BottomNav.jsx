@@ -11,9 +11,7 @@ const TABS = [
 
 export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
   return (
-    <div style={{
-      position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
-      width: "100%", maxWidth: 680,
+    <nav className="bottom-nav" aria-label="Hauptnavigation" style={{
       background: "color-mix(in srgb, var(--card) 92%, transparent)",
       backdropFilter: "blur(20px)",
       WebkitBackdropFilter: "blur(20px)",
@@ -79,6 +77,6 @@ export function BottomNav({ active, onNavigate, wishlistCount = 0 }) {
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 }
