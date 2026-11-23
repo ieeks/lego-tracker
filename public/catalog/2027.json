@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-11-16",
+ "generated_at": "2026-11-23",
  "year": 2027,
  "sets": [
   {
@@ -183,6 +183,138 @@
    "img": "https://cdn.rebrickable.com/media/sets/910073-1.jpg",
    "uvp_eur": 49.99,
    "first_seen": "2026-09-21"
+  },
+  {
+   "set_num": "77267-1",
+   "name": "Ferrari SF-26 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77267-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77268-1",
+   "name": "Oracle Red Bull Racing RB22 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77268-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77269-1",
+   "name": "McLaren Mastercard MCL40 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77269-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77270-1",
+   "name": "Mercedes-AMG PETRONAS W17 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77270-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77271-1",
+   "name": "Aston Martin Aramco AMR26 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77271-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77272-1",
+   "name": "Atlassian Williams FW48 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77272-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77273-1",
+   "name": "Visa Cash App RB VCARB 03 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77273-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77274-1",
+   "name": "BWT Alpine A526 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77274-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77275-1",
+   "name": "TGR Haas VF-26 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77275-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77276-1",
+   "name": "Audi Revolut R26 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77276-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "77277-1",
+   "name": "Cadillac MAC-26 F1 Race Car",
+   "year": 2027,
+   "parts": null,
+   "theme": "Speed Champions",
+   "subtheme": null,
+   "theme_id": 601,
+   "img": "https://cdn.rebrickable.com/media/sets/77277-1.jpg",
+   "uvp_eur": 29.99,
+   "first_seen": "2026-11-23"
   },
   {
    "set_num": "75466-1",

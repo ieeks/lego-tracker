@@ -1,7 +1,7 @@
 {
  "source": "Daten von Rebrickable.com",
  "price_source": "UVP von Brickset.com",
- "generated_at": "2026-11-16",
+ "generated_at": "2026-11-23",
  "year": 2026,
  "sets": [
   {
@@ -980,7 +980,7 @@
    "set_num": "60505-1",
    "name": "Airplane, Service Truck & Hovercraft Remix",
    "year": 2026,
-   "parts": 991,
+   "parts": 990,
    "theme": "City",
    "subtheme": null,
    "theme_id": 52,
@@ -2861,6 +2861,30 @@
    "first_seen": "2026-10-12"
   },
   {
+   "set_num": "40914-1",
+   "name": "Retro Jukebox",
+   "year": 2026,
+   "parts": 287,
+   "theme": "Other",
+   "subtheme": null,
+   "theme_id": 301,
+   "img": "https://cdn.rebrickable.com/media/sets/40914-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-11-23"
+  },
+  {
+   "set_num": "40918-1",
+   "name": "Winter Snow Globe",
+   "year": 2026,
+   "parts": 231,
+   "theme": "Other",
+   "subtheme": null,
+   "theme_id": 301,
+   "img": "https://cdn.rebrickable.com/media/sets/40918-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-11-23"
+  },
+  {
    "set_num": "40920-1",
    "name": "Bugs Bunny",
    "year": 2026,
@@ -3675,6 +3699,18 @@
    "img": "https://cdn.rebrickable.com/media/sets/6670939-1.jpg",
    "uvp_eur": null,
    "first_seen": "2026-11-16"
+  },
+  {
+   "set_num": "6671145-1",
+   "name": "Mini Santa's Workshop",
+   "year": 2026,
+   "parts": null,
+   "theme": "Seasonal",
+   "subtheme": "Christmas",
+   "theme_id": 227,
+   "img": "https://cdn.rebrickable.com/media/sets/6671145-1.jpg",
+   "uvp_eur": null,
+   "first_seen": "2026-11-23"
   },
   {
    "set_num": "66817-1",
