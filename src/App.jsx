@@ -417,8 +417,7 @@ export default function App() {
   const header = HEADERS[tab];
 
   return (
-    <div style={{
-      minHeight: "100vh",
+    <div className="app-shell" style={{
       background: "var(--paper)",
       fontFamily: "var(--font-body)",
       maxWidth: 680,
@@ -429,7 +428,7 @@ export default function App() {
     }}>
       <DetailModal key={selectedSet?.id ?? "closed"} set={selectedSet} onClose={() => setSelectedSet(null)} />
 
-      <div style={{ paddingBottom: 90 }}>
+      <div className="app-content">
         {/* Header */}
         <div style={{
           paddingTop: "max(20px, calc(env(safe-area-inset-top, 0px) + 16px))",

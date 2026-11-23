@@ -22,6 +22,47 @@ body {
   touch-action: pan-y;
 }
 
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-content {
+  padding-bottom: 90px;
+}
+
+.bottom-nav {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  max-width: 680px;
+  margin-inline: auto;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  /* Keep the nav in flow so Safari's moving toolbar cannot unpin it. */
+  .app-shell {
+    min-height: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding-bottom: 28px;
+  }
+
+  .bottom-nav {
+    position: relative;
+    flex-shrink: 0;
+    width: 100%;
+  }
+}
+
 /* ============================================================
    TYPOGRAFIE-UTILITIES
    ============================================================ */
